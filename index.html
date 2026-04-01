@@ -3,77 +3,143 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Salão de Beleza</title>
+  <title>Salão de Beleza — Demo Chatbot</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f0f0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Poppins', 'Segoe UI', sans-serif;
       min-height: 100vh;
+      background: linear-gradient(135deg, #f8e9f0 0%, #fdf4f8 50%, #f0e6f6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .page-center {
+    /* ── Página central ── */
+    .hero {
       text-align: center;
-      color: #555;
+      padding: 40px 20px;
+      max-width: 480px;
     }
-
-    .page-center h1 { font-size: 2rem; color: #b06a8c; margin-bottom: 8px; }
-    .page-center p  { font-size: 1rem; }
+    .hero .badge {
+      display: inline-block;
+      background: #b06a8c;
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #3d2035;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero p {
+      color: #7a5a6e;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .hero .cta-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      border: 1.5px solid #e0b8ce;
+      color: #b06a8c;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(176,106,140,0.12);
+      animation: pulse-border 2s infinite;
+    }
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 4px 16px rgba(176,106,140,0.12); }
+      50%       { box-shadow: 0 4px 24px rgba(176,106,140,0.32); }
+    }
 
     /* ── Botão flutuante ── */
     #chat-toggle {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      width: 60px;
-      height: 60px;
+      width: 62px;
+      height: 62px;
       border-radius: 50%;
-      background: #b06a8c;
+      background: linear-gradient(135deg, #c47ea0, #b06a8c);
       border: none;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 20px rgba(176,106,140,0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
       z-index: 1000;
     }
-    #chat-toggle:hover { background: #944f75; }
-    #chat-toggle svg { width: 28px; height: 28px; fill: white; }
+    #chat-toggle:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 26px rgba(176,106,140,0.55);
+    }
+    #chat-toggle svg { width: 28px; height: 28px; fill: white; transition: opacity 0.2s; }
+    #chat-toggle .icon-close { display: none; }
+
+    /* Notificação */
+    #notif {
+      position: absolute;
+      top: 2px; right: 2px;
+      width: 18px; height: 18px;
+      background: #ff4d6d;
+      border-radius: 50%;
+      border: 2px solid white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      animation: notif-pop 0.4s ease;
+    }
+    @keyframes notif-pop {
+      from { transform: scale(0); }
+      to   { transform: scale(1); }
+    }
 
     /* ── Janela do chat ── */
     #chat-window {
       position: fixed;
-      bottom: 96px;
+      bottom: 100px;
       right: 24px;
-      width: 340px;
-      max-height: 520px;
+      width: 350px;
+      max-height: 540px;
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.16);
       display: flex;
       flex-direction: column;
       overflow: hidden;
       z-index: 999;
-      transform: scale(0.85);
+      transform: scale(0.88) translateY(10px);
       opacity: 0;
       pointer-events: none;
       transform-origin: bottom right;
-      transition: transform 0.25s ease, opacity 0.25s ease;
+      transition: transform 0.28s cubic-bezier(.34,1.56,.64,1), opacity 0.22s ease;
     }
     #chat-window.open {
-      transform: scale(1);
+      transform: scale(1) translateY(0);
       opacity: 1;
       pointer-events: all;
     }
 
     /* ── Cabeçalho ── */
     .chat-header {
-      background: #b06a8c;
+      background: linear-gradient(135deg, #c47ea0, #9d4f7c);
       color: white;
       padding: 14px 16px;
       display: flex;
@@ -81,45 +147,89 @@
       gap: 10px;
     }
     .chat-header .avatar {
-      width: 38px; height: 38px;
+      width: 42px; height: 42px;
       border-radius: 50%;
-      background: white;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.4);
       display: flex; align-items: center; justify-content: center;
       font-size: 20px;
+      flex-shrink: 0;
     }
+    .chat-header .info { flex: 1; }
     .chat-header .info .name  { font-weight: 600; font-size: 0.95rem; }
-    .chat-header .info .status { font-size: 0.75rem; opacity: 0.85; }
+    .chat-header .info .status { font-size: 0.72rem; opacity: 0.88; margin-top: 1px; }
+    .chat-header .close-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .chat-header .close-btn:hover { background: rgba(255,255,255,0.35); }
 
     /* ── Mensagens ── */
     .chat-messages {
       flex: 1;
       overflow-y: auto;
-      padding: 14px 12px;
+      padding: 16px 12px;
       background: #fdf4f8;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      scroll-behavior: smooth;
     }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #ddb8cc; border-radius: 4px; }
 
     .msg {
-      max-width: 80%;
-      padding: 10px 13px;
-      border-radius: 14px;
-      font-size: 0.88rem;
-      line-height: 1.45;
-      animation: fadeIn 0.3s ease;
+      max-width: 82%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.87rem;
+      line-height: 1.5;
+      animation: fadeUp 0.3s ease;
     }
     .msg.bot {
       background: white;
       align-self: flex-start;
       border-bottom-left-radius: 4px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     }
     .msg.user {
-      background: #b06a8c;
+      background: linear-gradient(135deg, #c47ea0, #b06a8c);
       color: white;
       align-self: flex-end;
       border-bottom-right-radius: 4px;
+    }
+
+    /* Indicador de digitação */
+    .typing {
+      align-self: flex-start;
+      background: white;
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      display: flex;
+      gap: 5px;
+      animation: fadeUp 0.3s ease;
+    }
+    .typing span {
+      width: 7px; height: 7px;
+      background: #c47ea0;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.2s; }
+    .typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40%            { transform: translateY(-6px); opacity: 1; }
     }
 
     /* ── Botões de opção ── */
@@ -129,52 +239,67 @@
       gap: 7px;
       align-self: flex-start;
       width: 100%;
-      animation: fadeIn 0.3s ease;
+      animation: fadeUp 0.3s ease;
     }
     .opt-btn {
       background: white;
-      border: 1.5px solid #b06a8c;
-      color: #b06a8c;
-      border-radius: 20px;
-      padding: 8px 14px;
-      font-size: 0.85rem;
+      border: 1.5px solid #d08aaa;
+      color: #9d4f7c;
+      border-radius: 22px;
+      padding: 9px 16px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      font-weight: 600;
       cursor: pointer;
       text-align: left;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.15s, color 0.15s, transform 0.1s;
     }
-    .opt-btn:hover { background: #b06a8c; color: white; }
+    .opt-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, #c47ea0, #b06a8c);
+      color: white;
+      border-color: transparent;
+      transform: translateX(3px);
+    }
+    .opt-btn:disabled { opacity: 0.45; cursor: default; }
 
     /* ── Rodapé ── */
     .chat-footer {
-      padding: 10px 12px;
+      padding: 9px 12px;
       background: white;
       border-top: 1px solid #f0e0e8;
-      font-size: 0.72rem;
-      color: #aaa;
+      font-size: 0.7rem;
+      color: #bbb;
       text-align: center;
+      letter-spacing: 0.3px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Mobile ── */
     @media (max-width: 400px) {
-      #chat-window { width: calc(100vw - 20px); right: 10px; bottom: 86px; }
+      #chat-window { width: calc(100vw - 20px); right: 10px; bottom: 90px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="page-center">
+  <div class="hero">
+    <div class="badge">Demo — Chatbot IA</div>
     <h1>✂️ Salão de Beleza</h1>
-    <p>Clique no ícone no canto inferior direito para falar conosco!</p>
+    <p>Atendimento automático 24h pelo seu site.<br>Seus clientes agendam, tiram dúvidas e falam com a equipe — sem você precisar responder tudo.</p>
+    <div class="cta-hint">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#b06a8c"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+      Clique no botão abaixo para testar
+    </div>
   </div>
 
   <!-- Botão flutuante -->
   <button id="chat-toggle" aria-label="Abrir chat">
-    <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+    <div id="notif">1</div>
+    <svg class="icon-chat" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
   </button>
 
   <!-- Janela do chat -->
@@ -185,6 +310,7 @@
         <div class="name">Salão de Beleza</div>
         <div class="status">🟢 Online agora</div>
       </div>
+      <button class="close-btn" id="close-btn" aria-label="Fechar chat">✕</button>
     </div>
 
     <div class="chat-messages" id="messages"></div>
@@ -193,105 +319,154 @@
   </div>
 
   <script>
-    const toggle  = document.getElementById('chat-toggle');
-    const window_ = document.getElementById('chat-window');
-    const msgs    = document.getElementById('messages');
+    const toggle   = document.getElementById('chat-toggle');
+    const chatWin  = document.getElementById('chat-window');
+    const msgs     = document.getElementById('messages');
+    const closeBtn = document.getElementById('close-btn');
+    const notif    = document.getElementById('notif');
+    const iconChat = toggle.querySelector('.icon-chat');
+    const iconClose= toggle.querySelector('.icon-close');
 
     let started = false;
 
-    toggle.addEventListener('click', () => {
-      window_.classList.toggle('open');
-      if (!started) { started = true; setTimeout(startFlow, 400); }
-    });
+    function openChat() {
+      chatWin.classList.add('open');
+      if (notif) notif.remove();
+      iconChat.style.display = 'none';
+      iconClose.style.display = '';
+      if (!started) { started = true; setTimeout(startFlow, 450); }
+    }
 
-    function addMsg(text, type = 'bot') {
+    function closeChat() {
+      chatWin.classList.remove('open');
+      iconChat.style.display = '';
+      iconClose.style.display = 'none';
+    }
+
+    toggle.addEventListener('click', () => {
+      chatWin.classList.contains('open') ? closeChat() : openChat();
+    });
+    closeBtn.addEventListener('click', closeChat);
+
+    /* ── Helpers ── */
+    function addMsg(html, type = 'bot') {
       const d = document.createElement('div');
       d.className = `msg ${type}`;
-      d.innerHTML = text;
+      d.innerHTML = html;
       msgs.appendChild(d);
       msgs.scrollTop = msgs.scrollHeight;
+      return d;
+    }
+
+    function addTyping() {
+      const d = document.createElement('div');
+      d.className = 'typing';
+      d.innerHTML = '<span></span><span></span><span></span>';
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+      return d;
+    }
+
+    function botSay(html, delay = 0) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const t = addTyping();
+          setTimeout(() => {
+            t.remove();
+            addMsg(html, 'bot');
+            resolve();
+          }, 900);
+        }, delay);
+      });
     }
 
     function addOptions(options) {
-      const wrap = document.createElement('div');
-      wrap.className = 'options';
-      options.forEach(({ label, action }) => {
-        const btn = document.createElement('button');
-        btn.className = 'opt-btn';
-        btn.textContent = label;
-        btn.onclick = () => {
-          wrap.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
-          wrap.style.opacity = '0.5';
-          addMsg(label, 'user');
-          setTimeout(() => action(), 400);
-        };
-        wrap.appendChild(btn);
+      return new Promise(resolve => {
+        const wrap = document.createElement('div');
+        wrap.className = 'options';
+        options.forEach(({ label, action }) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn';
+          btn.textContent = label;
+          btn.onclick = () => {
+            wrap.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            wrap.style.pointerEvents = 'none';
+            addMsg(label, 'user');
+            setTimeout(() => action(), 400);
+            resolve();
+          };
+          wrap.appendChild(btn);
+        });
+        msgs.appendChild(wrap);
+        msgs.scrollTop = msgs.scrollHeight;
       });
-      msgs.appendChild(wrap);
-      msgs.scrollTop = msgs.scrollHeight;
     }
 
-    function startFlow() {
-      addMsg('Olá! 😊 Bem-vindo ao <strong>Salão de Beleza</strong>!<br>Como posso te ajudar hoje?');
-      setTimeout(() => {
-        addOptions([
-          { label: '📅 Agendar horário',         action: flowAgendar },
-          { label: '💅 Ver serviços e preços',   action: flowServicos },
-          { label: '💬 Falar com atendente',     action: flowAtendente },
-        ]);
-      }, 600);
+    /* ── Fluxo ── */
+    async function startFlow() {
+      await botSay('Olá! 😊 Bem-vindo ao <strong>Salão de Beleza</strong>!<br>Como posso te ajudar hoje?');
+      await addOptions([
+        { label: '📅 Agendar horário',        action: flowAgendar },
+        { label: '💅 Ver serviços e preços',  action: flowServicos },
+        { label: '💬 Falar com atendente',    action: flowAtendente },
+      ]);
     }
 
-    function flowAgendar() {
-      addMsg('Para agendar seu horário, entre em contato diretamente com a gente pelo WhatsApp. 📱<br>Em breve teremos agendamento automático aqui mesmo!');
-      setTimeout(() => addWhatsApp(), 800);
+    async function flowAgendar() {
+      await botSay('Para agendar seu horário, entre em contato com a gente pelo WhatsApp. 📱<br>Em breve teremos agendamento automático aqui mesmo!');
+      addWhatsApp();
+      setTimeout(addMenuBtn, 400);
     }
 
-    function flowServicos() {
-      addMsg(
-        'Nossos serviços: ✂️<br>' +
+    async function flowServicos() {
+      await botSay(
+        'Nossos serviços: ✨<br><br>' +
         '✂️ <b>Corte</b> — a partir de R$ XX<br>' +
         '💅 <b>Manicure/Pedicure</b> — a partir de R$ XX<br>' +
         '🎨 <b>Coloração</b> — a partir de R$ XX<br>' +
         '💇 <b>Escova</b> — a partir de R$ XX<br><br>' +
-        'Para mais informações ou agendar, fale com a gente!'
+        'Gostou? Fale com a gente para agendar!'
       );
-      setTimeout(() => addWhatsApp(), 800);
+      addWhatsApp();
+      setTimeout(addMenuBtn, 400);
     }
 
-    function flowAtendente() {
-      addMsg('Claro! Vou te transferir para nossa atendente agora. 😊<br>Um momento, por favor!');
-      setTimeout(() => addWhatsApp(), 800);
+    async function flowAtendente() {
+      await botSay('Claro! Vou te conectar com nossa atendente agora. 😊<br>Um momento, por favor!');
+      addWhatsApp();
+      setTimeout(addMenuBtn, 400);
     }
 
     function addWhatsApp() {
-      // Troque pelo número real: 5547999999999
       const numero = '5547999999999';
       const texto  = encodeURIComponent('Olá! Vi o chatbot do salão e gostaria de mais informações 😊');
       addMsg(
         `<a href="https://wa.me/${numero}?text=${texto}" target="_blank"
-           style="display:inline-flex;align-items:center;gap:6px;background:#25D366;color:white;
-                  padding:9px 14px;border-radius:20px;text-decoration:none;font-size:0.85rem;font-weight:600;">
-          <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15
-                     -.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075
-                     -.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059
-                     -.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52
-                     .149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52
-                     -.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51
-                     -.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372
-                     -.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074
-                     .149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625
-                     .712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413
-                     .248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.522 5.848L.057 23.804
-                     a.75.75 0 0 0 .92.92l5.956-1.465A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z
-                     M12 22a9.944 9.944 0 0 1-5.073-1.386l-.363-.216-3.764.927.944-3.653-.236-.376
-                     A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+           style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:white;
+                  padding:10px 16px;border-radius:22px;text-decoration:none;font-size:0.84rem;
+                  font-weight:600;box-shadow:0 3px 10px rgba(37,211,102,0.35);">
+          <svg width="17" height="17" fill="white" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.522 5.848L.057 23.804a.75.75 0 0 0 .92.92l5.956-1.465A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zM12 22a9.944 9.944 0 0 1-5.073-1.386l-.363-.216-3.764.927.944-3.653-.236-.376A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
           </svg>
           Falar no WhatsApp
         </a>`
       );
+    }
+
+    function addMenuBtn() {
+      const wrap = document.createElement('div');
+      wrap.className = 'options';
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = '🔙 Voltar ao menu';
+      btn.onclick = () => {
+        wrap.remove();
+        startFlow();
+      };
+      wrap.appendChild(btn);
+      msgs.appendChild(wrap);
+      msgs.scrollTop = msgs.scrollHeight;
     }
   </script>
 </body>
