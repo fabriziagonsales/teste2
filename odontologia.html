@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clínica Odontológica — Demo Chatbot IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul:        #1a7fc1;
+      --azul-escuro: #0d5a8a;
+      --azul-claro:  #2a9dd4;
+      --ciano:       #00c8c8;
+      --bg:          #f0f7ff;
+      --branco:      #ffffff;
+      --texto:       #0d3c5e;
+      --texto-suave: #4a7a9b;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    /* ───── FUNDO ANIMADO ───── */
+    .bg-shapes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .bg-shapes span {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.07;
+      animation: float 18s infinite ease-in-out;
+    }
+    .bg-shapes span:nth-child(1) { width: 500px; height: 500px; background: var(--azul);      top: -100px; left: -100px; animation-duration: 20s; }
+    .bg-shapes span:nth-child(2) { width: 350px; height: 350px; background: var(--ciano);     bottom: -80px; right: -80px; animation-duration: 16s; animation-delay: -5s; }
+    .bg-shapes span:nth-child(3) { width: 200px; height: 200px; background: var(--azul-claro); top: 40%; left: 60%; animation-duration: 12s; animation-delay: -9s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* ───── PÁGINA PRINCIPAL ───── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    /* ── Logo / Topo ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,127,193,0.1);
+    }
+    .topbar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--texto);
+    }
+    .topbar-logo .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .topbar-badge {
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-top: 80px;
+      text-align: center;
+      max-width: 600px;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(26,127,193,0.08);
+      color: var(--azul);
+      border: 1px solid rgba(26,127,193,0.2);
+      border-radius: 30px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow .dot {
+      width: 7px; height: 7px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--texto);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      font-weight: 300;
+    }
+
+    /* ── Cards de estatísticas ── */
+    .stats {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--branco);
+      border-radius: 16px;
+      padding: 18px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(26,127,193,0.08);
+      border: 1px solid rgba(26,127,193,0.08);
+      min-width: 110px;
+    }
+    .stat-card .stat-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--azul);
+      line-height: 1;
+    }
+    .stat-card .stat-label {
+      font-size: 0.72rem;
+      color: var(--texto-suave);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    /* ── CTA ── */
+    .cta-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--branco);
+      border: 2px solid rgba(26,127,193,0.2);
+      color: var(--azul);
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(26,127,193,0.12);
+      animation: pulse-btn 2.5s infinite;
+      cursor: default;
+    }
+    @keyframes pulse-btn {
+      0%, 100% { box-shadow: 0 8px 24px rgba(26,127,193,0.12); }
+      50%       { box-shadow: 0 8px 32px rgba(26,127,193,0.28); }
+    }
+    .arrow-bounce {
+      animation: arrow 1s infinite ease-in-out;
+      font-size: 1.1rem;
+    }
+    @keyframes arrow {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    /* ── Serviços (chips) ── */
+    .servicos-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 40px;
+      max-width: 600px;
+    }
+    .chip {
+      background: var(--branco);
+      border: 1px solid rgba(26,127,193,0.15);
+      color: var(--texto-suave);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(26,127,193,0.06);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ───── BOTÃO FLUTUANTE ───── */
+    #chat-toggle {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(26,127,193,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      z-index: 1000;
+    }
+    #chat-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 10px 30px rgba(26,127,193,0.6);
+    }
+    #chat-toggle svg { width: 28px; height: 28px; fill: white; }
+
+    #notif {
+      position: absolute;
+      top: 0px; right: 0px;
+      width: 20px; height: 20px;
+      background: #ff4d6d;
+      border-radius: 50%;
+      border: 2px solid white;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: white;
+      display: flex; align-items: center; justify-content: center;
+      animation: notif-pop 0.4s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes notif-pop {
+      from { transform: scale(0) rotate(-30deg); }
+      to   { transform: scale(1) rotate(0); }
+    }
+
+    /* ───── JANELA DO CHAT ───── */
+    #chat-window {
+      position: fixed;
+      bottom: 108px;
+      right: 28px;
+      width: 360px;
+      max-height: 580px;
+      background: var(--branco);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(26,127,193,0.08);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 999;
+      transform: scale(0.85) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transform-origin: bottom right;
+      transition: transform 0.32s cubic-bezier(.34,1.56,.64,1), opacity 0.24s ease;
+    }
+    #chat-window.open {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Cabeçalho ── */
+    .chat-header {
+      background: linear-gradient(135deg, #2a9dd4 0%, #0d5a8a 100%);
+      color: white;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .chat-header::after {
+      content: '🦷';
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      opacity: 0.08;
+    }
+    .chat-header .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .chat-header .info { flex: 1; }
+    .chat-header .info .name  { font-weight: 700; font-size: 0.98rem; }
+    .chat-header .info .status {
+      font-size: 0.71rem;
+      opacity: 0.9;
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot {
+      width: 7px; height: 7px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: blink 1.5s infinite;
+      flex-shrink: 0;
+    }
+    .chat-header .close-btn {
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: white;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .chat-header .close-btn:hover { background: rgba(255,255,255,0.35); }
+
+    /* ── Mensagens ── */
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 14px;
+      background: #f4f9ff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #b8d8f0; border-radius: 4px; }
+
+    .msg {
+      max-width: 85%;
+      padding: 11px 15px;
+      border-radius: 18px;
+      font-size: 0.86rem;
+      line-height: 1.55;
+      animation: fadeUp 0.28s ease;
+    }
+    .msg.bot {
+      background: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      color: var(--texto);
+    }
+    .msg.user {
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    /* Digitando */
+    .typing {
+      align-self: flex-start;
+      background: white;
+      border-radius: 18px;
+      border-bottom-left-radius: 5px;
+      padding: 13px 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      display: flex;
+      gap: 5px;
+      animation: fadeUp 0.28s ease;
+    }
+    .typing span {
+      width: 7px; height: 7px;
+      background: var(--azul-claro);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing span:nth-child(2) { animation-delay: 0.18s; }
+    .typing span:nth-child(3) { animation-delay: 0.36s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+      40%            { transform: translateY(-7px); opacity: 1; }
+    }
+
+    /* ── Opções ── */
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      align-self: flex-start;
+      width: 100%;
+      animation: fadeUp 0.28s ease;
+    }
+    .opt-btn {
+      background: white;
+      border: 1.5px solid rgba(26,127,193,0.3);
+      color: var(--azul-escuro);
+      border-radius: 22px;
+      padding: 10px 18px;
+      font-size: 0.84rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.18s;
+      box-shadow: 0 2px 6px rgba(26,127,193,0.06);
+    }
+    .opt-btn:hover:not(:disabled) {
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      color: white;
+      border-color: transparent;
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(26,127,193,0.3);
+    }
+    .opt-btn:disabled { opacity: 0.4; cursor: default; }
+
+    /* Urgência em destaque */
+    .opt-btn.urgencia {
+      border-color: rgba(255,77,109,0.35);
+      color: #c0152b;
+    }
+    .opt-btn.urgencia:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ff6b88, #e0142a);
+    }
+
+    /* ── Rodapé ── */
+    .chat-footer {
+      padding: 10px 14px;
+      background: white;
+      border-top: 1px solid #e8f2fb;
+      font-size: 0.68rem;
+      color: #b0c4d8;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 420px) {
+      #chat-window { width: calc(100vw - 20px); right: 10px; bottom: 96px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fundo animado -->
+  <div class="bg-shapes">
+    <span></span><span></span><span></span>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-icon">🦷</div>
+      Clínica Odontológica
+    </div>
+    <div class="topbar-badge">Demo Chatbot IA</div>
+  </div>
+
+  <!-- Página -->
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eyebrow">
+        <div class="dot"></div>
+        Atendimento Automático 24h
+      </div>
+
+      <h1>Seu sorriso merece<br><span>atendimento inteligente</span></h1>
+
+      <p>A clínica responde seus pacientes automaticamente — a qualquer hora, qualquer dia. Agendamentos, dúvidas e urgências sem precisar de um atendente disponível o tempo todo.</p>
+
+      <!-- Estatísticas -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-num">24h</div>
+          <div class="stat-label">disponível</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">+80%</div>
+          <div class="stat-label">menos espera</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">personalizado</div>
+        </div>
+      </div>
+
+      <div class="cta-hint">
+        Teste agora <span class="arrow-bounce">👇</span>
+      </div>
+    </div>
+
+    <!-- Chips de serviços -->
+    <div class="servicos-chips">
+      <div class="chip">🪥 Limpeza</div>
+      <div class="chip">✨ Clareamento</div>
+      <div class="chip">😬 Ortodontia</div>
+      <div class="chip">🦷 Implante</div>
+      <div class="chip">😴 Canal</div>
+      <div class="chip">🔧 Restauração</div>
+    </div>
+  </div>
+
+  <!-- Botão flutuante -->
+  <button id="chat-toggle" aria-label="Abrir chat">
+    <div id="notif">1</div>
+    <svg class="icon-chat" viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+    <svg class="icon-close" viewBox="0 0 24 24" style="display:none"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+  </button>
+
+  <!-- Janela do chat -->
+  <div id="chat-window">
+    <div class="chat-header">
+      <div class="avatar">🦷</div>
+      <div class="info">
+        <div class="name">Clínica Odontológica</div>
+        <div class="status">
+          <div class="status-dot"></div>
+          Online agora · respondendo em instantes
+        </div>
+      </div>
+      <button class="close-btn" id="close-btn" aria-label="Fechar chat">✕</button>
+    </div>
+
+    <div class="chat-messages" id="messages"></div>
+
+    <div class="chat-footer">Powered by IA · Fabrizia Soluções Digitais</div>
+  </div>
+
+  <script>
+    const toggle   = document.getElementById('chat-toggle');
+    const chatWin  = document.getElementById('chat-window');
+    const msgs     = document.getElementById('messages');
+    const closeBtn = document.getElementById('close-btn');
+    const notif    = document.getElementById('notif');
+    const iconChat = toggle.querySelector('.icon-chat');
+    const iconClose= toggle.querySelector('.icon-close');
+
+    let started = false;
+
+    function openChat() {
+      chatWin.classList.add('open');
+      if (notif) notif.remove();
+      iconChat.style.display = 'none';
+      iconClose.style.display = '';
+      if (!started) { started = true; setTimeout(startFlow, 500); }
+    }
+
+    function closeChat() {
+      chatWin.classList.remove('open');
+      iconChat.style.display = '';
+      iconClose.style.display = 'none';
+    }
+
+    toggle.addEventListener('click', () => {
+      chatWin.classList.contains('open') ? closeChat() : openChat();
+    });
+    closeBtn.addEventListener('click', closeChat);
+
+    /* ── Helpers ── */
+    function addMsg(html, type = 'bot') {
+      const d = document.createElement('div');
+      d.className = `msg ${type}`;
+      d.innerHTML = html;
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+      return d;
+    }
+
+    function addTyping() {
+      const d = document.createElement('div');
+      d.className = 'typing';
+      d.innerHTML = '<span></span><span></span><span></span>';
+      msgs.appendChild(d);
+      msgs.scrollTop = msgs.scrollHeight;
+      return d;
+    }
+
+    function botSay(html, delay = 0) {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const t = addTyping();
+          setTimeout(() => { t.remove(); addMsg(html); resolve(); }, 950);
+        }, delay);
+      });
+    }
+
+    function addOptions(options) {
+      return new Promise(resolve => {
+        const wrap = document.createElement('div');
+        wrap.className = 'options';
+        options.forEach(({ label, action, cls }) => {
+          const btn = document.createElement('button');
+          btn.className = 'opt-btn' + (cls ? ' ' + cls : '');
+          btn.textContent = label;
+          btn.onclick = () => {
+            wrap.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+            wrap.style.pointerEvents = 'none';
+            addMsg(label, 'user');
+            setTimeout(() => action(), 420);
+            resolve();
+          };
+          wrap.appendChild(btn);
+        });
+        msgs.appendChild(wrap);
+        msgs.scrollTop = msgs.scrollHeight;
+      });
+    }
+
+    /* ── FLUXO PRINCIPAL ── */
+    async function startFlow() {
+      await botSay('Olá! 😊 Bem-vindo à <strong>Clínica Odontológica</strong>!<br>Como posso te ajudar hoje?');
+      await addOptions([
+        { label: '📅 Agendar consulta',          action: flowAgendar },
+        { label: '🦷 Tratamentos e preços',       action: flowTratamentos },
+        { label: '💳 Formas de pagamento',        action: flowPagamento },
+        { label: '🚨 Urgência / Dor de dente',   action: flowUrgencia, cls: 'urgencia' },
+        { label: '💬 Falar com atendente',        action: flowAtendente },
+      ]);
+    }
+
+    /* ── AGENDAR ── */
+    async function flowAgendar() {
+      await botSay('Ótimo! Para agendar da forma certa, me diga:<br><br>Você já é paciente da clínica?');
+      await addOptions([
+        { label: '🆕 Sou paciente novo',    action: flowPacienteNovo },
+        { label: '🔄 Já sou paciente',      action: flowPacienteRetorno },
+      ]);
+    }
+
+    async function flowPacienteNovo() {
+      await botSay('Seja muito bem-vindo! 🎉<br><br>Para novos pacientes, oferecemos uma <strong>avaliação gratuita</strong> com o dentista — sem compromisso.<br><br>Clique abaixo para agendar pelo WhatsApp e escolher o melhor horário para você:');
+      addWhatsApp('Olá! Quero agendar uma avaliação gratuita como paciente novo 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function flowPacienteRetorno() {
+      await botSay('Que bom ter você de volta! 😊<br><br>Qual procedimento precisa agendar?');
+      await addOptions([
+        { label: '🪥 Limpeza / Profilaxia',    action: () => agendarProc('Limpeza / Profilaxia') },
+        { label: '✨ Clareamento',              action: () => agendarProc('Clareamento dental') },
+        { label: '😬 Consulta de ortodontia',  action: () => agendarProc('Consulta de ortodontia') },
+        { label: '🦷 Consulta de rotina',      action: () => agendarProc('Consulta de rotina') },
+        { label: '📋 Outro procedimento',      action: () => agendarProc('outro procedimento') },
+      ]);
+    }
+
+    async function agendarProc(proc) {
+      await botSay(`Perfeito! Para agendar <strong>${proc}</strong>, fale com a gente pelo WhatsApp e nossa equipe escolhe o horário ideal com você:`);
+      addWhatsApp(`Olá! Gostaria de agendar: ${proc} 😊`);
+      setTimeout(addMenuBtn, 400);
+    }
+
+    /* ── TRATAMENTOS ── */
+    async function flowTratamentos() {
+      await botSay('Quer saber mais sobre qual tratamento?');
+      await addOptions([
+        { label: '🪥 Limpeza / Profilaxia',    action: infoLimpeza },
+        { label: '✨ Clareamento dental',       action: infoClareamento },
+        { label: '😬 Aparelho ortodôntico',     action: infoAparelho },
+        { label: '🦷 Implante dentário',        action: infoImplante },
+        { label: '😴 Tratamento de canal',      action: infoCanal },
+        { label: '🔧 Restauração / Obturação',  action: infoRestauracao },
+      ]);
+    }
+
+    async function infoLimpeza() {
+      await botSay('🪥 <b>Limpeza / Profilaxia</b><br><br>' +
+        'Remove tártaro e manchas que a escova não alcança.<br>' +
+        '• Recomendado a cada 6 meses<br>' +
+        '• Previne cáries e gengivite<br>' +
+        '• A partir de <b>R$ XX</b><br><br>' +
+        'Rápido, indolor e super importante para a saúde bucal! ✅');
+      addWhatsApp('Olá! Tenho interesse em agendar uma limpeza 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function infoClareamento() {
+      await botSay('✨ <b>Clareamento Dental</b><br><br>' +
+        'Deixa seu sorriso até <b>8 tons mais claro</b>!<br><br>' +
+        '• <b>Clareamento a laser</b> — resultado em 1 sessão (R$ XX)<br>' +
+        '• <b>Clareamento caseiro</b> — moldeira + gel (R$ XX)<br><br>' +
+        'Fazemos avaliação prévia gratuita para indicar o melhor método. ✨');
+      addWhatsApp('Olá! Tenho interesse no clareamento dental 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function infoAparelho() {
+      await botSay('😬 <b>Aparelho Ortodôntico</b><br><br>' +
+        '• 🔩 <b>Metálico</b> — mais econômico (a partir de R$ XX/mês)<br>' +
+        '• 🪬 <b>Estético / Cerâmico</b> — discreto (a partir de R$ XX/mês)<br>' +
+        '• 😶 <b>Invisalign</b> — alinhadores invisíveis (consulte)<br><br>' +
+        'Agende uma avaliação gratuita e descubra o ideal para você!');
+      addWhatsApp('Olá! Quero saber mais sobre aparelho ortodôntico 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function infoImplante() {
+      await botSay('🦷 <b>Implante Dentário</b><br><br>' +
+        'A solução mais duradoura para dentes perdidos.<br><br>' +
+        '✅ Parece e funciona como dente natural<br>' +
+        '✅ Dura décadas com cuidados simples<br>' +
+        '✅ Preserva o osso do maxilar<br>' +
+        '✅ Parcelamos em até 24x<br><br>' +
+        'Agende uma avaliação para receber orçamento personalizado.');
+      addWhatsApp('Olá! Quero saber sobre implante dentário 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function infoCanal() {
+      await botSay('😴 <b>Tratamento de Canal (Endodontia)</b><br><br>' +
+        'Remove a infecção dentro do dente, eliminando a dor e salvando o dente natural.<br><br>' +
+        '• Anestesia local — o procedimento é indolor<br>' +
+        '• Geralmente 1 a 2 sessões<br>' +
+        '• A partir de <b>R$ XX</b><br><br>' +
+        'Sentindo dor? Não espere — entre em contato agora!');
+      addWhatsApp('Olá! Preciso saber sobre tratamento de canal 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    async function infoRestauracao() {
+      await botSay('🔧 <b>Restauração / Obturação</b><br><br>' +
+        'Trata cáries e restaura a forma e função do dente com resina da cor do dente.<br><br>' +
+        '• Procedimento rápido (30–60 min)<br>' +
+        '• Resultado estético e natural<br>' +
+        '• A partir de <b>R$ XX</b><br><br>' +
+        'Quanto antes tratar, mais simples e barato fica! 😊');
+      addWhatsApp('Olá! Quero agendar uma restauração 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    /* ── PAGAMENTO ── */
+    async function flowPagamento() {
+      await botSay('💳 <b>Formas de Pagamento</b><br><br>' +
+        '💵 Dinheiro e Pix — <b>5% de desconto</b><br>' +
+        '💳 Cartão de débito<br>' +
+        '💳 Cartão de crédito em até <b>12x</b> sem juros<br>' +
+        '📋 Convênios: <b>Amil One, SulAmérica Prestige, Bradesco Saúde Nacional</b><br><br>' +
+        'Dúvidas sobre seu convênio? Fale com a gente! 😊');
+      addWhatsApp('Olá! Gostaria de saber sobre formas de pagamento e convênios 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    /* ── URGÊNCIA ── */
+    async function flowUrgencia() {
+      await botSay('🚨 <b>Atendimento de Urgência</b><br><br>' +
+        'Entendo que é urgente! Para <strong>dor forte, dente quebrado ou inchaço</strong>, entre em contato <b>agora mesmo</b> pelo WhatsApp — tentaremos te encaixar o mais rápido possível:');
+      addWhatsApp('🚨 URGÊNCIA: preciso de atendimento urgente!');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    /* ── ATENDENTE ── */
+    async function flowAtendente() {
+      await botSay('Claro! Vou te conectar com nossa equipe agora. 😊');
+      addWhatsApp('Olá! Gostaria de falar com um atendente 😊');
+      setTimeout(addMenuBtn, 400);
+    }
+
+    /* ── WhatsApp ── */
+    function addWhatsApp(mensagem) {
+      const numero = '5547999999999';
+      const texto  = encodeURIComponent(mensagem);
+      addMsg(
+        `<a href="https://wa.me/${numero}?text=${texto}" target="_blank"
+           style="display:inline-flex;align-items:center;gap:9px;background:#25D366;color:white;
+                  padding:11px 18px;border-radius:24px;text-decoration:none;font-size:0.84rem;
+                  font-weight:700;box-shadow:0 4px 14px rgba(37,211,102,0.4);">
+          <svg width="18" height="18" fill="white" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+            <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.117 1.522 5.848L.057 23.804a.75.75 0 0 0 .92.92l5.956-1.465A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zM12 22a9.944 9.944 0 0 1-5.073-1.386l-.363-.216-3.764.927.944-3.653-.236-.376A9.944 9.944 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+          </svg>
+          Falar no WhatsApp
+        </a>`
+      );
+    }
+
+    /* ── Voltar ao menu ── */
+    function addMenuBtn() {
+      const wrap = document.createElement('div');
+      wrap.className = 'options';
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = '🔙 Voltar ao menu principal';
+      btn.onclick = () => { wrap.remove(); startFlow(); };
+      wrap.appendChild(btn);
+      msgs.appendChild(wrap);
+      msgs.scrollTop = msgs.scrollHeight;
+    }
+  </script>
+</body>
+</html>
