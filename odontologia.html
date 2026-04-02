@@ -465,12 +465,49 @@
       background: linear-gradient(135deg, #ff6b88, #e0142a);
     }
 
-    /* ── Rodapé ── */
-    .chat-footer {
-      padding: 10px 14px;
+    /* ── Campo de texto ── */
+    .chat-input-area {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
       background: white;
       border-top: 1px solid #e8f2fb;
-      font-size: 0.68rem;
+      align-items: center;
+    }
+    .chat-input {
+      flex: 1;
+      border: 1.5px solid rgba(26,127,193,0.22);
+      border-radius: 22px;
+      padding: 9px 15px;
+      font-family: inherit;
+      font-size: 0.84rem;
+      outline: none;
+      color: var(--texto);
+      background: #f4f9ff;
+      transition: border 0.2s, background 0.2s;
+    }
+    .chat-input:focus { border-color: var(--azul-claro); background: white; }
+    .chat-input::placeholder { color: #a8c4d8; }
+    .send-btn {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--azul-claro), var(--azul));
+      border: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .send-btn:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(26,127,193,0.4); }
+    .send-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+    .send-btn svg { width: 17px; height: 17px; fill: white; }
+
+    /* ── Rodapé ── */
+    .chat-footer {
+      padding: 7px 14px;
+      background: white;
+      border-top: 1px solid #e8f2fb;
+      font-size: 0.67rem;
       color: #b0c4d8;
       text-align: center;
       letter-spacing: 0.3px;
@@ -569,19 +606,75 @@
 
     <div class="chat-messages" id="messages"></div>
 
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" class="chat-input" placeholder="Digite sua mensagem..." autocomplete="off"/>
+      <button class="send-btn" id="send-btn" aria-label="Enviar">
+        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+      </button>
+    </div>
+
     <div class="chat-footer">Powered by IA · Fabrizia Soluções Digitais</div>
   </div>
 
   <script>
-    const toggle   = document.getElementById('chat-toggle');
-    const chatWin  = document.getElementById('chat-window');
-    const msgs     = document.getElementById('messages');
-    const closeBtn = document.getElementById('close-btn');
-    const notif    = document.getElementById('notif');
-    const iconChat = toggle.querySelector('.icon-chat');
-    const iconClose= toggle.querySelector('.icon-close');
+    const toggle    = document.getElementById('chat-toggle');
+    const chatWin   = document.getElementById('chat-window');
+    const msgs      = document.getElementById('messages');
+    const closeBtn  = document.getElementById('close-btn');
+    const notif     = document.getElementById('notif');
+    const iconChat  = toggle.querySelector('.icon-chat');
+    const iconClose = toggle.querySelector('.icon-close');
+    const inputEl   = document.getElementById('chat-input');
+    const sendBtn   = document.getElementById('send-btn');
 
-    let started = false;
+    let started      = false;
+    let nomeCliente  = '';
+    let inputCallback = null; // função chamada quando usuário envia texto livre
+
+    // Enviar mensagem pelo input
+    function enviarTexto() {
+      const texto = inputEl.value.trim();
+      if (!texto) return;
+      inputEl.value = '';
+      addMsg(texto, 'user');
+      if (inputCallback) {
+        const cb = inputCallback;
+        inputCallback = null;
+        setTimeout(() => cb(texto), 400);
+      } else {
+        setTimeout(() => responderLivre(texto), 400);
+      }
+    }
+
+    sendBtn.addEventListener('click', enviarTexto);
+    inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') enviarTexto(); });
+
+    // Resposta inteligente a texto livre
+    async function responderLivre(texto) {
+      const t = texto.toLowerCase();
+      if (/agen|consult|marc|hora/.test(t))          { await flowAgendar(); }
+      else if (/pre[çc]|valor|quanto|cust/.test(t))  { await flowTratamentos(); }
+      else if (/dor|urgent|urgên|urgen|quebr|inchaç/.test(t)) { await flowUrgencia(); }
+      else if (/pag|conv[eê]n|parcel|pix|cart/.test(t))       { await flowPagamento(); }
+      else if (/hor[aá]rio|funciona|abre|fecha/.test(t)) {
+        await botSay('🕐 <b>Horário de atendimento:</b><br>Segunda a Sexta: <b>8h às 20h</b><br><br>Fora desse horário, deixe sua mensagem que respondemos assim que possível! 😊');
+        setTimeout(addMenuBtn, 400);
+      }
+      else if (/oi|olá|ola|bom dia|boa tarde|boa noite/.test(t)) {
+        await botSay(`Olá, <strong>${nomeCliente || 'tudo bem'}</strong>! 😊 Como posso te ajudar?`);
+        await startFlow();
+      }
+      else {
+        await botSay(`Entendi, <strong>${nomeCliente}</strong>! 😊 Para te ajudar melhor, escolha uma das opções abaixo:`);
+        await addOptions([
+          { label: '📅 Agendar consulta',         action: flowAgendar },
+          { label: '🦷 Tratamentos e preços',      action: flowTratamentos },
+          { label: '💳 Formas de pagamento',       action: flowPagamento },
+          { label: '🚨 Urgência / Dor de dente',  action: flowUrgencia, cls: 'urgencia' },
+          { label: '💬 Falar com atendente',       action: flowAtendente },
+        ]);
+      }
+    }
 
     function openChat() {
       chatWin.classList.add('open');
@@ -654,7 +747,27 @@
 
     /* ── FLUXO PRINCIPAL ── */
     async function startFlow() {
-      await botSay('Olá! 😊 Bem-vindo à <strong>Clínica Odontológica</strong>!<br>Como posso te ajudar hoje?');
+      // Pede o nome na primeira vez
+      if (!nomeCliente) {
+        await botSay('Olá! 😊 Bem-vindo à <strong>Clínica Odontológica</strong>!<br><br>Antes de começar, qual é o seu nome?');
+        inputEl.placeholder = 'Digite seu nome...';
+        inputCallback = async (nome) => {
+          nomeCliente = nome.trim() || 'paciente';
+          inputEl.placeholder = 'Digite sua mensagem...';
+          await botSay(
+            `Prazer, <strong>${nomeCliente}</strong>! 😄<br><br>` +
+            `🕐 <b>Horário de atendimento:</b> Seg–Sex, das 8h às 20h<br><br>` +
+            `Como posso te ajudar hoje?`
+          );
+          await showMenu();
+        };
+      } else {
+        await botSay(`Como posso te ajudar, <strong>${nomeCliente}</strong>? 😊`);
+        await showMenu();
+      }
+    }
+
+    async function showMenu() {
       await addOptions([
         { label: '📅 Agendar consulta',          action: flowAgendar },
         { label: '🦷 Tratamentos e preços',       action: flowTratamentos },
@@ -666,7 +779,7 @@
 
     /* ── AGENDAR ── */
     async function flowAgendar() {
-      await botSay('Ótimo! Para agendar da forma certa, me diga:<br><br>Você já é paciente da clínica?');
+      await botSay(`Ótimo, <strong>${nomeCliente}</strong>! Para agendar da forma certa, me diga:<br><br>Você já é paciente da clínica?`);
       await addOptions([
         { label: '🆕 Sou paciente novo',    action: flowPacienteNovo },
         { label: '🔄 Já sou paciente',      action: flowPacienteRetorno },
@@ -826,7 +939,7 @@
       const btn = document.createElement('button');
       btn.className = 'opt-btn';
       btn.textContent = '🔙 Voltar ao menu principal';
-      btn.onclick = () => { wrap.remove(); startFlow(); };
+      btn.onclick = () => { wrap.remove(); showMenu(); };
       wrap.appendChild(btn);
       msgs.appendChild(wrap);
       msgs.scrollTop = msgs.scrollHeight;
