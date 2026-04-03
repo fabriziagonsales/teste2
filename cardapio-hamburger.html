@@ -594,14 +594,53 @@
         </div>
       </div>
 
-      <div class="item-card" data-cat="burger" data-id="5" data-nome="Veggie Burger" data-preco="31.90" data-foto="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=300&fit=crop&auto=format">
-        <img class="item-foto" src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=300&fit=crop&auto=format" alt="Veggie Burger" loading="lazy"/>
+      <div class="item-card" data-cat="burger" data-id="5" data-nome="Veggie da Horta" data-preco="31.90" data-foto="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1520072959219-c595dc870360?w=400&h=300&fit=crop&auto=format" alt="Veggie da Horta" loading="lazy"/>
         <div class="item-body">
           <div class="item-tags"><span class="tag tag-veggie">🌱 Veggie</span></div>
-          <div class="item-nome">Veggie Burger</div>
+          <div class="item-nome">Veggie da Horta</div>
           <div class="item-desc">Blend de grão-de-bico e cogumelos, queijo brie, rúcula, tomate seco e pesto de manjericão.</div>
           <div class="item-rodape">
             <div class="item-preco">R$ 31,90<small>só o burger</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="burger" data-id="17" data-nome="Frango do Capeta" data-preco="33.90" data-foto="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop&auto=format" alt="Frango do Capeta" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-hot">🌶️ Picante</span></div>
+          <div class="item-nome">Frango do Capeta</div>
+          <div class="item-desc">Filé de frango crocante, molho buffalo ardido, cheddar, jalapeño e maionese de limão siciliano.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 33,90<small>só o burger</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="burger" data-id="18" data-nome="O Monstro" data-preco="52.90" data-foto="https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&h=300&fit=crop&auto=format" alt="O Monstro" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-mais">👑 Gigante</span></div>
+          <div class="item-nome">O Monstro</div>
+          <div class="item-desc">Três blends 180g, bacon triplo, cheddar derretido, ovo frito, picles e molho secreto da casa.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 52,90<small>só o burger</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="burger" data-id="19" data-nome="Rainha da Noite" data-preco="41.90" data-foto="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop&auto=format" alt="Rainha da Noite" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-novo">✨ Especial</span></div>
+          <div class="item-nome">Rainha da Noite</div>
+          <div class="item-desc">Pão preto de tinta de lula, blend bovino premium, queijo brie, geleia de pimenta e rúcula selvagem.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 41,90<small>só o burger</small></div>
             <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
           </div>
         </div>
@@ -655,6 +694,58 @@
         </div>
       </div>
 
+      <div class="item-card" data-cat="combo" data-id="20" data-nome="Combo Duplo Especial" data-preco="62.90" data-foto="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&h=300&fit=crop&auto=format" alt="Combo Duplo" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-combo">🍟 Combo</span><span class="tag tag-mais">👑 Premium</span></div>
+          <div class="item-nome">Combo Duplo Especial</div>
+          <div class="item-desc">Duplo Especial + Batata Cheddar Bacon + Milkshake 400ml. Para quem não tem medo de exagerar!</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 62,90<small>economize R$ 14,00</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="combo" data-id="21" data-nome="Combo Frango do Capeta" data-preco="52.90" data-foto="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop&auto=format" alt="Combo Frango" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-combo">🍟 Combo</span><span class="tag tag-hot">🌶️ Picante</span></div>
+          <div class="item-nome">Combo Frango do Capeta</div>
+          <div class="item-desc">Frango do Capeta + Batata Frita + Limonada Suíça 500ml. Pede se aguentar o tranco!</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 52,90<small>economize R$ 10,00</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="combo" data-id="22" data-nome="Combo Rainha da Noite" data-preco="59.90" data-foto="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?w=400&h=300&fit=crop&auto=format" alt="Combo Rainha" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-combo">🍟 Combo</span><span class="tag tag-novo">✨ Especial</span></div>
+          <div class="item-nome">Combo Rainha da Noite</div>
+          <div class="item-desc">Rainha da Noite + Onion Rings + Suco Natural 400ml. A escolha mais elegante do cardápio.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 59,90<small>economize R$ 12,00</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="combo" data-id="23" data-nome="Combo O Monstro" data-preco="72.90" data-foto="https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1587334274328-64186a80aeee?w=400&h=300&fit=crop&auto=format" alt="Combo Monstro" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-combo">🍟 Combo</span><span class="tag tag-mais">👑 Gigante</span></div>
+          <div class="item-nome">Combo O Monstro</div>
+          <div class="item-desc">O Monstro + Batata Cheddar Bacon + Refrigerante 500ml. Desafio aceito?</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 72,90<small>economize R$ 16,00</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -698,6 +789,58 @@
           <div class="item-desc">Batata frita coberta com cheddar cremoso quente e bacon crocante artesanal.</div>
           <div class="item-rodape">
             <div class="item-preco">R$ 27,90<small>porção média</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="porcao" data-id="24" data-nome="Nuggets Artesanais" data-preco="24.90" data-foto="https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&h=300&fit=crop&auto=format" alt="Nuggets" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-novo">⭐ Favorito</span></div>
+          <div class="item-nome">Nuggets Artesanais</div>
+          <div class="item-desc">10 unidades de frango empanado na hora com molho buffalo ou mel mostarda. Impossível comer um só.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 24,90<small>10 unidades</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="porcao" data-id="25" data-nome="Mac 'n' Cheese da Casa" data-preco="29.90" data-foto="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?w=400&h=300&fit=crop&auto=format" alt="Mac n Cheese" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-hot">🔥 Cremoso</span></div>
+          <div class="item-nome">Mac 'n' Cheese da Casa</div>
+          <div class="item-desc">Macarrão cremoso com blend de quatro queijos, bacon crocante e crosta dourada no forno.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 29,90<small>porção individual</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="porcao" data-id="26" data-nome="Costelinha BBQ" data-preco="39.90" data-foto="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1544025162-d76694265947?w=400&h=300&fit=crop&auto=format" alt="Costelinha BBQ" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-mais">👑 Premium</span></div>
+          <div class="item-nome">Costelinha BBQ</div>
+          <div class="item-desc">Meia costela suína ao molho BBQ defumado, assada lentamente por 6 horas. Cai do osso.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 39,90<small>meia costela</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="porcao" data-id="27" data-nome="Mix do Boteco" data-preco="34.90" data-foto="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?w=400&h=300&fit=crop&auto=format" alt="Mix Petiscos" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-combo">🍺 Para compartilhar</span></div>
+          <div class="item-nome">Mix do Boteco</div>
+          <div class="item-desc">Onion Rings, Nuggets, batata frita e mini pão de alho. Perfeito para dividir com a galera.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 34,90<small>serve 2–3 pessoas</small></div>
             <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
           </div>
         </div>
@@ -751,6 +894,58 @@
         </div>
       </div>
 
+      <div class="item-card" data-cat="bebida" data-id="28" data-nome="Limonada Suíça" data-preco="14.90" data-foto="https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&h=300&fit=crop&auto=format" alt="Limonada Suíça" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-novo">⭐ Favorita</span></div>
+          <div class="item-nome">Limonada Suíça 500ml</div>
+          <div class="item-desc">Limão siciliano, leite condensado e creme de leite. Cremosa, gelada e irresistível.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 14,90<small>500ml</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="bebida" data-id="29" data-nome="Cerveja Artesanal" data-preco="17.90" data-foto="https://images.unsplash.com/photo-1566633806827-5c0a5a867f0e?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1566633806827-5c0a5a867f0e?w=400&h=300&fit=crop&auto=format" alt="Cerveja Artesanal" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-mais">🍺 Artesanal</span></div>
+          <div class="item-nome">Cerveja Artesanal 350ml</div>
+          <div class="item-desc">IPA, Weiss, Red Ale ou Stout. Produção local, gelada na temperatura certa.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 17,90<small>350ml</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="bebida" data-id="30" data-nome="Chá Gelado Premium" data-preco="11.90" data-foto="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=300&fit=crop&auto=format" alt="Chá Gelado" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-veggie">🌿 Refrescante</span></div>
+          <div class="item-nome">Chá Gelado Premium 400ml</div>
+          <div class="item-desc">Pêssego, Frutas Vermelhas ou Menta com Limão. Artesanal, sem corantes.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 11,90<small>400ml</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="bebida" data-id="31" data-nome="Energético Monster" data-preco="13.90" data-foto="https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=400&h=300&fit=crop&auto=format" alt="Energético" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-hot">⚡ Energia</span></div>
+          <div class="item-nome">Energético Monster 473ml</div>
+          <div class="item-desc">Original, Ultra White, Ultra Rosa ou Pipeline Punch. Gelado do jeito que tem que ser.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 13,90<small>473ml</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -781,6 +976,71 @@
           <div class="item-desc">Sorvete de creme, Nutella, chantilly e granulado crocante de avelã.</div>
           <div class="item-rodape">
             <div class="item-preco">R$ 16,90</div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="sobremesa" data-id="32" data-nome="Churros do Pecado" data-preco="19.90" data-foto="https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&h=300&fit=crop&auto=format" alt="Churros" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-hot">🔥 Irresistível</span></div>
+          <div class="item-nome">Churros do Pecado</div>
+          <div class="item-desc">Churros crocante recheado com doce de leite, servido com sorvete de baunilha e calda de chocolate.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 19,90<small>2 unidades</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="sobremesa" data-id="33" data-nome="Cookie Quente" data-preco="17.90" data-foto="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=400&h=300&fit=crop&auto=format" alt="Cookie" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-novo">⭐ Favorito</span></div>
+          <div class="item-nome">Cookie Quente</div>
+          <div class="item-desc">Cookie gigante de chocolate meio amargo quentinho, servido com bola de sorvete. Tão bom que dói.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 17,90</div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="sobremesa" data-id="34" data-nome="Petit Gateau Vulcão" data-preco="22.90" data-foto="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=400&h=300&fit=crop&auto=format" alt="Petit Gateau" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-mais">👑 Premium</span></div>
+          <div class="item-nome">Petit Gateau Vulcão</div>
+          <div class="item-desc">Bolinho de chocolate com interior derretido, sorvete de baunilha e calda de frutas vermelhas.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 22,90</div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="sobremesa" data-id="35" data-nome="Açaí do Guerreiro" data-preco="21.90" data-foto="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=400&h=300&fit=crop&auto=format" alt="Açaí" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-veggie">🌱 Natural</span></div>
+          <div class="item-nome">Açaí do Guerreiro 500ml</div>
+          <div class="item-desc">Açaí cremoso na tigela com granola crocante, banana, morango, mel e leite condensado.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 21,90<small>500ml</small></div>
+            <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="item-card" data-cat="sobremesa" data-id="36" data-nome="Crepe da Tentação" data-preco="20.90" data-foto="https://images.unsplash.com/photo-1519676867240-f03562e64548?w=400&h=300&fit=crop&auto=format">
+        <img class="item-foto" src="https://images.unsplash.com/photo-1519676867240-f03562e64548?w=400&h=300&fit=crop&auto=format" alt="Crepe Nutella" loading="lazy"/>
+        <div class="item-body">
+          <div class="item-tags"><span class="tag tag-hot">🔥 Tentador</span></div>
+          <div class="item-nome">Crepe da Tentação</div>
+          <div class="item-desc">Crepe fininho com Nutella, morangos frescos, chantilly e raspas de chocolate belga.</div>
+          <div class="item-rodape">
+            <div class="item-preco">R$ 20,90</div>
             <button class="add-btn" onclick="adicionar(this.closest('.item-card'))">+</button>
           </div>
         </div>
