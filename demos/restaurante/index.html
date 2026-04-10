@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grill & Sabor — Cardápio Digital</title>
+  <title>Cardápio Digital | Grill & Sabor — Balneário Camboriú</title>
+  <meta name="description" content="Cardápio digital do Grill & Sabor. Pratos caseiros, combos especiais, delivery e reserva de mesa em Balneário Camboriú. Peça pelo WhatsApp!" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,13 +12,11 @@
       --primary: #c17f24;
       --primary-dark: #a06a18;
       --dark: #1c1208;
-      --dark2: #2d1f0d;
       --text: #3d2a10;
       --text-light: #7a6040;
       --cream: #fdf9f3;
       --white: #ffffff;
       --border: rgba(193,127,36,.18);
-      --shadow: 0 4px 24px rgba(0,0,0,.1);
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
@@ -31,10 +30,7 @@
     }
     .lgpd.hidden { transform: translateY(100%); }
     .lgpd p { font-size: .82rem; line-height: 1.6; flex: 1; min-width: 200px; }
-    .lgpd button {
-      background: var(--primary); color: #fff; border: none;
-      padding: 8px 22px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer;
-    }
+    .lgpd button { background: var(--primary); color: #fff; border: none; padding: 8px 22px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer; }
 
     /* === WHATSAPP FLOAT === */
     .wpp-float {
@@ -54,8 +50,7 @@
       position: fixed; bottom: 80px; left: 24px; z-index: 998;
       background: var(--dark); color: #fff; width: 44px; height: 44px;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; cursor: pointer; border: none;
-      opacity: 0; pointer-events: none; transition: opacity .3s;
+      font-size: 1.1rem; cursor: pointer; border: none; opacity: 0; pointer-events: none; transition: opacity .3s;
     }
     .back-top.visible { opacity: 1; pointer-events: all; }
 
@@ -73,46 +68,26 @@
     .chatbox {
       position: fixed; bottom: 210px; right: 24px; z-index: 997;
       width: 320px; background: #fff; border-radius: 16px;
-      box-shadow: 0 8px 40px rgba(0,0,0,.2);
-      display: flex; flex-direction: column; overflow: hidden;
-      opacity: 0; pointer-events: none; transform: translateY(20px);
-      transition: opacity .3s, transform .3s;
+      box-shadow: 0 8px 40px rgba(0,0,0,.2); display: flex; flex-direction: column; overflow: hidden;
+      opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity .3s, transform .3s;
     }
     .chatbox.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-    .chat-header {
-      background: var(--dark); color: #fff; padding: 16px 20px;
-      display: flex; align-items: center; gap: 12px;
-    }
-    .chat-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-    }
+    .chat-header { background: var(--dark); color: #fff; padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+    .chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
     .chat-header-info h4 { font-size: .9rem; font-weight: 700; }
     .chat-header-info p { font-size: .72rem; color: rgba(255,255,255,.6); }
     .chat-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,.6); font-size: 1.2rem; cursor: pointer; }
-    .chat-messages {
-      padding: 16px; min-height: 180px; max-height: 260px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 10px;
-    }
+    .chat-messages { padding: 16px; min-height: 180px; max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
     .msg { max-width: 82%; font-size: .85rem; line-height: 1.5; padding: 10px 14px; border-radius: 12px; }
     .msg-bot { background: #f0ede8; color: var(--text); border-radius: 4px 12px 12px 12px; align-self: flex-start; }
     .msg-user { background: var(--primary); color: #fff; border-radius: 12px 4px 12px 12px; align-self: flex-end; }
     .chat-options { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 8px; }
-    .chat-opt {
-      background: none; border: 1px solid var(--border); color: var(--text);
-      padding: 7px 14px; border-radius: 20px; font-size: .8rem; cursor: pointer; transition: all .2s;
-    }
+    .chat-opt { background: none; border: 1px solid var(--border); color: var(--text); padding: 7px 14px; border-radius: 20px; font-size: .8rem; cursor: pointer; transition: all .2s; }
     .chat-opt:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
     .chat-input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
-    .chat-input {
-      flex: 1; border: 1px solid var(--border); border-radius: 8px;
-      padding: 9px 12px; font-size: .85rem; outline: none; font-family: inherit;
-    }
+    .chat-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: .85rem; outline: none; font-family: inherit; }
     .chat-input:focus { border-color: var(--primary); }
-    .chat-send {
-      background: var(--primary); color: #fff; border: none;
-      padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: .9rem;
-    }
+    .chat-send { background: var(--primary); color: #fff; border: none; padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: .9rem; }
 
     /* === NAVBAR === */
     nav {
@@ -123,16 +98,10 @@
       border-bottom: 1px solid transparent; transition: border-color .3s, box-shadow .3s;
     }
     nav.scrolled { border-color: var(--border); box-shadow: 0 2px 20px rgba(0,0,0,.08); }
-    .nav-brand {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700;
-      color: var(--dark); text-decoration: none;
-    }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--dark); text-decoration: none; }
     .nav-brand span { color: var(--primary); }
     .nav-links { display: flex; gap: 4px; align-items: center; }
-    .nav-links a {
-      color: var(--text); text-decoration: none; font-size: .85rem; font-weight: 500;
-      padding: 7px 14px; border-radius: 8px; transition: all .2s;
-    }
+    .nav-links a { color: var(--text); text-decoration: none; font-size: .85rem; font-weight: 500; padding: 7px 14px; border-radius: 8px; transition: all .2s; }
     .nav-links a:hover { background: rgba(193,127,36,.1); color: var(--primary); }
     .nav-wpp { background: #25d366 !important; color: #fff !important; font-weight: 600 !important; }
     .nav-wpp:hover { background: #1da851 !important; color: #fff !important; }
@@ -148,28 +117,42 @@
       position: absolute; inset: 0; z-index: 0;
       background: url('https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1400') center/cover no-repeat;
     }
-    .hero-overlay {
-      position: absolute; inset: 0; z-index: 1;
-      background: linear-gradient(to bottom, rgba(28,18,8,.6) 0%, rgba(28,18,8,.82) 100%);
-    }
+    .hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to bottom, rgba(28,18,8,.6) 0%, rgba(28,18,8,.82) 100%); }
     .hero-content { position: relative; z-index: 2; color: #fff; }
-    .hero-badge {
-      display: inline-block; background: rgba(193,127,36,.2); border: 1px solid rgba(193,127,36,.45);
-      color: #f5c97a; font-size: .72rem; font-weight: 600; letter-spacing: 3px;
-      text-transform: uppercase; padding: 7px 22px; border-radius: 50px; margin-bottom: 24px;
-    }
-    .hero h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.2rem, 9vw, 7rem); font-weight: 700; line-height: 1.05;
-      margin-bottom: 18px; text-shadow: 0 2px 24px rgba(0,0,0,.5);
-    }
+    .hero-badge { display: inline-block; background: rgba(193,127,36,.2); border: 1px solid rgba(193,127,36,.45); color: #f5c97a; font-size: .72rem; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; padding: 7px 22px; border-radius: 50px; margin-bottom: 24px; }
+    .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.2rem, 9vw, 7rem); font-weight: 700; line-height: 1.05; margin-bottom: 18px; text-shadow: 0 2px 24px rgba(0,0,0,.5); }
     .hero h1 span { color: #f5c97a; }
-    .hero p {
-      font-size: 1.05rem; line-height: 1.8; color: rgba(255,255,255,.78);
-      max-width: 480px; margin: 0 auto 36px;
-    }
-    .hero-infos { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; color: rgba(255,255,255,.65); font-size: .85rem; }
+    .hero p { font-size: 1.05rem; line-height: 1.8; color: rgba(255,255,255,.78); max-width: 480px; margin: 0 auto 28px; }
+    .hero-infos { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; color: rgba(255,255,255,.65); font-size: .85rem; margin-bottom: 36px; }
     .hero-infos span { display: flex; align-items: center; gap: 6px; }
+
+    /* Status ao vivo */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50px; padding: 8px 18px; font-size: .82rem; font-weight: 600; margin-bottom: 28px;
+    }
+    .status-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .status-dot.open { background: #4ade80; box-shadow: 0 0 0 3px rgba(74,222,128,.25); animation: blink 2s infinite; }
+    .status-dot.closed { background: #f87171; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--primary); color: #fff; text-decoration: none;
+      padding: 15px 36px; border-radius: 10px; font-size: .95rem; font-weight: 700;
+      transition: background .2s; box-shadow: 0 4px 20px rgba(193,127,36,.4);
+    }
+    .hero-cta:hover { background: var(--primary-dark); }
+
+    /* === DELIVERY BANNER === */
+    .delivery-banner {
+      background: var(--primary); color: #fff;
+      padding: 14px 6%; display: flex; align-items: center; justify-content: center;
+      gap: 32px; flex-wrap: wrap; font-size: .85rem; font-weight: 500;
+    }
+    .delivery-banner span { display: flex; align-items: center; gap: 6px; }
+    .delivery-banner strong { font-weight: 700; }
 
     /* === CATEGORY TABS === */
     .cat-tabs {
@@ -184,39 +167,29 @@
       padding: 14px 22px; font-size: .85rem; font-weight: 600;
       color: var(--text-light); text-decoration: none;
       border-bottom: 2px solid transparent; margin-bottom: -2px;
-      transition: all .2s; white-space: nowrap;
+      transition: all .2s; white-space: nowrap; cursor: pointer; border-top: none; border-left: none; border-right: none;
+      background: none; font-family: inherit;
     }
     .cat-tab:hover, .cat-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-    /* === COMBOS === */
-    .combos { padding: 80px 6%; background: var(--dark); }
+    /* === SECTION HIDDEN BY FILTER === */
+    .menu-section.hidden-filter, .combos.hidden-filter { display: none; }
+
+    /* === SECTION HEADER === */
     .section-header { text-align: center; margin-bottom: 52px; }
-    .section-label {
-      display: inline-block; color: var(--primary); font-size: .72rem; font-weight: 700;
-      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
-    }
+    .section-label { display: inline-block; color: var(--primary); font-size: .72rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
     .combos .section-label { color: #f5c97a; }
-    .section-header h2 {
-      font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 700; color: var(--dark);
-    }
+    .section-header h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; color: var(--dark); }
     .combos .section-header h2 { color: #fff; }
     .section-header p { color: var(--text-light); font-size: .9rem; margin-top: 10px; line-height: 1.7; }
     .combos .section-header p { color: rgba(255,255,255,.55); }
 
+    /* === COMBOS === */
+    .combos { padding: 80px 6%; background: var(--dark); }
     .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .combo-card {
-      background: rgba(255,255,255,.04); border: 1px solid rgba(193,127,36,.2);
-      border-radius: 16px; overflow: hidden; transition: transform .3s, border-color .3s;
-      position: relative;
-    }
+    .combo-card { background: rgba(255,255,255,.04); border: 1px solid rgba(193,127,36,.2); border-radius: 16px; overflow: hidden; transition: transform .3s, border-color .3s; position: relative; }
     .combo-card:hover { transform: translateY(-5px); border-color: rgba(193,127,36,.55); }
-    .combo-badge {
-      position: absolute; top: 14px; left: 14px; z-index: 2;
-      background: var(--primary); color: #fff;
-      font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-      padding: 5px 13px; border-radius: 20px;
-    }
+    .combo-badge { position: absolute; top: 14px; left: 14px; z-index: 2; background: var(--primary); color: #fff; font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 5px 13px; border-radius: 20px; }
     .combo-img { width: 100%; height: 200px; object-fit: cover; display: block; }
     .combo-body { padding: 22px; }
     .combo-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
@@ -224,57 +197,108 @@
     .combo-price { display: flex; align-items: baseline; gap: 10px; }
     .combo-price .old { color: rgba(255,255,255,.3); font-size: .85rem; text-decoration: line-through; }
     .combo-price .new { color: #f5c97a; font-size: 1.55rem; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
-    .combo-btn {
-      display: block; text-align: center; margin-top: 16px;
-      background: var(--primary); color: #fff; text-decoration: none;
-      padding: 11px; border-radius: 8px; font-size: .85rem; font-weight: 600; transition: background .2s;
-    }
+    .combo-btn { display: block; text-align: center; margin-top: 16px; background: var(--primary); color: #fff; text-decoration: none; padding: 11px; border-radius: 8px; font-size: .85rem; font-weight: 600; transition: background .2s; }
     .combo-btn:hover { background: var(--primary-dark); }
 
     /* === MENU SECTION === */
     .menu-section { padding: 80px 6%; background: var(--cream); }
     .menu-section.white { background: var(--white); }
-
     .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
-    .menu-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden; transition: transform .3s, box-shadow .3s;
-      display: flex; flex-direction: column;
-    }
+
+    /* === MENU CARD === */
+    .menu-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; transition: transform .3s, box-shadow .3s; display: flex; flex-direction: column; position: relative; }
     .menu-section.white .menu-card { background: var(--cream); }
     .menu-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
     .menu-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
     .menu-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
     .menu-card-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
-    .menu-card-body p { color: var(--text-light); font-size: .83rem; line-height: 1.6; flex: 1; margin-bottom: 18px; }
+    .menu-card-body p { color: var(--text-light); font-size: .83rem; line-height: 1.6; flex: 1; margin-bottom: 14px; }
     .menu-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
     .menu-price { font-size: 1.35rem; font-weight: 700; color: var(--primary); font-family: 'Cormorant Garamond', serif; }
-    .pedido-btn {
-      background: var(--dark); color: #fff; border: none;
-      padding: 9px 18px; border-radius: 8px; font-size: .8rem; font-weight: 600;
-      cursor: pointer; transition: background .2s; text-decoration: none; display: inline-block;
-    }
+    .pedido-btn { background: var(--dark); color: #fff; border: none; padding: 9px 18px; border-radius: 8px; font-size: .8rem; font-weight: 600; cursor: pointer; transition: background .2s; text-decoration: none; display: inline-block; }
     .pedido-btn:hover { background: var(--primary); }
 
-    /* === CTA === */
-    .cta-section {
-      padding: 80px 6%; text-align: center; background: var(--dark);
+    /* === ITEM BADGES === */
+    .item-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .item-tag { font-size: .68rem; font-weight: 700; padding: 3px 9px; border-radius: 20px; letter-spacing: .5px; }
+    .tag-fav { background: #fff3cd; color: #856404; }
+    .tag-fit { background: #d1fae5; color: #065f46; }
+    .tag-hot { background: #fee2e2; color: #991b1b; }
+    .tag-new { background: #e0e7ff; color: #3730a3; }
+    .tag-home { background: #fce7f3; color: #9d174d; }
+    .tag-offer { background: rgba(193,127,36,.12); color: var(--primary-dark); }
+
+    /* === GALERIA === */
+    .galeria { padding: 80px 6%; background: var(--white); }
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: auto auto;
+      gap: 12px;
     }
+    .galeria-item { overflow: hidden; border-radius: 12px; cursor: pointer; }
+    .galeria-item:first-child { grid-column: span 2; grid-row: span 2; }
+    .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; display: block; min-height: 180px; }
+    .galeria-item:first-child img { min-height: 380px; }
+    .galeria-item:hover img { transform: scale(1.05); }
+
+    /* Lightbox */
+    .lightbox { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,.9); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+    .lightbox-close { position: absolute; top: 20px; right: 28px; color: #fff; font-size: 2rem; cursor: pointer; background: none; border: none; line-height: 1; }
+
+    /* === DEPOIMENTOS === */
+    .depoimentos { padding: 80px 6%; background: var(--cream); }
+    .dep-carousel { position: relative; overflow: hidden; }
+    .dep-track { display: flex; gap: 24px; transition: transform .5s ease; }
+    .dep-card {
+      min-width: calc(33.333% - 16px); background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; padding: 28px; flex-shrink: 0;
+    }
+    .dep-stars { color: #f5a623; font-size: 1rem; margin-bottom: 12px; letter-spacing: 2px; }
+    .dep-text { color: var(--text); font-size: .9rem; line-height: 1.7; margin-bottom: 18px; font-style: italic; }
+    .dep-author { display: flex; align-items: center; gap: 12px; }
+    .dep-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: .95rem; flex-shrink: 0; }
+    .dep-info strong { display: block; font-size: .88rem; font-weight: 700; color: var(--dark); }
+    .dep-info span { font-size: .78rem; color: var(--text-light); }
+    .dep-dots { display: flex; justify-content: center; gap: 8px; margin-top: 28px; }
+    .dep-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); border: none; cursor: pointer; transition: background .2s, transform .2s; padding: 0; }
+    .dep-dot.active { background: var(--primary); transform: scale(1.3); }
+
+    /* === HORÁRIO === */
+    .horario { padding: 72px 6%; background: var(--dark); }
+    .horario .section-header h2 { color: #fff; }
+    .horario .section-label { color: #f5c97a; }
+    .horario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; max-width: 860px; margin: 0 auto; }
+    .horario-card { background: rgba(255,255,255,.05); border: 1px solid rgba(193,127,36,.18); border-radius: 14px; padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .horario-card.hoje { border-color: rgba(193,127,36,.5); background: rgba(193,127,36,.08); }
+    .horario-dias { font-size: .85rem; font-weight: 600; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+    .horario-card.hoje .horario-dias { color: #f5c97a; }
+    .horario-horas { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: #fff; }
+    .horario-status { font-size: .75rem; font-weight: 700; padding: 5px 12px; border-radius: 20px; white-space: nowrap; }
+    .horario-status.aberto { background: rgba(74,222,128,.15); color: #4ade80; }
+    .horario-status.fechado { background: rgba(248,113,113,.12); color: #f87171; }
+    .horario-info { text-align: center; margin-top: 32px; color: rgba(255,255,255,.45); font-size: .83rem; }
+
+    /* === PAGAMENTO === */
+    .pagamento { padding: 56px 6%; background: var(--white); }
+    .pagamento .section-header { margin-bottom: 36px; }
+    .pag-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; max-width: 800px; margin: 0 auto; }
+    .pag-item { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 24px; background: var(--cream); border-radius: 14px; border: 1px solid var(--border); }
+    .pag-icon { font-size: 2rem; }
+    .pag-item strong { font-size: .9rem; font-weight: 700; color: var(--dark); }
+    .pag-item span { font-size: .8rem; color: var(--text-light); text-align: center; }
+
+    /* === CTA === */
+    .cta-section { padding: 80px 6%; text-align: center; background: var(--dark); }
     .cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); color: #fff; margin-bottom: 16px; }
     .cta-section p { color: rgba(255,255,255,.6); font-size: .95rem; max-width: 480px; margin: 0 auto 36px; line-height: 1.8; }
-    .cta-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: #25d366; color: #fff; text-decoration: none;
-      padding: 16px 36px; border-radius: 10px; font-size: .95rem; font-weight: 700;
-      transition: background .2s;
-    }
+    .cta-btn { display: inline-flex; align-items: center; gap: 10px; background: #25d366; color: #fff; text-decoration: none; padding: 16px 36px; border-radius: 10px; font-size: .95rem; font-weight: 700; transition: background .2s; }
     .cta-btn:hover { background: #1da851; }
 
     /* === FOOTER === */
-    footer {
-      background: #0d0a05; padding: 32px 6%; text-align: center;
-      color: rgba(255,255,255,.3); font-size: .82rem; line-height: 2.2;
-    }
+    footer { background: #0d0a05; padding: 32px 6%; text-align: center; color: rgba(255,255,255,.3); font-size: .82rem; line-height: 2.2; }
     footer strong { color: rgba(255,255,255,.55); }
     footer span { color: var(--primary); }
 
@@ -282,10 +306,17 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    @media(max-width: 900px) {
+      .dep-card { min-width: calc(50% - 12px); }
+    }
     @media(max-width: 600px) {
       .chatbox { width: calc(100vw - 48px); right: 24px; }
       .hero h1 { font-size: 2.8rem; }
       .wpp-float, .chat-toggle { width: 50px; height: 50px; font-size: 1.3rem; }
+      .dep-card { min-width: calc(100% - 0px); }
+      .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+      .galeria-item:first-child { grid-column: span 2; }
+      .delivery-banner { gap: 14px; font-size: .8rem; }
     }
   </style>
 </head>
@@ -297,6 +328,12 @@
   <button onclick="aceitarLGPD()">Entendi</button>
 </div>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="fecharLightbox()">
+  <button class="lightbox-close" onclick="fecharLightbox()">✕</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
 <!-- WhatsApp Float -->
 <a class="wpp-float" href="https://wa.me/5547999990000?text=Olá! Quero fazer um pedido." target="_blank" title="Chamar no WhatsApp">💬</a>
 
@@ -304,7 +341,7 @@
 <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- Chat toggle -->
-<button class="chat-toggle" id="chatToggle" onclick="toggleChat()" title="Fale conosco">🍽️</button>
+<button class="chat-toggle" onclick="toggleChat()" title="Fale conosco">🍽️</button>
 
 <!-- Chatbox -->
 <div class="chatbox" id="chatbox">
@@ -352,25 +389,40 @@
     <div class="hero-badge">✦ Cardápio Digital</div>
     <h1>Grill <span>&</span> Sabor</h1>
     <p>Comida caseira feita com amor, ingredientes frescos e muito sabor em cada prato.</p>
+    <div class="status-badge" id="statusBadge">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Verificando horário...</span>
+    </div>
     <div class="hero-infos">
       <span>🕐 Seg–Sex: 11h–22h</span>
       <span>🕐 Sáb–Dom: 11h–23h</span>
       <span>📍 Centro, Balneário Camboriú</span>
     </div>
+    <a class="hero-cta" href="#combos">📋 Ver cardápio completo</a>
   </div>
 </section>
 
+<!-- DELIVERY BANNER -->
+<div class="delivery-banner">
+  <span>🛵 <strong>Delivery disponível</strong> na região</span>
+  <span>💳 <strong>Cartão</strong> débito e crédito</span>
+  <span>📱 <strong>Pix</strong> aceito</span>
+  <span>💵 <strong>Dinheiro</strong> aceito</span>
+  <span>🛒 Pedido mínimo <strong>R$ 25</strong></span>
+</div>
+
 <!-- CATEGORY TABS -->
 <div class="cat-tabs" id="catTabs">
-  <a class="cat-tab" href="#combos">🔥 Combos</a>
-  <a class="cat-tab" href="#entradas">🥗 Entradas</a>
-  <a class="cat-tab" href="#pratos">🍽️ Pratos Principais</a>
-  <a class="cat-tab" href="#sobremesas">🍮 Sobremesas</a>
-  <a class="cat-tab" href="#bebidas">🥤 Bebidas</a>
+  <button class="cat-tab active" onclick="filtrar('todos', this)">🍴 Todos</button>
+  <button class="cat-tab" onclick="filtrar('combos', this)">🔥 Combos</button>
+  <button class="cat-tab" onclick="filtrar('entradas', this)">🥗 Entradas</button>
+  <button class="cat-tab" onclick="filtrar('pratos', this)">🍽️ Pratos</button>
+  <button class="cat-tab" onclick="filtrar('sobremesas', this)">🍮 Sobremesas</button>
+  <button class="cat-tab" onclick="filtrar('bebidas', this)">🥤 Bebidas</button>
 </div>
 
 <!-- COMBOS -->
-<section class="combos" id="combos">
+<section class="combos" id="combos" data-section="combos">
   <div class="section-header">
     <span class="section-label">✦ Promoções</span>
     <h2>Combos do Dia</h2>
@@ -424,7 +476,7 @@
 </section>
 
 <!-- ENTRADAS -->
-<section class="menu-section" id="entradas">
+<section class="menu-section" id="entradas" data-section="entradas">
   <div class="section-header reveal">
     <span class="section-label">✦ Para começar</span>
     <h2>Entradas</h2>
@@ -435,6 +487,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Batata Frita Crocante" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Batata Frita Crocante</h3>
         <p>Batatas sequinhas e douradas por fora, macias por dentro. Servidas com molho especial da casa.</p>
         <div class="menu-card-footer">
@@ -447,6 +500,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1070034/pexels-photo-1070034.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Bruschetta Italiana" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Bruschetta Italiana</h3>
         <p>Fatias de pão italiano tostado com tomate, manjericão fresco, alho e azeite extravirgem.</p>
         <div class="menu-card-footer">
@@ -459,6 +513,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Coxinha de Frango" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-home">🏠 Artesanal</span></div>
         <h3>Coxinha de Frango (6 un.)</h3>
         <p>Coxinhas artesanais com massa crocante e recheio cremoso de frango com catupiry. Feitas aqui!</p>
         <div class="menu-card-footer">
@@ -472,7 +527,7 @@
 </section>
 
 <!-- PRATOS PRINCIPAIS -->
-<section class="menu-section white" id="pratos">
+<section class="menu-section white" id="pratos" data-section="pratos">
   <div class="section-header reveal">
     <span class="section-label">✦ Principal</span>
     <h2>Pratos Principais</h2>
@@ -483,6 +538,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Filé ao Molho Madeira" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Filé ao Molho Madeira</h3>
         <p>Filé mignon grelhado ao ponto com molho madeira, acompanhado de arroz, feijão e batata sauté.</p>
         <div class="menu-card-footer">
@@ -495,6 +551,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/2673353/pexels-photo-2673353.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Frango Grelhado com Legumes" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fit">🥗 Fit</span></div>
         <h3>Frango Grelhado com Legumes</h3>
         <p>Peito de frango marinado e grelhado, com legumes salteados na manteiga e arroz integral.</p>
         <div class="menu-card-footer">
@@ -507,6 +564,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Macarrão à Bolonhesa" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Macarrão à Bolonhesa</h3>
         <p>Macarrão al dente com molho bolonhesa artesanal, generosa porção de queijo parmesão ralado.</p>
         <div class="menu-card-footer">
@@ -519,6 +577,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Tilápia Grelhada" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fit">🥗 Fit</span></div>
         <h3>Tilápia Grelhada</h3>
         <p>Filé de tilápia temperado com ervas finas, grelhado na brasa. Acompanha arroz, farofa e salada.</p>
         <div class="menu-card-footer">
@@ -531,6 +590,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Prato do Dia" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-offer">💰 Oferta</span></div>
         <h3>Prato do Dia</h3>
         <p>Especial que muda diariamente com ingredientes da estação. Consulte o cardápio de hoje no WhatsApp!</p>
         <div class="menu-card-footer">
@@ -544,7 +604,7 @@
 </section>
 
 <!-- SOBREMESAS -->
-<section class="menu-section" id="sobremesas">
+<section class="menu-section" id="sobremesas" data-section="sobremesas">
   <div class="section-header reveal">
     <span class="section-label">✦ Para adoçar</span>
     <h2>Sobremesas</h2>
@@ -555,6 +615,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Petit Gateau" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Petit Gateau com Sorvete</h3>
         <p>Bolinho de chocolate quente com interior cremoso e derretido, acompanhado de sorvete de creme.</p>
         <div class="menu-card-footer">
@@ -567,6 +628,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Pudim de Leite" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-home">🏠 Caseiro</span></div>
         <h3>Pudim de Leite Condensado</h3>
         <p>Receita tradicional, pudim cremoso feito diariamente aqui, com calda de caramelo artesanal.</p>
         <div class="menu-card-footer">
@@ -579,6 +641,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Brownie com Sorvete" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Brownie com Sorvete</h3>
         <p>Brownie quentinho com nozes, sorvete de creme artesanal e calda de caramelo. Irresistível!</p>
         <div class="menu-card-footer">
@@ -592,7 +655,7 @@
 </section>
 
 <!-- BEBIDAS -->
-<section class="menu-section white" id="bebidas">
+<section class="menu-section white" id="bebidas" data-section="bebidas">
   <div class="section-header reveal">
     <span class="section-label">✦ Para beber</span>
     <h2>Bebidas</h2>
@@ -603,6 +666,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1337825/pexels-photo-1337825.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Suco Natural" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fit">🥗 Natural</span><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Suco Natural (400ml)</h3>
         <p>Feito na hora com frutas selecionadas. Sabores: laranja, limão, maracujá, morango ou abacaxi.</p>
         <div class="menu-card-footer">
@@ -615,6 +679,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/338713/pexels-photo-338713.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Refrigerante" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"></div>
         <h3>Refrigerante (Lata 350ml)</h3>
         <p>Coca-Cola, Pepsi, Guaraná Antarctica, Sprite ou Fanta. Sempre bem gelado!</p>
         <div class="menu-card-footer">
@@ -627,6 +692,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Cerveja" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Cerveja (600ml)</h3>
         <p>Brahma, Skol, Itaipava ou Heineken. Servida bem gelada, do jeito que você gosta.</p>
         <div class="menu-card-footer">
@@ -639,6 +705,7 @@
     <div class="menu-card reveal">
       <img src="https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Água Mineral" loading="lazy" />
       <div class="menu-card-body">
+        <div class="item-tags"><span class="item-tag tag-fit">🥗 Saudável</span></div>
         <h3>Água Mineral (500ml)</h3>
         <p>Água mineral gelada, com ou sem gás. Opção saudável para acompanhar qualquer prato.</p>
         <div class="menu-card-footer">
@@ -651,10 +718,163 @@
   </div>
 </section>
 
+<!-- GALERIA -->
+<section class="galeria reveal" id="galeria">
+  <div class="section-header">
+    <span class="section-label">✦ Nossos pratos</span>
+    <h2>Galeria</h2>
+    <p>Clique nas fotos para ampliar</p>
+  </div>
+  <div class="galeria-grid">
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Filé ao Molho Madeira" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Macarrão à Bolonhesa" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Petit Gateau" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/1337825/pexels-photo-1337825.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/1337825/pexels-photo-1337825.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Suco Natural" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Batata Frita" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Brownie" loading="lazy" />
+    </div>
+    <div class="galeria-item" onclick="abrirLightbox('https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=1200')">
+      <img src="https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Cerveja" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos" id="depoimentos">
+  <div class="section-header reveal">
+    <span class="section-label">✦ O que dizem</span>
+    <h2>Avaliações dos Clientes</h2>
+    <p>Mais de 200 avaliações 5 estrelas no Google</p>
+  </div>
+  <div class="dep-carousel">
+    <div class="dep-track" id="depTrack">
+
+      <div class="dep-card">
+        <div class="dep-stars">★★★★★</div>
+        <p class="dep-text">"O filé ao molho madeira é simplesmente incrível! Porção generosa, carne no ponto perfeito. Melhor restaurante da cidade, sem dúvida."</p>
+        <div class="dep-author">
+          <div class="dep-avatar">MS</div>
+          <div class="dep-info">
+            <strong>Maria S.</strong>
+            <span>Google · há 2 dias</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dep-card">
+        <div class="dep-stars">★★★★★</div>
+        <p class="dep-text">"Pedi o Combo do Dia e valeu muito a pena! Prato cheio, suco gelado e ainda veio o pudim. Preço justo e atendimento nota 10!"</p>
+        <div class="dep-author">
+          <div class="dep-avatar">JP</div>
+          <div class="dep-info">
+            <strong>João P.</strong>
+            <span>Google · há 5 dias</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dep-card">
+        <div class="dep-stars">★★★★★</div>
+        <p class="dep-text">"Atendimento carinhoso e o petit gateau derrete na boca! Fui com a família no sábado e todo mundo amou. Com certeza voltarei!"</p>
+        <div class="dep-author">
+          <div class="dep-avatar">AC</div>
+          <div class="dep-info">
+            <strong>Ana C.</strong>
+            <span>Google · há 1 semana</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dep-card">
+        <div class="dep-stars">★★★★★</div>
+        <p class="dep-text">"Delivery super rápido e embalagem caprichada. O macarrão à bolonhesa chegou quentinho e muito saboroso. Recomendo de olhos fechados!"</p>
+        <div class="dep-author">
+          <div class="dep-avatar">CM</div>
+          <div class="dep-info">
+            <strong>Carlos M.</strong>
+            <span>Google · há 2 semanas</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="dep-dots" id="depDots"></div>
+  </div>
+</section>
+
+<!-- HORÁRIO -->
+<section class="horario" id="horario">
+  <div class="section-header">
+    <span class="section-label">✦ Quando estamos abertos</span>
+    <h2>Horário de Funcionamento</h2>
+  </div>
+  <div class="horario-grid" id="horarioGrid">
+
+    <div class="horario-card" data-dias="1,2,3,4,5" data-abre="11" data-fecha="22">
+      <div>
+        <div class="horario-dias">Segunda a Sexta</div>
+        <div class="horario-horas">11h00 às 22h00</div>
+      </div>
+      <span class="horario-status" id="statusSegSex">—</span>
+    </div>
+
+    <div class="horario-card" data-dias="6,0" data-abre="11" data-fecha="23">
+      <div>
+        <div class="horario-dias">Sábado e Domingo</div>
+        <div class="horario-horas">11h00 às 23h00</div>
+      </div>
+      <span class="horario-status" id="statusFimSem">—</span>
+    </div>
+
+  </div>
+  <p class="horario-info">Fechado em feriados municipais · Reservas pelo WhatsApp</p>
+</section>
+
+<!-- FORMAS DE PAGAMENTO -->
+<section class="pagamento">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Pagamento</span>
+    <h2>Aceitamos</h2>
+  </div>
+  <div class="pag-grid">
+    <div class="pag-item reveal">
+      <span class="pag-icon">📱</span>
+      <strong>Pix</strong>
+      <span>Transferência instantânea</span>
+    </div>
+    <div class="pag-item reveal">
+      <span class="pag-icon">💳</span>
+      <strong>Cartão de Débito</strong>
+      <span>Todas as bandeiras</span>
+    </div>
+    <div class="pag-item reveal">
+      <span class="pag-icon">💳</span>
+      <strong>Cartão de Crédito</strong>
+      <span>Parcelamos em até 3x</span>
+    </div>
+    <div class="pag-item reveal">
+      <span class="pag-icon">💵</span>
+      <strong>Dinheiro</strong>
+      <span>Troco disponível</span>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-section">
-  <h2>Gostou do cardápio?</h2>
-  <p>Faça seu pedido pelo WhatsApp, reserve sua mesa ou venha nos visitar. Aceitamos cartão, Pix e dinheiro.</p>
+  <h2>Pronto para pedir?</h2>
+  <p>Faça seu pedido pelo WhatsApp, reserve sua mesa ou venha nos visitar. Atendemos na hora!</p>
   <a class="cta-btn" href="https://wa.me/5547999990000?text=Olá! Quero fazer um pedido no Grill e Sabor!" target="_blank">
     💬 Fazer pedido no WhatsApp
   </a>
@@ -667,73 +887,157 @@
 </footer>
 
 <script>
-  // LGPD
+  // === LGPD ===
   function aceitarLGPD() {
     localStorage.setItem('lgpd_gs', '1');
     document.getElementById('lgpd').classList.add('hidden');
   }
   if (localStorage.getItem('lgpd_gs')) document.getElementById('lgpd').classList.add('hidden');
 
-  // Navbar + back to top on scroll
+  // === SCROLL ===
   window.addEventListener('scroll', () => {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
     document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
   });
 
-  // Scroll reveal
+  // === REVEAL ===
   const revealObs = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: .12 });
+  }, { threshold: .1 });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
-  // Active tab highlight
-  const sectionIds = ['combos','entradas','pratos','sobremesas','bebidas'];
-  const tabs = document.querySelectorAll('.cat-tab');
-  const tabObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        tabs.forEach(t => t.classList.remove('active'));
-        const tab = document.querySelector(`.cat-tab[href="#${e.target.id}"]`);
-        if (tab) tab.classList.add('active');
+  // === STATUS AO VIVO ===
+  function verificarStatus() {
+    const agora = new Date();
+    const dia = agora.getDay(); // 0=dom, 6=sab
+    const hora = agora.getHours() + agora.getMinutes() / 60;
+    const fimSemana = dia === 0 || dia === 6;
+    const fechamento = fimSemana ? 23 : 22;
+    const aberto = hora >= 11 && hora < fechamento;
+
+    const dot = document.getElementById('statusDot');
+    const txt = document.getElementById('statusText');
+    dot.className = 'status-dot ' + (aberto ? 'open' : 'closed');
+    if (aberto) {
+      txt.textContent = 'Aberto agora · Fecha às ' + fechamento + 'h';
+    } else if (hora < 11) {
+      txt.textContent = 'Abre hoje às 11h';
+    } else {
+      txt.textContent = 'Fechado · Abre amanhã às 11h';
+    }
+
+    // Cards de horário
+    const cards = document.querySelectorAll('.horario-card');
+    cards.forEach(card => {
+      const diasAttr = card.dataset.dias.split(',').map(Number);
+      const abre = Number(card.dataset.abre);
+      const fecha = Number(card.dataset.fecha);
+      const eHoje = diasAttr.includes(dia);
+      const statusEl = card.querySelector('.horario-status');
+
+      if (eHoje) {
+        card.classList.add('hoje');
+        if (hora >= abre && hora < fecha) {
+          statusEl.textContent = 'Aberto agora';
+          statusEl.className = 'horario-status aberto';
+        } else {
+          statusEl.textContent = hora < abre ? 'Abre às ' + abre + 'h' : 'Encerrado hoje';
+          statusEl.className = 'horario-status fechado';
+        }
+      } else {
+        statusEl.textContent = 'Fechado hoje';
+        statusEl.className = 'horario-status fechado';
       }
     });
-  }, { threshold: .35 });
-  sectionIds.forEach(id => { const el = document.getElementById(id); if (el) tabObs.observe(el); });
+  }
+  verificarStatus();
 
-  // Chatbot
+  // === FILTRO DE CATEGORIAS ===
+  function filtrar(cat, btn) {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    const combos = document.getElementById('combos');
+    const sections = document.querySelectorAll('.menu-section[data-section]');
+
+    if (cat === 'todos') {
+      combos.classList.remove('hidden-filter');
+      sections.forEach(s => s.classList.remove('hidden-filter'));
+      return;
+    }
+
+    if (cat === 'combos') {
+      combos.classList.remove('hidden-filter');
+      sections.forEach(s => s.classList.add('hidden-filter'));
+      combos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      combos.classList.add('hidden-filter');
+      sections.forEach(s => {
+        if (s.dataset.section === cat) {
+          s.classList.remove('hidden-filter');
+          setTimeout(() => s.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+        } else {
+          s.classList.add('hidden-filter');
+        }
+      });
+    }
+  }
+
+  // === GALERIA LIGHTBOX ===
+  function abrirLightbox(src) {
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function fecharLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') fecharLightbox(); });
+
+  // === DEPOIMENTOS CARROSSEL ===
+  const depTrack = document.getElementById('depTrack');
+  const depDots = document.getElementById('depDots');
+  const cards = depTrack.querySelectorAll('.dep-card');
+  let depAtual = 0;
+  let cardsVisiveis = window.innerWidth > 900 ? 3 : window.innerWidth > 600 ? 2 : 1;
+
+  const totalSlides = Math.ceil(cards.length / cardsVisiveis);
+
+  function criarDots() {
+    depDots.innerHTML = '';
+    for (let i = 0; i < totalSlides; i++) {
+      const d = document.createElement('button');
+      d.className = 'dep-dot' + (i === 0 ? ' active' : '');
+      d.onclick = () => irParaDep(i);
+      depDots.appendChild(d);
+    }
+  }
+
+  function irParaDep(idx) {
+    depAtual = idx;
+    const cardWidth = cards[0].offsetWidth + 24;
+    depTrack.style.transform = `translateX(-${idx * cardsVisiveis * cardWidth}px)`;
+    depDots.querySelectorAll('.dep-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  criarDots();
+  const depTimer = setInterval(() => irParaDep((depAtual + 1) % totalSlides), 4500);
+  depTrack.addEventListener('mouseenter', () => clearInterval(depTimer));
+
+  // === CHATBOT ===
   function toggleChat() {
     document.getElementById('chatbox').classList.toggle('open');
   }
 
   const respostas = {
-    cardapio: {
-      bot: 'Nosso cardápio está todo aqui na página! 😊 Temos combos, entradas, pratos principais, sobremesas e bebidas. Use as abas para navegar entre as categorias.',
-      opts: ['reserva', 'horario', 'delivery']
-    },
-    reserva: {
-      bot: 'Para reservar sua mesa é só nos chamar no WhatsApp! 📅 Clique no botão verde na tela e a gente confirma rapidinho.',
-      opts: ['horario', 'delivery', 'cardapio']
-    },
-    horario: {
-      bot: '🕐 Nosso horário de funcionamento:\n\nSeg a Sex: 11h às 22h\nSáb e Dom: 11h às 23h\n\nFechado apenas em feriados municipais.',
-      opts: ['cardapio', 'reserva', 'delivery']
-    },
-    delivery: {
-      bot: '🛵 Sim, fazemos delivery na região! Pedido mínimo R$ 25,00. Frete a partir de R$ 5,00. Peça pelo WhatsApp e combinamos o endereço!',
-      opts: ['cardapio', 'reserva', 'horario']
-    },
-    padrao: {
-      bot: 'Entendi! Para te ajudar melhor, é só nos chamar no WhatsApp. Nosso time responde rápido! 😊',
-      opts: ['cardapio', 'reserva', 'horario', 'delivery']
-    }
+    cardapio: { bot: 'Nosso cardápio está todo aqui na página! 😊 Temos combos, entradas, pratos, sobremesas e bebidas. Use os filtros no topo para navegar.', opts: ['reserva', 'horario', 'delivery'] },
+    reserva: { bot: 'Para reservar sua mesa é só nos chamar no WhatsApp! 📅 Clique no botão verde na tela e confirmamos rapidinho.', opts: ['horario', 'delivery', 'cardapio'] },
+    horario: { bot: '🕐 Funcionamos:\nSeg a Sex: 11h às 22h\nSáb e Dom: 11h às 23h\n\nFechado em feriados municipais.', opts: ['cardapio', 'reserva', 'delivery'] },
+    delivery: { bot: '🛵 Sim! Fazemos delivery na região. Pedido mínimo R$ 25. Frete a partir de R$ 5. Peça pelo WhatsApp!', opts: ['cardapio', 'reserva', 'horario'] },
+    padrao: { bot: 'Entendi! Para te ajudar melhor, nos chame no WhatsApp. Respondemos rápido! 😊', opts: ['cardapio', 'reserva', 'horario', 'delivery'] }
   };
-
-  const labels = {
-    cardapio: '📋 Cardápio',
-    reserva: '📅 Reserva',
-    horario: '🕐 Horário',
-    delivery: '🛵 Delivery'
-  };
+  const labels = { cardapio: '📋 Cardápio', reserva: '📅 Reserva', horario: '🕐 Horário', delivery: '🛵 Delivery' };
 
   function addMsg(text, type) {
     const msgs = document.getElementById('chatMsgs');
@@ -744,18 +1048,15 @@
     msgs.scrollTop = msgs.scrollHeight;
     document.getElementById('chatOpts').innerHTML = '';
   }
-
   function renderOpts(opts) {
     document.getElementById('chatOpts').innerHTML =
       opts.map(o => `<button class="chat-opt" onclick="chatResp('${o}')">${labels[o]}</button>`).join('');
   }
-
   function chatResp(key) {
     const r = respostas[key] || respostas.padrao;
     addMsg(labels[key] || key, 'user');
     setTimeout(() => { addMsg(r.bot, 'bot'); renderOpts(r.opts); }, 420);
   }
-
   function enviarMsg() {
     const input = document.getElementById('chatInput');
     const text = input.value.trim();
