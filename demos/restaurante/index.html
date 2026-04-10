@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grill & Sabor — Cardápio Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #c17f24;
+      --primary-dark: #a06a18;
+      --dark: #1c1208;
+      --dark2: #2d1f0d;
+      --text: #3d2a10;
+      --text-light: #7a6040;
+      --cream: #fdf9f3;
+      --white: #ffffff;
+      --border: rgba(193,127,36,.18);
+      --shadow: 0 4px 24px rgba(0,0,0,.1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+    /* === LGPD === */
+    .lgpd {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+      background: var(--dark); color: rgba(255,255,255,.85);
+      padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; transition: transform .4s;
+    }
+    .lgpd.hidden { transform: translateY(100%); }
+    .lgpd p { font-size: .82rem; line-height: 1.6; flex: 1; min-width: 200px; }
+    .lgpd button {
+      background: var(--primary); color: #fff; border: none;
+      padding: 8px 22px; border-radius: 8px; font-size: .82rem; font-weight: 600; cursor: pointer;
+    }
+
+    /* === WHATSAPP FLOAT === */
+    .wpp-float {
+      position: fixed; bottom: 80px; right: 24px; z-index: 998;
+      background: #25d366; color: #fff; width: 56px; height: 56px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+      animation: pulse-wpp 2.5s infinite;
+    }
+    @keyframes pulse-wpp {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(37,211,102,.4); }
+      50% { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+    }
+
+    /* === BACK TO TOP === */
+    .back-top {
+      position: fixed; bottom: 80px; left: 24px; z-index: 998;
+      background: var(--dark); color: #fff; width: 44px; height: 44px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; border: none;
+      opacity: 0; pointer-events: none; transition: opacity .3s;
+    }
+    .back-top.visible { opacity: 1; pointer-events: all; }
+
+    /* === CHAT TOGGLE === */
+    .chat-toggle {
+      position: fixed; bottom: 144px; right: 24px; z-index: 998;
+      background: var(--dark); color: #fff; width: 56px; height: 56px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; border: none; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,.3); transition: background .2s;
+    }
+    .chat-toggle:hover { background: var(--primary); }
+
+    /* === CHATBOX === */
+    .chatbox {
+      position: fixed; bottom: 210px; right: 24px; z-index: 997;
+      width: 320px; background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.2);
+      display: flex; flex-direction: column; overflow: hidden;
+      opacity: 0; pointer-events: none; transform: translateY(20px);
+      transition: opacity .3s, transform .3s;
+    }
+    .chatbox.open { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .chat-header {
+      background: var(--dark); color: #fff; padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .chat-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .chat-header-info h4 { font-size: .9rem; font-weight: 700; }
+    .chat-header-info p { font-size: .72rem; color: rgba(255,255,255,.6); }
+    .chat-close { margin-left: auto; background: none; border: none; color: rgba(255,255,255,.6); font-size: 1.2rem; cursor: pointer; }
+    .chat-messages {
+      padding: 16px; min-height: 180px; max-height: 260px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .msg { max-width: 82%; font-size: .85rem; line-height: 1.5; padding: 10px 14px; border-radius: 12px; }
+    .msg-bot { background: #f0ede8; color: var(--text); border-radius: 4px 12px 12px 12px; align-self: flex-start; }
+    .msg-user { background: var(--primary); color: #fff; border-radius: 12px 4px 12px 12px; align-self: flex-end; }
+    .chat-options { padding: 0 16px 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .chat-opt {
+      background: none; border: 1px solid var(--border); color: var(--text);
+      padding: 7px 14px; border-radius: 20px; font-size: .8rem; cursor: pointer; transition: all .2s;
+    }
+    .chat-opt:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .chat-input-area { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+    .chat-input {
+      flex: 1; border: 1px solid var(--border); border-radius: 8px;
+      padding: 9px 12px; font-size: .85rem; outline: none; font-family: inherit;
+    }
+    .chat-input:focus { border-color: var(--primary); }
+    .chat-send {
+      background: var(--primary); color: #fff; border: none;
+      padding: 9px 14px; border-radius: 8px; cursor: pointer; font-size: .9rem;
+    }
+
+    /* === NAVBAR === */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(253,249,243,.96); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6%; height: 64px;
+      border-bottom: 1px solid transparent; transition: border-color .3s, box-shadow .3s;
+    }
+    nav.scrolled { border-color: var(--border); box-shadow: 0 2px 20px rgba(0,0,0,.08); }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700;
+      color: var(--dark); text-decoration: none;
+    }
+    .nav-brand span { color: var(--primary); }
+    .nav-links { display: flex; gap: 4px; align-items: center; }
+    .nav-links a {
+      color: var(--text); text-decoration: none; font-size: .85rem; font-weight: 500;
+      padding: 7px 14px; border-radius: 8px; transition: all .2s;
+    }
+    .nav-links a:hover { background: rgba(193,127,36,.1); color: var(--primary); }
+    .nav-wpp { background: #25d366 !important; color: #fff !important; font-weight: 600 !important; }
+    .nav-wpp:hover { background: #1da851 !important; color: #fff !important; }
+    @media(max-width: 768px) { .nav-links { display: none; } }
+
+    /* === HERO === */
+    .hero {
+      min-height: 90vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 6% 60px; position: relative; overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: url('https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1400') center/cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to bottom, rgba(28,18,8,.6) 0%, rgba(28,18,8,.82) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; color: #fff; }
+    .hero-badge {
+      display: inline-block; background: rgba(193,127,36,.2); border: 1px solid rgba(193,127,36,.45);
+      color: #f5c97a; font-size: .72rem; font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; padding: 7px 22px; border-radius: 50px; margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 9vw, 7rem); font-weight: 700; line-height: 1.05;
+      margin-bottom: 18px; text-shadow: 0 2px 24px rgba(0,0,0,.5);
+    }
+    .hero h1 span { color: #f5c97a; }
+    .hero p {
+      font-size: 1.05rem; line-height: 1.8; color: rgba(255,255,255,.78);
+      max-width: 480px; margin: 0 auto 36px;
+    }
+    .hero-infos { display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; color: rgba(255,255,255,.65); font-size: .85rem; }
+    .hero-infos span { display: flex; align-items: center; gap: 6px; }
+
+    /* === CATEGORY TABS === */
+    .cat-tabs {
+      position: sticky; top: 64px; z-index: 90;
+      background: var(--white); border-bottom: 2px solid var(--border);
+      padding: 0 6%; overflow-x: auto; white-space: nowrap;
+      display: flex; gap: 0; scrollbar-width: none;
+    }
+    .cat-tabs::-webkit-scrollbar { display: none; }
+    .cat-tab {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 14px 22px; font-size: .85rem; font-weight: 600;
+      color: var(--text-light); text-decoration: none;
+      border-bottom: 2px solid transparent; margin-bottom: -2px;
+      transition: all .2s; white-space: nowrap;
+    }
+    .cat-tab:hover, .cat-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    /* === COMBOS === */
+    .combos { padding: 80px 6%; background: var(--dark); }
+    .section-header { text-align: center; margin-bottom: 52px; }
+    .section-label {
+      display: inline-block; color: var(--primary); font-size: .72rem; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .combos .section-label { color: #f5c97a; }
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700; color: var(--dark);
+    }
+    .combos .section-header h2 { color: #fff; }
+    .section-header p { color: var(--text-light); font-size: .9rem; margin-top: 10px; line-height: 1.7; }
+    .combos .section-header p { color: rgba(255,255,255,.55); }
+
+    .combo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .combo-card {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(193,127,36,.2);
+      border-radius: 16px; overflow: hidden; transition: transform .3s, border-color .3s;
+      position: relative;
+    }
+    .combo-card:hover { transform: translateY(-5px); border-color: rgba(193,127,36,.55); }
+    .combo-badge {
+      position: absolute; top: 14px; left: 14px; z-index: 2;
+      background: var(--primary); color: #fff;
+      font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      padding: 5px 13px; border-radius: 20px;
+    }
+    .combo-img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .combo-body { padding: 22px; }
+    .combo-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .combo-body p { color: rgba(255,255,255,.58); font-size: .85rem; line-height: 1.6; margin-bottom: 18px; }
+    .combo-price { display: flex; align-items: baseline; gap: 10px; }
+    .combo-price .old { color: rgba(255,255,255,.3); font-size: .85rem; text-decoration: line-through; }
+    .combo-price .new { color: #f5c97a; font-size: 1.55rem; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
+    .combo-btn {
+      display: block; text-align: center; margin-top: 16px;
+      background: var(--primary); color: #fff; text-decoration: none;
+      padding: 11px; border-radius: 8px; font-size: .85rem; font-weight: 600; transition: background .2s;
+    }
+    .combo-btn:hover { background: var(--primary-dark); }
+
+    /* === MENU SECTION === */
+    .menu-section { padding: 80px 6%; background: var(--cream); }
+    .menu-section.white { background: var(--white); }
+
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+    .menu-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; transition: transform .3s, box-shadow .3s;
+      display: flex; flex-direction: column;
+    }
+    .menu-section.white .menu-card { background: var(--cream); }
+    .menu-card:hover { transform: translateY(-5px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
+    .menu-card img { width: 100%; height: 200px; object-fit: cover; display: block; }
+    .menu-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .menu-card-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .menu-card-body p { color: var(--text-light); font-size: .83rem; line-height: 1.6; flex: 1; margin-bottom: 18px; }
+    .menu-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+    .menu-price { font-size: 1.35rem; font-weight: 700; color: var(--primary); font-family: 'Cormorant Garamond', serif; }
+    .pedido-btn {
+      background: var(--dark); color: #fff; border: none;
+      padding: 9px 18px; border-radius: 8px; font-size: .8rem; font-weight: 600;
+      cursor: pointer; transition: background .2s; text-decoration: none; display: inline-block;
+    }
+    .pedido-btn:hover { background: var(--primary); }
+
+    /* === CTA === */
+    .cta-section {
+      padding: 80px 6%; text-align: center; background: var(--dark);
+    }
+    .cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3.2rem); color: #fff; margin-bottom: 16px; }
+    .cta-section p { color: rgba(255,255,255,.6); font-size: .95rem; max-width: 480px; margin: 0 auto 36px; line-height: 1.8; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #25d366; color: #fff; text-decoration: none;
+      padding: 16px 36px; border-radius: 10px; font-size: .95rem; font-weight: 700;
+      transition: background .2s;
+    }
+    .cta-btn:hover { background: #1da851; }
+
+    /* === FOOTER === */
+    footer {
+      background: #0d0a05; padding: 32px 6%; text-align: center;
+      color: rgba(255,255,255,.3); font-size: .82rem; line-height: 2.2;
+    }
+    footer strong { color: rgba(255,255,255,.55); }
+    footer span { color: var(--primary); }
+
+    /* === REVEAL === */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media(max-width: 600px) {
+      .chatbox { width: calc(100vw - 48px); right: 24px; }
+      .hero h1 { font-size: 2.8rem; }
+      .wpp-float, .chat-toggle { width: 50px; height: 50px; font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LGPD -->
+<div class="lgpd" id="lgpd">
+  <p>Usamos cookies para melhorar sua experiência. Ao continuar navegando, você concorda com nossa política de privacidade.</p>
+  <button onclick="aceitarLGPD()">Entendi</button>
+</div>
+
+<!-- WhatsApp Float -->
+<a class="wpp-float" href="https://wa.me/5547999990000?text=Olá! Quero fazer um pedido." target="_blank" title="Chamar no WhatsApp">💬</a>
+
+<!-- Back to top -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- Chat toggle -->
+<button class="chat-toggle" id="chatToggle" onclick="toggleChat()" title="Fale conosco">🍽️</button>
+
+<!-- Chatbox -->
+<div class="chatbox" id="chatbox">
+  <div class="chat-header">
+    <div class="chat-avatar">🍽️</div>
+    <div class="chat-header-info">
+      <h4>Atendimento Online</h4>
+      <p>Grill & Sabor • Respondemos rápido</p>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMsgs">
+    <div class="msg msg-bot">Olá! 😊 Seja bem-vindo ao <strong>Grill & Sabor</strong>! Como posso te ajudar?</div>
+  </div>
+  <div class="chat-options" id="chatOpts">
+    <button class="chat-opt" onclick="chatResp('cardapio')">📋 Cardápio</button>
+    <button class="chat-opt" onclick="chatResp('reserva')">📅 Reserva</button>
+    <button class="chat-opt" onclick="chatResp('horario')">🕐 Horário</button>
+    <button class="chat-opt" onclick="chatResp('delivery')">🛵 Delivery</button>
+  </div>
+  <div class="chat-input-area">
+    <input class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." onkeydown="if(event.key==='Enter')enviarMsg()" />
+    <button class="chat-send" onclick="enviarMsg()">➤</button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+  <a class="nav-brand" href="#">Grill <span>&</span> Sabor</a>
+  <div class="nav-links">
+    <a href="#combos">Combos</a>
+    <a href="#entradas">Entradas</a>
+    <a href="#pratos">Pratos</a>
+    <a href="#sobremesas">Sobremesas</a>
+    <a href="#bebidas">Bebidas</a>
+    <a class="nav-wpp" href="https://wa.me/5547999990000?text=Olá! Quero fazer um pedido no Grill e Sabor!" target="_blank">💬 Pedir agora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Cardápio Digital</div>
+    <h1>Grill <span>&</span> Sabor</h1>
+    <p>Comida caseira feita com amor, ingredientes frescos e muito sabor em cada prato.</p>
+    <div class="hero-infos">
+      <span>🕐 Seg–Sex: 11h–22h</span>
+      <span>🕐 Sáb–Dom: 11h–23h</span>
+      <span>📍 Centro, Balneário Camboriú</span>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY TABS -->
+<div class="cat-tabs" id="catTabs">
+  <a class="cat-tab" href="#combos">🔥 Combos</a>
+  <a class="cat-tab" href="#entradas">🥗 Entradas</a>
+  <a class="cat-tab" href="#pratos">🍽️ Pratos Principais</a>
+  <a class="cat-tab" href="#sobremesas">🍮 Sobremesas</a>
+  <a class="cat-tab" href="#bebidas">🥤 Bebidas</a>
+</div>
+
+<!-- COMBOS -->
+<section class="combos" id="combos">
+  <div class="section-header">
+    <span class="section-label">✦ Promoções</span>
+    <h2>Combos do Dia</h2>
+    <p>Economize mais com nossos combos especiais. Disponíveis todos os dias!</p>
+  </div>
+  <div class="combo-grid">
+
+    <div class="combo-card reveal">
+      <span class="combo-badge">🔥 Mais pedido</span>
+      <img class="combo-img" src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Combo do Dia" loading="lazy" />
+      <div class="combo-body">
+        <h3>Combo do Dia</h3>
+        <p>1 prato principal à escolha + 1 bebida (suco natural ou refri) + 1 sobremesa (pudim ou brownie).</p>
+        <div class="combo-price">
+          <span class="old">R$ 59,70</span>
+          <span class="new">R$ 42,90</span>
+        </div>
+        <a class="combo-btn" href="https://wa.me/5547999990000?text=Quero o Combo do Dia!" target="_blank">Pedir agora 💬</a>
+      </div>
+    </div>
+
+    <div class="combo-card reveal">
+      <span class="combo-badge">👨‍👩‍👧 Família</span>
+      <img class="combo-img" src="https://images.pexels.com/photos/2338407/pexels-photo-2338407.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Combo Família" loading="lazy" />
+      <div class="combo-body">
+        <h3>Combo Família</h3>
+        <p>2 pratos principais + 2 bebidas à escolha + 1 sobremesa para compartilhar. Perfeito para o almoço!</p>
+        <div class="combo-price">
+          <span class="old">R$ 109,60</span>
+          <span class="new">R$ 79,90</span>
+        </div>
+        <a class="combo-btn" href="https://wa.me/5547999990000?text=Quero o Combo Família!" target="_blank">Pedir agora 💬</a>
+      </div>
+    </div>
+
+    <div class="combo-card reveal">
+      <span class="combo-badge">🥩 Especial</span>
+      <img class="combo-img" src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Combo Grill" loading="lazy" />
+      <div class="combo-body">
+        <h3>Combo Grill</h3>
+        <p>Filé ao molho madeira + batata frita crocante + cerveja 600ml. Para quem merece o melhor!</p>
+        <div class="combo-price">
+          <span class="old">R$ 84,70</span>
+          <span class="new">R$ 64,90</span>
+        </div>
+        <a class="combo-btn" href="https://wa.me/5547999990000?text=Quero o Combo Grill!" target="_blank">Pedir agora 💬</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ENTRADAS -->
+<section class="menu-section" id="entradas">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Para começar</span>
+    <h2>Entradas</h2>
+    <p>Petiscos e entradas para abrir o apetite</p>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Batata Frita Crocante" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Batata Frita Crocante</h3>
+        <p>Batatas sequinhas e douradas por fora, macias por dentro. Servidas com molho especial da casa.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 19,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Batata Frita Crocante!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1070034/pexels-photo-1070034.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Bruschetta Italiana" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Bruschetta Italiana</h3>
+        <p>Fatias de pão italiano tostado com tomate, manjericão fresco, alho e azeite extravirgem.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 22,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Bruschetta Italiana!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Coxinha de Frango" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Coxinha de Frango (6 un.)</h3>
+        <p>Coxinhas artesanais com massa crocante e recheio cremoso de frango com catupiry. Feitas aqui!</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 24,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Coxinha de Frango!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PRATOS PRINCIPAIS -->
+<section class="menu-section white" id="pratos">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Principal</span>
+    <h2>Pratos Principais</h2>
+    <p>Receitas feitas com ingredientes frescos, preparadas na hora</p>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Filé ao Molho Madeira" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Filé ao Molho Madeira</h3>
+        <p>Filé mignon grelhado ao ponto com molho madeira, acompanhado de arroz, feijão e batata sauté.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 54,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Filé ao Molho Madeira!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/2673353/pexels-photo-2673353.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Frango Grelhado com Legumes" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Frango Grelhado com Legumes</h3>
+        <p>Peito de frango marinado e grelhado, com legumes salteados na manteiga e arroz integral.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 42,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Frango Grelhado com Legumes!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Macarrão à Bolonhesa" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Macarrão à Bolonhesa</h3>
+        <p>Macarrão al dente com molho bolonhesa artesanal, generosa porção de queijo parmesão ralado.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 38,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Macarrão à Bolonhesa!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/3763847/pexels-photo-3763847.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Tilápia Grelhada" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Tilápia Grelhada</h3>
+        <p>Filé de tilápia temperado com ervas finas, grelhado na brasa. Acompanha arroz, farofa e salada.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 46,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Tilápia Grelhada!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Prato do Dia" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Prato do Dia</h3>
+        <p>Especial que muda diariamente com ingredientes da estação. Consulte o cardápio de hoje no WhatsApp!</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 35,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Qual é o prato do dia hoje?" target="_blank">Consultar</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SOBREMESAS -->
+<section class="menu-section" id="sobremesas">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Para adoçar</span>
+    <h2>Sobremesas</h2>
+    <p>O fim perfeito para uma refeição incrível</p>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Petit Gateau" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Petit Gateau com Sorvete</h3>
+        <p>Bolinho de chocolate quente com interior cremoso e derretido, acompanhado de sorvete de creme.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 24,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Petit Gateau!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Pudim de Leite" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Pudim de Leite Condensado</h3>
+        <p>Receita tradicional, pudim cremoso feito diariamente aqui, com calda de caramelo artesanal.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 16,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Pudim de Leite!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Brownie com Sorvete" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Brownie com Sorvete</h3>
+        <p>Brownie quentinho com nozes, sorvete de creme artesanal e calda de caramelo. Irresistível!</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 22,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Brownie com Sorvete!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BEBIDAS -->
+<section class="menu-section white" id="bebidas">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Para beber</span>
+    <h2>Bebidas</h2>
+    <p>Opções refrescantes para acompanhar seu prato</p>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1337825/pexels-photo-1337825.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Suco Natural" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Suco Natural (400ml)</h3>
+        <p>Feito na hora com frutas selecionadas. Sabores: laranja, limão, maracujá, morango ou abacaxi.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 10,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir um Suco Natural!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/338713/pexels-photo-338713.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Refrigerante" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Refrigerante (Lata 350ml)</h3>
+        <p>Coca-Cola, Pepsi, Guaraná Antarctica, Sprite ou Fanta. Sempre bem gelado!</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 7,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir um Refrigerante!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/1552630/pexels-photo-1552630.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Cerveja" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Cerveja (600ml)</h3>
+        <p>Brahma, Skol, Itaipava ou Heineken. Servida bem gelada, do jeito que você gosta.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 14,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir uma Cerveja!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <img src="https://images.pexels.com/photos/416528/pexels-photo-416528.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Água Mineral" loading="lazy" />
+      <div class="menu-card-body">
+        <h3>Água Mineral (500ml)</h3>
+        <p>Água mineral gelada, com ou sem gás. Opção saudável para acompanhar qualquer prato.</p>
+        <div class="menu-card-footer">
+          <span class="menu-price">R$ 5,90</span>
+          <a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir uma Água Mineral!" target="_blank">Pedir</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Gostou do cardápio?</h2>
+  <p>Faça seu pedido pelo WhatsApp, reserve sua mesa ou venha nos visitar. Aceitamos cartão, Pix e dinheiro.</p>
+  <a class="cta-btn" href="https://wa.me/5547999990000?text=Olá! Quero fazer um pedido no Grill e Sabor!" target="_blank">
+    💬 Fazer pedido no WhatsApp
+  </a>
+</section>
+
+<footer>
+  <p><strong>Grill & Sabor</strong> — Seg–Sex: 11h às 22h &nbsp;|&nbsp; Sáb–Dom: 11h às 23h</p>
+  <p>📍 Centro, Balneário Camboriú — SC &nbsp;|&nbsp; 📞 (47) 99999-0000</p>
+  <p style="margin-top:12px">© 2025 Grill & Sabor &nbsp;·&nbsp; <span>Demo</span> criado por Fabrizia Soluções Digitais</p>
+</footer>
+
+<script>
+  // LGPD
+  function aceitarLGPD() {
+    localStorage.setItem('lgpd_gs', '1');
+    document.getElementById('lgpd').classList.add('hidden');
+  }
+  if (localStorage.getItem('lgpd_gs')) document.getElementById('lgpd').classList.add('hidden');
+
+  // Navbar + back to top on scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
+    document.getElementById('backTop').classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // Scroll reveal
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // Active tab highlight
+  const sectionIds = ['combos','entradas','pratos','sobremesas','bebidas'];
+  const tabs = document.querySelectorAll('.cat-tab');
+  const tabObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        tabs.forEach(t => t.classList.remove('active'));
+        const tab = document.querySelector(`.cat-tab[href="#${e.target.id}"]`);
+        if (tab) tab.classList.add('active');
+      }
+    });
+  }, { threshold: .35 });
+  sectionIds.forEach(id => { const el = document.getElementById(id); if (el) tabObs.observe(el); });
+
+  // Chatbot
+  function toggleChat() {
+    document.getElementById('chatbox').classList.toggle('open');
+  }
+
+  const respostas = {
+    cardapio: {
+      bot: 'Nosso cardápio está todo aqui na página! 😊 Temos combos, entradas, pratos principais, sobremesas e bebidas. Use as abas para navegar entre as categorias.',
+      opts: ['reserva', 'horario', 'delivery']
+    },
+    reserva: {
+      bot: 'Para reservar sua mesa é só nos chamar no WhatsApp! 📅 Clique no botão verde na tela e a gente confirma rapidinho.',
+      opts: ['horario', 'delivery', 'cardapio']
+    },
+    horario: {
+      bot: '🕐 Nosso horário de funcionamento:\n\nSeg a Sex: 11h às 22h\nSáb e Dom: 11h às 23h\n\nFechado apenas em feriados municipais.',
+      opts: ['cardapio', 'reserva', 'delivery']
+    },
+    delivery: {
+      bot: '🛵 Sim, fazemos delivery na região! Pedido mínimo R$ 25,00. Frete a partir de R$ 5,00. Peça pelo WhatsApp e combinamos o endereço!',
+      opts: ['cardapio', 'reserva', 'horario']
+    },
+    padrao: {
+      bot: 'Entendi! Para te ajudar melhor, é só nos chamar no WhatsApp. Nosso time responde rápido! 😊',
+      opts: ['cardapio', 'reserva', 'horario', 'delivery']
+    }
+  };
+
+  const labels = {
+    cardapio: '📋 Cardápio',
+    reserva: '📅 Reserva',
+    horario: '🕐 Horário',
+    delivery: '🛵 Delivery'
+  };
+
+  function addMsg(text, type) {
+    const msgs = document.getElementById('chatMsgs');
+    const div = document.createElement('div');
+    div.className = `msg msg-${type}`;
+    div.innerHTML = text.replace(/\n/g, '<br>');
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    document.getElementById('chatOpts').innerHTML = '';
+  }
+
+  function renderOpts(opts) {
+    document.getElementById('chatOpts').innerHTML =
+      opts.map(o => `<button class="chat-opt" onclick="chatResp('${o}')">${labels[o]}</button>`).join('');
+  }
+
+  function chatResp(key) {
+    const r = respostas[key] || respostas.padrao;
+    addMsg(labels[key] || key, 'user');
+    setTimeout(() => { addMsg(r.bot, 'bot'); renderOpts(r.opts); }, 420);
+  }
+
+  function enviarMsg() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    addMsg(text, 'user');
+    input.value = '';
+    setTimeout(() => { addMsg(respostas.padrao.bot, 'bot'); renderOpts(respostas.padrao.opts); }, 500);
+  }
+</script>
+
+</body>
+</html>
