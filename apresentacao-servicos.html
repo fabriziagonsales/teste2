@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fabrizia Soluções Digitais — Apresentação de Serviços</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #7c4dff;
+    --primary-light: #ede7ff;
+    --accent: #ff6b6b;
+    --dark: #1a1a2e;
+    --gray: #64748b;
+    --light: #f8fafc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --gold: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white;
+    padding: 60px 40px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 50%, rgba(124,77,255,.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(255,107,107,.1) 0%, transparent 40%);
+    animation: move 8s ease-in-out infinite alternate;
+  }
+  @keyframes move {
+    from { transform: translateX(-5%) translateY(-5%); }
+    to   { transform: translateX(5%) translateY(5%); }
+  }
+  header > * { position: relative; z-index: 1; }
+
+  .badge {
+    display: inline-block;
+    background: rgba(124,77,255,.25);
+    border: 1px solid rgba(124,77,255,.5);
+    color: #c4b5fd;
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  header h1 span { color: #a78bfa; }
+  header p.sub {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    max-width: 520px;
+    margin: 0 auto 32px;
+  }
+  .header-contact {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .header-contact a {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: .9rem;
+    transition: background .2s;
+  }
+  .header-contact a:hover { background: rgba(255,255,255,.15); }
+  .header-contact a .icon { margin-right: 6px; }
+
+  /* ── SECTION BASE ── */
+  section { padding: 70px 20px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .section-title {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+  .section-title p {
+    color: var(--gray);
+    font-size: .95rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .divider {
+    width: 48px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+
+  /* ── DIFERENCIAIS ── */
+  #diferenciais { background: var(--white); }
+  .cards-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .card-dif {
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    text-align: center;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card-dif:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(124,77,255,.12); }
+  .card-dif .emoji { font-size: 2.4rem; margin-bottom: 16px; }
+  .card-dif h3 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .card-dif p { font-size: .88rem; color: var(--gray); }
+
+  /* ── SERVIÇOS ── */
+  #servicos { background: var(--light); }
+  .servico-bloco {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    transition: box-shadow .2s;
+  }
+  .servico-bloco:hover { box-shadow: 0 8px 32px rgba(0,0,0,.07); }
+  .servico-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(90deg, var(--primary-light), var(--white));
+    cursor: pointer;
+    user-select: none;
+  }
+  .servico-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+  .servico-header h3 { font-size: 1.05rem; font-weight: 600; flex: 1; }
+  .servico-header .arrow {
+    color: var(--gray);
+    font-size: .85rem;
+    transition: transform .3s;
+  }
+  .servico-bloco.open .arrow { transform: rotate(180deg); }
+  .servico-body {
+    display: none;
+    padding: 0 28px 28px;
+  }
+  .servico-bloco.open .servico-body { display: block; }
+  .servico-body p {
+    color: var(--gray);
+    font-size: .9rem;
+    margin: 20px 0 16px;
+  }
+  .itens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .item-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .item-card .nome { font-size: .88rem; font-weight: 600; margin-bottom: 6px; }
+  .item-card .desc { font-size: .8rem; color: var(--gray); margin-bottom: 10px; }
+  .item-card .preco { font-size: .82rem; }
+  .item-card .preco strong { color: var(--primary); }
+  .tag-inclui {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+    font-size: .75rem;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin: 4px 4px 0 0;
+  }
+
+  /* ── PACOTES ── */
+  #pacotes { background: var(--white); }
+  .pacotes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .pacote {
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 28px;
+    position: relative;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .pacote:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+  .pacote.destaque {
+    border-color: var(--primary);
+    box-shadow: 0 8px 32px rgba(124,77,255,.15);
+  }
+  .pacote-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .pacote h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    margin-bottom: 4px;
+  }
+  .pacote .desc { font-size: .85rem; color: var(--gray); margin-bottom: 20px; }
+  .pacote .preco-pack {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+  .pacote .preco-pack span { font-size: 1rem; font-weight: 400; color: var(--gray); }
+  .pacote .mensalidade {
+    font-size: .82rem;
+    color: var(--gray);
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .pacote ul { list-style: none; margin-bottom: 28px; }
+  .pacote ul li {
+    font-size: .88rem;
+    padding: 6px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .pacote ul li::before { content: '✓'; color: #16a34a; font-weight: 700; flex-shrink: 0; }
+  .btn-wpp {
+    display: block;
+    text-align: center;
+    background: #25d366;
+    color: white;
+    font-weight: 600;
+    font-size: .9rem;
+    padding: 14px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity .2s;
+  }
+  .btn-wpp:hover { opacity: .9; }
+  .pacote.destaque .btn-wpp {
+    background: var(--primary);
+  }
+
+  /* ── NICHOS ── */
+  #nichos { background: var(--light); }
+  .nichos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 16px;
+  }
+  .nicho {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px 16px;
+    text-align: center;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .nicho:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.07); }
+  .nicho .emoji { font-size: 2.2rem; margin-bottom: 10px; }
+  .nicho h4 { font-size: .9rem; font-weight: 600; margin-bottom: 6px; }
+  .nicho p { font-size: .78rem; color: var(--gray); }
+
+  /* ── CTA ── */
+  #cta {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+  }
+  #cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    margin-bottom: 12px;
+  }
+  #cta p { color: #94a3b8; max-width: 460px; margin: 0 auto 36px; }
+  .cta-buttons { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: #25d366;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 16px 36px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(37,211,102,.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.4); }
+  .btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,.25);
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 14px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: border-color .2s;
+  }
+  .btn-secondary:hover { border-color: rgba(255,255,255,.5); }
+
+  /* ── RODAPÉ ── */
+  footer {
+    background: #0d0d1a;
+    color: #64748b;
+    text-align: center;
+    padding: 28px 20px;
+    font-size: .82rem;
+  }
+  footer strong { color: #94a3b8; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media print {
+    .servico-body { display: block !important; }
+    .servico-bloco.open .arrow, .arrow { display: none; }
+    header::before { display: none; }
+    #cta .btn-primary, #cta .btn-secondary { border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="badge">Soluções Digitais para Negócios Locais</div>
+  <h1>Fabrizia <span>Soluções Digitais</span></h1>
+  <p class="sub">Sites profissionais, chatbots e conteúdo para redes sociais — tudo em um lugar só.</p>
+  <div class="header-contact">
+    <a href="https://wa.me/5547000000000?text=Ol%C3%A1%2C+gostaria+de+saber+mais+sobre+os+servi%C3%A7os!" target="_blank">
+      <span class="icon">💬</span> WhatsApp
+    </a>
+    <a href="mailto:fabriziagonsales@gmail.com">
+      <span class="icon">✉️</span> E-mail
+    </a>
+    <a href="https://instagram.com/" target="_blank">
+      <span class="icon">📷</span> Instagram
+    </a>
+  </div>
+</header>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Por que escolher a Fabrizia?</h2>
+      <p>Atendimento personalizado, entrega rápida e resultados reais para o seu negócio.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="cards-3">
+      <div class="card-dif reveal">
+        <div class="emoji">⚡</div>
+        <h3>Entrega rápida</h3>
+        <p>Seu site ou chatbot pronto em até 5 dias úteis, sem burocracia.</p>
+      </div>
+      <div class="card-dif reveal">
+        <div class="emoji">💡</div>
+        <h3>Tudo personalizado</h3>
+        <p>Cada projeto é feito sob medida para o seu negócio e seus clientes.</p>
+      </div>
+      <div class="card-dif reveal">
+        <div class="emoji">🤝</div>
+        <h3>Suporte contínuo</h3>
+        <p>Não abandono você após a entrega — estou disponível no WhatsApp quando precisar.</p>
+      </div>
+      <div class="card-dif reveal">
+        <div class="emoji">📱</div>
+        <h3>100% mobile</h3>
+        <p>Todos os sites funcionam perfeitamente no celular, onde seu cliente está.</p>
+      </div>
+      <div class="card-dif reveal">
+        <div class="emoji">💰</div>
+        <h3>Sem surpresas</h3>
+        <p>Preço fixo e transparente. Você sabe exatamente o que vai pagar.</p>
+      </div>
+      <div class="card-dif reveal">
+        <div class="emoji">🚀</div>
+        <h3>Resultado imediato</h3>
+        <p>Clientes que aplicam as soluções relatam aumento no contato em poucos dias.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Nossos Serviços</h2>
+      <p>Clique em cada categoria para ver os detalhes e preços.</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Sites -->
+    <div class="servico-bloco open reveal">
+      <div class="servico-header" onclick="toggle(this)">
+        <div class="servico-icon">🌐</div>
+        <h3>Sites & Landing Pages</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="servico-body">
+        <p>Presença digital profissional para o seu negócio aparecer no Google e nas redes sociais.</p>
+        <div class="itens-grid">
+          <div class="item-card">
+            <div class="nome">Landing Page Institucional</div>
+            <div class="desc">Site completo com serviços, fotos, depoimentos e botão de contato.</div>
+            <div class="preco">Criação: <strong>R$ 300 – 600</strong><br>Manutenção: <strong>R$ 50 – 100/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Cardápio Digital</div>
+            <div class="desc">Cardápio com fotos, preços e pedido direto pelo WhatsApp.</div>
+            <div class="preco">Criação: <strong>R$ 300 – 500</strong><br>Manutenção: <strong>R$ 80 – 150/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Página de Agendamento</div>
+            <div class="desc">Apresenta os serviços e facilita o agendamento via WhatsApp.</div>
+            <div class="preco">Criação: <strong>R$ 250 – 450</strong><br>Manutenção: <strong>R$ 50 – 100/mês</strong></div>
+          </div>
+        </div>
+        <span class="tag-inclui">✓ Adaptado para celular</span>
+        <span class="tag-inclui">✓ Botão WhatsApp</span>
+        <span class="tag-inclui">✓ Fotos incluídas</span>
+        <span class="tag-inclui">✓ Google Fonts profissional</span>
+      </div>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="servico-bloco reveal">
+      <div class="servico-header" onclick="toggle(this)">
+        <div class="servico-icon">🤖</div>
+        <h3>Chatbot para WhatsApp</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="servico-body">
+        <p>Seu negócio respondendo clientes 24h por dia, mesmo quando você não está disponível.</p>
+        <div class="itens-grid">
+          <div class="item-card">
+            <div class="nome">Chatbot Básico</div>
+            <div class="desc">Menu automático com as principais dúvidas e direcionamento pro atendente.</div>
+            <div class="preco">Criação: <strong>R$ 300 – 500</strong><br>Mensalidade: <strong>R$ 100 – 200/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Chatbot com Agendamento</div>
+            <div class="desc">Coleta nome, serviço e data do cliente e envia resumo para o dono.</div>
+            <div class="preco">Criação: <strong>R$ 500 – 800</strong><br>Mensalidade: <strong>R$ 150 – 250/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Chatbot FAQ Completo</div>
+            <div class="desc">Responde as 10 perguntas mais comuns automaticamente.</div>
+            <div class="preco">Criação: <strong>+ R$ 100</strong> (no pacote)</div>
+          </div>
+        </div>
+        <span class="tag-inclui">✓ Funciona 24 horas</span>
+        <span class="tag-inclui">✓ Sem custo de recebimento</span>
+        <span class="tag-inclui">✓ Textos personalizados</span>
+        <span class="tag-inclui">✓ Treinamento incluso</span>
+      </div>
+    </div>
+
+    <!-- Redes sociais -->
+    <div class="servico-bloco reveal">
+      <div class="servico-header" onclick="toggle(this)">
+        <div class="servico-icon">📲</div>
+        <h3>Conteúdo para Redes Sociais</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="servico-body">
+        <p>Textos profissionais para Instagram, Facebook e WhatsApp — sem você precisar pensar no que postar.</p>
+        <div class="itens-grid">
+          <div class="item-card">
+            <div class="nome">Pack 12 Posts/mês</div>
+            <div class="desc">Textos prontos com sugestão de imagem e hashtags.</div>
+            <div class="preco">Mensalidade: <strong>R$ 200 – 350/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Pack 30 Posts/mês</div>
+            <div class="desc">Calendário editorial completo, um post por dia.</div>
+            <div class="preco">Mensalidade: <strong>R$ 350 – 500/mês</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Bio do Instagram</div>
+            <div class="desc">Reescrita profissional do perfil para atrair mais seguidores.</div>
+            <div class="preco">Avulso: <strong>R$ 50 – 100</strong></div>
+          </div>
+        </div>
+        <span class="tag-inclui">✓ Legenda pronta</span>
+        <span class="tag-inclui">✓ Hashtags inclusas</span>
+        <span class="tag-inclui">✓ Calendário editorial</span>
+        <span class="tag-inclui">✓ Tom de voz do negócio</span>
+      </div>
+    </div>
+
+    <!-- Textos e materiais -->
+    <div class="servico-bloco reveal">
+      <div class="servico-header" onclick="toggle(this)">
+        <div class="servico-icon">✍️</div>
+        <h3>Textos & Materiais de Vendas</h3>
+        <span class="arrow">▼</span>
+      </div>
+      <div class="servico-body">
+        <p>Mensagens, scripts e materiais para você vender mais e atender melhor seus clientes.</p>
+        <div class="itens-grid">
+          <div class="item-card">
+            <div class="nome">Script de Atendimento</div>
+            <div class="desc">Como responder clientes no WhatsApp e por telefone.</div>
+            <div class="preco">Avulso: <strong>R$ 100 – 200</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Mensagem de Boas-vindas</div>
+            <div class="desc">Texto automático para novos clientes no WhatsApp.</div>
+            <div class="preco">Avulso: <strong>R$ 80 – 150</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Texto para Panfleto/Flyer</div>
+            <div class="desc">Copy completo para material impresso ou digital.</div>
+            <div class="preco">Avulso: <strong>R$ 80 – 150</strong></div>
+          </div>
+          <div class="item-card">
+            <div class="nome">Mensagens de Reativação</div>
+            <div class="desc">Para trazer de volta clientes que sumiram.</div>
+            <div class="preco">Avulso: <strong>R$ 100 – 180</strong></div>
+          </div>
+        </div>
+        <span class="tag-inclui">✓ Entrega em até 48h</span>
+        <span class="tag-inclui">✓ Ajustes inclusos</span>
+        <span class="tag-inclui">✓ Tom personalizado</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PACOTES -->
+<section id="pacotes">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Pacotes Completos</h2>
+      <p>Combine serviços e economize. Ideal para quem quer resultado rápido.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="pacotes-grid">
+
+      <div class="pacote reveal">
+        <h3>Starter</h3>
+        <p class="desc">Para começar com o pé direito</p>
+        <div class="preco-pack">R$ 750 <span>criação</span></div>
+        <div class="mensalidade">+ a partir de R$ 150/mês</div>
+        <ul>
+          <li>Landing page profissional</li>
+          <li>Chatbot básico no WhatsApp</li>
+          <li>Botão WhatsApp flutuante</li>
+          <li>Adaptado para celular</li>
+          <li>Suporte por 30 dias</li>
+        </ul>
+        <a href="https://wa.me/5547000000000?text=Ol%C3%A1%2C+tenho+interesse+no+Pacote+Starter!" class="btn-wpp" target="_blank">💬 Quero este pacote</a>
+      </div>
+
+      <div class="pacote destaque reveal">
+        <div class="pacote-badge">⭐ Mais vendido</div>
+        <h3>Digital Completo</h3>
+        <p class="desc">O pacote favorito dos clientes</p>
+        <div class="preco-pack">R$ 1.000 <span>criação</span></div>
+        <div class="mensalidade">+ a partir de R$ 300/mês</div>
+        <ul>
+          <li>Site completo personalizado</li>
+          <li>Chatbot com agendamento</li>
+          <li>12 posts/mês para Instagram</li>
+          <li>Bio do Instagram reescrita</li>
+          <li>Suporte contínuo incluso</li>
+          <li>Atualização mensal do site</li>
+        </ul>
+        <a href="https://wa.me/5547000000000?text=Ol%C3%A1%2C+tenho+interesse+no+Pacote+Digital+Completo!" class="btn-wpp" target="_blank">💬 Quero este pacote</a>
+      </div>
+
+      <div class="pacote reveal">
+        <h3>Premium</h3>
+        <p class="desc">Para quem quer o máximo</p>
+        <div class="preco-pack">R$ 1.350 <span>criação</span></div>
+        <div class="mensalidade">+ a partir de R$ 500/mês</div>
+        <ul>
+          <li>Tudo do Digital Completo</li>
+          <li>30 posts/mês para Instagram</li>
+          <li>Script completo de atendimento</li>
+          <li>Mensagens de reativação</li>
+          <li>Mensagem automática de boas-vindas</li>
+          <li>Prioridade no suporte</li>
+        </ul>
+        <a href="https://wa.me/5547000000000?text=Ol%C3%A1%2C+tenho+interesse+no+Pacote+Premium!" class="btn-wpp" target="_blank">💬 Quero este pacote</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NICHOS -->
+<section id="nichos">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Atendo seu segmento</h2>
+      <p>Soluções adaptadas para cada tipo de negócio local.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="nichos-grid">
+      <div class="nicho reveal">
+        <div class="emoji">💇</div>
+        <h4>Salão de Beleza</h4>
+        <p>Agendamento automático + Instagram</p>
+      </div>
+      <div class="nicho reveal">
+        <div class="emoji">🍔</div>
+        <h4>Restaurante</h4>
+        <p>Cardápio digital + pedido via WPP</p>
+      </div>
+      <div class="nicho reveal">
+        <div class="emoji">🦷</div>
+        <h4>Clínica / Dentista</h4>
+        <p>Agendamento + FAQ automático</p>
+      </div>
+      <div class="nicho reveal">
+        <div class="emoji">🐾</div>
+        <h4>Petshop</h4>
+        <p>Site + banho e tosa via WPP</p>
+      </div>
+      <div class="nicho reveal">
+        <div class="emoji">💪</div>
+        <h4>Academia</h4>
+        <p>Landing page + planos e matrículas</p>
+      </div>
+      <div class="nicho reveal">
+        <div class="emoji">✨</div>
+        <h4>Estética</h4>
+        <p>Antes/depois + agendamento online</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="container">
+    <h2 reveal>Pronto para transformar seu negócio?</h2>
+    <p>Entre em contato agora e receba uma proposta personalizada em até 24 horas. Sem compromisso.</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/5547000000000?text=Ol%C3%A1+Fabrizia!+Gostaria+de+uma+proposta+para+o+meu+neg%C3%B3cio." class="btn-primary" target="_blank">💬 Falar no WhatsApp</a>
+      <a href="mailto:fabriziagonsales@gmail.com" class="btn-secondary">✉️ Enviar e-mail</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Fabrizia Soluções Digitais</strong> · Balneário Camboriú, SC · <a href="mailto:fabriziagonsales@gmail.com" style="color:#7c4dff">fabriziagonsales@gmail.com</a></p>
+  <p style="margin-top:6px">© 2026 — Todos os direitos reservados</p>
+</footer>
+
+<script>
+  // Accordion
+  function toggle(header) {
+    const bloco = header.parentElement;
+    bloco.classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clínica Sorriso Pleno — Odontologia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1f35;
+    --navy2: #162840;
+    --gold: #b8973a;
+    --gold-light: #f5ecd7;
+    --cream: #faf7f2;
+    --white: #ffffff;
+    --gray: #64748b;
+    --border: #e8e2d9;
+    --text: #1e293b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background .3s, box-shadow .3s, padding .3s;
+  }
+  nav.scrolled {
+    background: var(--navy);
+    box-shadow: 0 2px 20px rgba(0,0,0,.2);
+    padding: 12px 40px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,.8);
+    text-decoration: none;
+    font-size: .9rem;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--navy) !important;
+    font-weight: 600 !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    transition: opacity .2s !important;
+  }
+  .nav-cta:hover { opacity: .85; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 60%, #1a3355 100%);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 100px 40px 60px;
+  }
+  #hero::before {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 55%;
+    height: 90%;
+    background: url('https://images.pexels.com/photos/3845766/pexels-photo-3845766.jpeg?auto=compress&cs=tinysrgb&w=900') center/cover;
+    border-radius: 40px 0 0 40px;
+    opacity: .25;
+  }
+  #hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(184,151,58,.08) 0%, transparent 60%);
+  }
+  .hero-content {
+    max-width: 580px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(184,151,58,.15);
+    border: 1px solid rgba(184,151,58,.3);
+    color: var(--gold);
+    font-size: .78rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+  .hero-content h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .hero-content h1 em {
+    font-style: normal;
+    color: var(--gold);
+  }
+  .hero-content p {
+    color: rgba(255,255,255,.7);
+    font-size: 1.05rem;
+    max-width: 440px;
+    margin-bottom: 36px;
+  }
+  .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: .95rem;
+    padding: 15px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 16px rgba(184,151,58,.35);
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(184,151,58,.45); }
+  .btn-outline {
+    border: 2px solid rgba(255,255,255,.3);
+    color: var(--white);
+    font-weight: 500;
+    font-size: .95rem;
+    padding: 13px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color .2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,.6); }
+  .hero-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 52px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    flex-wrap: wrap;
+  }
+  .stat { text-align: left; }
+  .stat strong {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat span { font-size: .8rem; color: rgba(255,255,255,.5); }
+
+  /* ── SEÇÕES BASE ── */
+  section { padding: 80px 20px; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .sec-title { text-align: center; margin-bottom: 52px; }
+  .sec-title .label {
+    display: inline-block;
+    color: var(--gold);
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .sec-title h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .sec-title p { color: var(--gray); max-width: 460px; margin: 0 auto; font-size: .93rem; }
+  .gold-bar {
+    width: 40px; height: 2px;
+    background: var(--gold);
+    margin: 14px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── SOBRE ── */
+  #sobre { background: var(--cream); }
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+  .sobre-img {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+  }
+  .sobre-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sobre-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40%;
+    background: linear-gradient(transparent, rgba(15,31,53,.5));
+  }
+  .sobre-tag {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1;
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: .82rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+  }
+  .sobre-texto .label { color: var(--gold); font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .sobre-texto h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--navy);
+    margin: 10px 0 16px;
+    line-height: 1.2;
+  }
+  .sobre-texto p { color: var(--gray); font-size: .93rem; margin-bottom: 14px; }
+  .sobre-itens { list-style: none; margin: 24px 0; }
+  .sobre-itens li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    font-size: .9rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .sobre-itens li:last-child { border: none; }
+  .sobre-itens li .check {
+    width: 22px; height: 22px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    color: var(--navy);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── SERVIÇOS ── */
+  #servicos { background: var(--white); }
+  .servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .servico-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .servico-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s;
+  }
+  .servico-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(15,31,53,.08); border-color: var(--gold); }
+  .servico-card:hover::before { transform: scaleX(1); }
+  .servico-card .icon {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .servico-card h3 { font-size: 1rem; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+  .servico-card p { font-size: .86rem; color: var(--gray); }
+
+  /* ── DEPOIMENTOS ── */
+  #depoimentos { background: var(--navy); }
+  #depoimentos .sec-title h2 { color: var(--white); }
+  #depoimentos .sec-title p { color: rgba(255,255,255,.5); }
+  .depo-slider { position: relative; overflow: hidden; }
+  .depo-track {
+    display: flex;
+    transition: transform .5s ease;
+  }
+  .depo-card {
+    min-width: 100%;
+    padding: 0 20px;
+  }
+  .depo-inner {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .depo-stars { color: var(--gold); font-size: 1.1rem; margin-bottom: 20px; letter-spacing: 2px; }
+  .depo-inner blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--white);
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 28px;
+  }
+  .depo-autor { display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .depo-avatar {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 1.1rem;
+  }
+  .depo-nome strong { display: block; color: var(--white); font-size: .9rem; }
+  .depo-nome span { color: rgba(255,255,255,.45); font-size: .8rem; }
+  .depo-dots { text-align: center; margin-top: 28px; }
+  .dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    margin: 0 4px;
+    cursor: pointer;
+    transition: background .2s, width .2s;
+  }
+  .dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+  /* ── GALERIA ── */
+  #galeria { background: var(--cream); }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 16px;
+  }
+  .galeria-item {
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    position: relative;
+  }
+  .galeria-item:first-child { grid-column: span 2; aspect-ratio: 16/9; }
+  .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .galeria-item:hover img { transform: scale(1.05); }
+
+  /* ── CONTATO ── */
+  #contato { background: var(--white); }
+  .contato-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .contato-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+  .contato-info p { color: var(--gray); font-size: .9rem; margin-bottom: 28px; }
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .info-icon {
+    width: 44px; height: 44px;
+    background: var(--gold-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .info-item strong { display: block; font-size: .88rem; color: var(--navy); margin-bottom: 2px; }
+  .info-item span { font-size: .85rem; color: var(--gray); }
+  .contato-form {
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+  }
+  .contato-form h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 20px;
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .88rem;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .btn-form {
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    font-weight: 600;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .2s;
+    margin-top: 4px;
+  }
+  .btn-form:hover { background: var(--gold); color: var(--navy); }
+
+  /* ── WPP FLOAT ── */
+  .wpp-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 200;
+    width: 58px;
+    height: 58px;
+    background: #25d366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,.45);
+    text-decoration: none;
+    font-size: 1.6rem;
+    animation: pulse-wpp 2.5s infinite;
+    transition: transform .2s;
+  }
+  .wpp-float:hover { transform: scale(1.1); }
+  @keyframes pulse-wpp {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,.45); }
+    50% { box-shadow: 0 4px 32px rgba(37,211,102,.75); }
+  }
+
+  /* ── TOPO ── */
+  .topo-btn {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    background: var(--navy);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .topo-btn.show { opacity: 1; pointer-events: auto; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080f1a;
+    color: rgba(255,255,255,.35);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: .82rem;
+  }
+  footer strong { color: rgba(255,255,255,.6); }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s, transform .65s; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVO ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    nav.scrolled { padding: 12px 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 24px 60px; }
+    #hero::before { display: none; }
+    .sobre-grid,
+    .contato-grid { grid-template-columns: 1fr; gap: 32px; }
+    .galeria-grid { grid-template-columns: 1fr 1fr; }
+    .galeria-item:first-child { grid-column: span 2; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-logo" href="#">✦ <span>Sorriso</span> Pleno</a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="#contato" class="nav-cta">Agendar consulta</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🦷 Odontologia de excelência</div>
+    <h1>Cuidando do seu<br><em>sorriso</em> com carinho</h1>
+    <p>Tratamentos modernos em um ambiente acolhedor. Sua saúde bucal em boas mãos desde o primeiro atendimento.</p>
+    <div class="hero-buttons">
+      <a href="https://wa.me/5547000000000?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="btn-gold" target="_blank">💬 Agendar pelo WhatsApp</a>
+      <a href="#servicos" class="btn-outline">Ver serviços</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><strong>12+</strong><span>Anos de experiência</span></div>
+      <div class="stat"><strong>2.4k</strong><span>Pacientes atendidos</span></div>
+      <div class="stat"><strong>98%</strong><span>Satisfação</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-img reveal">
+        <img src="https://images.pexels.com/photos/3845810/pexels-photo-3845810.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Dra. responsável">
+        <div class="sobre-tag">CRO registrada</div>
+      </div>
+      <div class="sobre-texto reveal">
+        <div class="label">Sobre a clínica</div>
+        <h2>Tradição e modernidade em um só lugar</h2>
+        <p>A Clínica Sorriso Pleno foi fundada com o propósito de oferecer tratamento odontológico de qualidade para toda a família, com atenção individual e tecnologia de ponta.</p>
+        <p>Nossa equipe é formada por especialistas em cada área, garantindo que você receba o melhor cuidado possível — sem longas esperas e com total conforto.</p>
+        <ul class="sobre-itens">
+          <li><span class="check">✓</span> Equipamentos digitais modernos</li>
+          <li><span class="check">✓</span> Atendimento para todas as idades</li>
+          <li><span class="check">✓</span> Financiamento em até 12x sem juros</li>
+          <li><span class="check">✓</span> Convênios aceitos</li>
+        </ul>
+        <a href="https://wa.me/5547000000000?text=Ol%C3%A1!+Gostaria+de+saber+mais+sobre+a+cl%C3%ADnica." class="btn-gold" target="_blank">Conhecer mais →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="container">
+    <div class="sec-title reveal">
+      <div class="label">O que oferecemos</div>
+      <h2>Nossos Tratamentos</h2>
+      <p>Do preventivo ao estético — tudo que o seu sorriso precisa.</p>
+      <div class="gold-bar"></div>
+    </div>
+    <div class="servicos-grid">
+      <div class="servico-card reveal">
+        <span class="icon">🦷</span>
+        <h3>Clareamento Dental</h3>
+        <p>Clareia até 8 tons em uma sessão, com protocolo seguro e resultado duradouro.</p>
+      </div>
+      <div class="servico-card reveal">
+        <span class="icon">✨</span>
+        <h3>Lentes de Contato</h3>
+        <p>Facetas ultra-finas de porcelana para transformar o formato e a cor dos dentes.</p>
+      </div>
+      <div class="servico-card reveal">
+        <span class="icon">🔄</span>
+        <h3>Ortodontia</h3>
+        <p>Aparelhos convencionais e alinhadores invisíveis para corrigir o alinhamento.</p>
+      </div>
+      <div class="servico-card reveal">
+        <span class="icon">🩺</span>
+        <h3>Implantes</h3>
+        <p>Substituição de dentes perdidos com resultado natural e permanente.</p>
+      </div>
+      <div class="servico-card reveal">
+        <span class="icon">🧒</span>
+        <h3>Odontopediatria</h3>
+        <p>Atendimento especializado para crianças, com ambiente acolhedor e lúdico.</p>
+      </div>
+      <div class="servico-card reveal">
+        <span class="icon">🛡️</span>
+        <h3>Prevenção & Limpeza</h3>
+        <p>Consultas de rotina, profilaxia e orientação para manter sua saúde bucal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="container">
+    <div class="sec-title reveal">
+      <div class="label" style="color:var(--gold)">O que dizem nossos pacientes</div>
+      <h2>Depoimentos</h2>
+      <p style="color:rgba(255,255,255,.45)">Mais de 2.400 sorrisos transformados.</p>
+      <div class="gold-bar"></div>
+    </div>
+    <div class="depo-slider reveal">
+      <div class="depo-track" id="track">
+        <div class="depo-card">
+          <div class="depo-inner">
+            <div class="depo-stars">★★★★★</div>
+            <blockquote>"Fiz o clareamento e fiquei impressionada com o resultado. Ficou muito mais natural do que eu esperava. A Dra. foi super atenciosa durante todo o processo."</blockquote>
+            <div class="depo-autor">
+              <div class="depo-avatar">A</div>
+              <div class="depo-nome"><strong>Ana Paula S.</strong><span>Clareamento dental</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="depo-card">
+          <div class="depo-inner">
+            <div class="depo-stars">★★★★★</div>
+            <blockquote>"Minha filha tinha muito medo de dentista e aqui ela se sentiu à vontade desde a primeira consulta. Equipe incrível, lugar lindo e muito cuidado."</blockquote>
+            <div class="depo-autor">
+              <div class="depo-avatar">M</div>
+              <div class="depo-nome"><strong>Mariana T.</strong><span>Odontopediatria</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="depo-card">
+          <div class="depo-inner">
+            <div class="depo-stars">★★★★★</div>
+            <blockquote>"Coloquei as lentes de contato e mudou minha vida. O resultado é lindo, parece dente natural. Me arrependo só de não ter feito antes!"</blockquote>
+            <div class="depo-autor">
+              <div class="depo-avatar">R</div>
+              <div class="depo-nome"><strong>Ricardo L.</strong><span>Lentes de contato</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="depo-dots">
+        <span class="dot active" onclick="goTo(0)"></span>
+        <span class="dot" onclick="goTo(1)"></span>
+        <span class="dot" onclick="goTo(2)"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA -->
+<section id="galeria">
+  <div class="container">
+    <div class="sec-title reveal">
+      <div class="label">Nossa estrutura</div>
+      <h2>Ambiente Moderno</h2>
+      <p>Um espaço pensado para o seu conforto e tranquilidade.</p>
+      <div class="gold-bar"></div>
+    </div>
+    <div class="galeria-grid reveal">
+      <div class="galeria-item">
+        <img src="https://images.pexels.com/photos/3881449/pexels-photo-3881449.jpeg?auto=compress&cs=tinysrgb&w=900" alt="Recepção">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.pexels.com/photos/3845766/pexels-photo-3845766.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Consultório">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.pexels.com/photos/6812548/pexels-photo-6812548.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Equipamentos">
+      </div>
+      <div class="galeria-item">
+        <img src="https://images.pexels.com/photos/4269694/pexels-photo-4269694.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Atendimento">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="container">
+    <div class="sec-title reveal">
+      <div class="label">Fale conosco</div>
+      <h2>Agende sua Consulta</h2>
+      <p>Estamos prontos para te atender. Escolha a forma mais cômoda.</p>
+      <div class="gold-bar"></div>
+    </div>
+    <div class="contato-grid">
+      <div class="contato-info reveal">
+        <h3>Venha nos visitar</h3>
+        <p>Atendemos de segunda a sábado, com horários flexíveis para você.</p>
+        <div class="info-item">
+          <div class="info-icon">📍</div>
+          <div><strong>Endereço</strong><span>Rua das Flores, 456 — Centro<br>Balneário Camboriú, SC</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">🕐</div>
+          <div><strong>Horário</strong><span>Seg–Sex: 8h às 19h<br>Sábado: 8h às 13h</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">💬</div>
+          <div><strong>WhatsApp</strong><span>(47) 00000-0000</span></div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon">💳</div>
+          <div><strong>Formas de pagamento</strong><span>Cartão, Pix, dinheiro<br>Parcelamento em até 12x</span></div>
+        </div>
+      </div>
+      <div class="contato-form reveal">
+        <h4>Solicite seu agendamento</h4>
+        <div class="form-group">
+          <label>Seu nome</label>
+          <input type="text" placeholder="Como podemos te chamar?">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp</label>
+          <input type="tel" placeholder="(47) 00000-0000" oninput="mascaraTel(this)">
+        </div>
+        <div class="form-group">
+          <label>Tratamento de interesse</label>
+          <select>
+            <option value="">Selecione...</option>
+            <option>Clareamento dental</option>
+            <option>Lentes de contato</option>
+            <option>Ortodontia / Aparelho</option>
+            <option>Implante</option>
+            <option>Odontopediatria</option>
+            <option>Limpeza e prevenção</option>
+            <option>Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mensagem (opcional)</label>
+          <textarea placeholder="Alguma dúvida ou observação?"></textarea>
+        </div>
+        <button class="btn-form" onclick="enviarWpp()">💬 Enviar pelo WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Clínica Sorriso Pleno</strong> · Balneário Camboriú, SC · (47) 00000-0000</p>
+  <p style="margin-top:6px">© 2026 — Todos os direitos reservados</p>
+</footer>
+
+<!-- BOTÃO WPP FLUTUANTE -->
+<a href="https://wa.me/5547000000000?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="wpp-float" target="_blank" title="Falar no WhatsApp">💬</a>
+
+<!-- VOLTAR AO TOPO -->
+<button class="topo-btn" id="topoBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Nav scrolled
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('topoBtn').classList.toggle('show', window.scrollY > 400);
+  });
+
+  // Reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Carrossel depoimentos
+  let current = 0;
+  const track = document.getElementById('track');
+  const dots = document.querySelectorAll('.dot');
+  function goTo(i) {
+    current = i;
+    track.style.transform = `translateX(-${i * 100}%)`;
+    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+  }
+  setInterval(() => goTo((current + 1) % 3), 5000);
+
+  // Máscara telefone
+  function mascaraTel(el) {
+    let v = el.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+    else if (v.length > 6) v = v.replace(/(\d{2})(\d{4})(\d+)/, '($1) $2-$3');
+    else if (v.length > 2) v = v.replace(/(\d{2})(\d+)/, '($1) $2');
+    el.value = v;
+  }
+
+  // Envio pelo WhatsApp
+  function enviarWpp() {
+    const nome = document.querySelector('input[placeholder*="chamar"]').value.trim();
+    const tel = document.querySelector('input[type="tel"]').value.trim();
+    const trat = document.querySelector('select').value;
+    const msg = document.querySelector('textarea').value.trim();
+    if (!nome || !tel) { alert('Por favor, preencha seu nome e WhatsApp.'); return; }
+    let texto = `Olá! Gostaria de agendar uma consulta.\n\n*Nome:* ${nome}\n*WhatsApp:* ${tel}`;
+    if (trat) texto += `\n*Tratamento:* ${trat}`;
+    if (msg) texto += `\n*Mensagem:* ${msg}`;
+    window.open(`https://wa.me/5547000000000?text=${encodeURIComponent(texto)}`, '_blank');
+  }
+</script>
+</body>
+</html>
