@@ -7,16 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #1a6b3a;
-    --primary2: #145530;
-    --accent: #e8f5ee;
-    --gold: #e8a020;
-    --dark: #0f2419;
+    --primary: #0284c7;
+    --primary2: #0369a1;
+    --primary3: #075985;
+    --accent: #e0f2fe;
+    --light-blue: #bae6fd;
+    --dark: #0c2340;
     --gray: #64748b;
-    --light: #f7faf8;
+    --light: #f0f9ff;
     --white: #ffffff;
-    --border: #d4e8db;
+    --border: #bae6fd;
     --text: #1e293b;
+    --gold: #f59e0b;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,63 +28,67 @@
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 18px 40px;
+    padding: 16px 40px;
     display: flex; align-items: center; justify-content: space-between;
     transition: background .3s, box-shadow .3s, padding .3s;
   }
-  nav.scrolled { background: var(--primary2); box-shadow: 0 2px 20px rgba(0,0,0,.2); padding: 12px 40px; }
+  nav.scrolled { background: var(--primary3); box-shadow: 0 2px 20px rgba(0,0,0,.2); padding: 10px 40px; }
   .nav-logo {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600;
-    color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 700;
+    color: var(--white); text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    letter-spacing: -.5px;
   }
-  .nav-logo span { color: #6ee7a0; }
-  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-logo span { color: #7dd3fc; }
+  .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
   .nav-links a { color: rgba(255,255,255,.85); text-decoration: none; font-size: .9rem; transition: color .2s; }
-  .nav-links a:hover { color: #6ee7a0; }
+  .nav-links a:hover { color: #7dd3fc; }
   .nav-cta {
-    background: var(--gold); color: var(--dark) !important; font-weight: 700 !important;
-    padding: 8px 20px; border-radius: 6px; transition: opacity .2s !important;
+    background: #f59e0b; color: var(--dark) !important; font-weight: 700 !important;
+    padding: 9px 22px; border-radius: 8px; transition: opacity .2s !important;
   }
   .nav-cta:hover { opacity: .85; }
 
   /* ── HERO ── */
   #hero {
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--dark) 0%, var(--primary2) 50%, var(--primary) 100%);
+    background: linear-gradient(135deg, var(--dark) 0%, var(--primary3) 50%, var(--primary) 100%);
     display: flex; align-items: center; position: relative; overflow: hidden;
-    padding: 100px 40px 60px;
+    padding: 110px 40px 60px;
   }
   #hero::before {
     content: ''; position: absolute; right: -5%; top: 50%; transform: translateY(-50%);
     width: 50%; height: 85%;
     background: url('https://images.pexels.com/photos/4386467/pexels-photo-4386467.jpeg?auto=compress&cs=tinysrgb&w=900') center/cover;
-    border-radius: 40px 0 0 40px; opacity: .2;
+    border-radius: 40px 0 0 40px; opacity: .18;
   }
   #hero::after {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 20% 50%, rgba(110,231,160,.06) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 20% 50%, rgba(125,211,252,.07) 0%, transparent 60%);
   }
-  .hero-content { max-width: 580px; position: relative; z-index: 1; }
+  .hero-content { max-width: 600px; position: relative; z-index: 1; }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(110,231,160,.15); border: 1px solid rgba(110,231,160,.3);
-    color: #6ee7a0; font-size: .78rem; font-weight: 500;
+    background: rgba(125,211,252,.15); border: 1px solid rgba(125,211,252,.35);
+    color: #7dd3fc; font-size: .78rem; font-weight: 500;
     letter-spacing: .1em; text-transform: uppercase;
-    padding: 7px 16px; border-radius: 20px; margin-bottom: 24px;
+    padding: 7px 18px; border-radius: 20px; margin-bottom: 24px;
   }
-  .hero-content h1 {
+  .hero-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 700;
-    color: var(--white); line-height: 1.15; margin-bottom: 20px;
+    font-size: clamp(2.6rem, 5.5vw, 4.2rem); font-weight: 700;
+    color: var(--white); line-height: 1.1; margin-bottom: 20px;
   }
-  .hero-content h1 em { font-style: normal; color: #6ee7a0; }
-  .hero-content p { color: rgba(255,255,255,.7); font-size: 1.05rem; max-width: 440px; margin-bottom: 36px; }
+  .hero-title em { font-style: normal; color: #7dd3fc; }
+  .hero-content p { color: rgba(255,255,255,.72); font-size: 1.05rem; max-width: 460px; margin-bottom: 36px; }
   .hero-buttons { display: flex; gap: 14px; flex-wrap: wrap; }
   .btn-wpp {
     background: #25d366; color: white; font-weight: 700; font-size: .95rem;
     padding: 15px 30px; border-radius: 8px; text-decoration: none;
     transition: transform .2s, box-shadow .2s;
     box-shadow: 0 4px 16px rgba(37,211,102,.35);
+    display: flex; align-items: center; gap: 8px;
   }
   .btn-wpp:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.45); }
   .btn-outline {
@@ -90,18 +96,18 @@
     font-size: .95rem; padding: 13px 28px; border-radius: 8px; text-decoration: none;
     transition: border-color .2s;
   }
-  .btn-outline:hover { border-color: rgba(255,255,255,.6); }
+  .btn-outline:hover { border-color: rgba(255,255,255,.65); }
   .hero-stats {
-    display: flex; gap: 32px; margin-top: 52px; padding-top: 32px;
+    display: flex; gap: 36px; margin-top: 52px; padding-top: 32px;
     border-top: 1px solid rgba(255,255,255,.1); flex-wrap: wrap;
   }
   .stat strong {
     display: block; font-family: 'Cormorant Garamond', serif;
-    font-size: 2rem; font-weight: 700; color: #6ee7a0; line-height: 1;
+    font-size: 2rem; font-weight: 700; color: #7dd3fc; line-height: 1;
   }
   .stat span { font-size: .8rem; color: rgba(255,255,255,.5); }
 
-  /* ── BASE SEÇÕES ── */
+  /* ── BASE ── */
   section { padding: 80px 20px; }
   .container { max-width: 1000px; margin: 0 auto; }
   .sec-title { text-align: center; margin-bottom: 52px; }
@@ -114,26 +120,23 @@
     font-size: clamp(1.8rem, 3.5vw, 2.4rem); font-weight: 700; color: var(--dark); margin-bottom: 10px;
   }
   .sec-title p { color: var(--gray); max-width: 460px; margin: 0 auto; font-size: .93rem; }
-  .green-bar { width: 40px; height: 2px; background: var(--primary); border-radius: 2px; margin: 14px auto 0; }
+  .blue-bar { width: 40px; height: 2px; background: var(--primary); border-radius: 2px; margin: 14px auto 0; }
 
-  /* ── CARTÃO ── */
+  /* ── FAIXA CARTÃO ── */
   #cartao { background: var(--primary); padding: 40px 20px; }
   .cartao-inner {
     max-width: 900px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
   }
   .cartao-texto h3 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
-    font-weight: 700; color: white; margin-bottom: 6px;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 700; color: white; margin-bottom: 6px;
   }
-  .cartao-texto p { color: rgba(255,255,255,.75); font-size: .9rem; }
+  .cartao-texto p { color: rgba(255,255,255,.78); font-size: .9rem; max-width: 480px; }
   .cartao-preco {
-    background: var(--gold); color: var(--dark);
-    font-weight: 700; font-size: 1.1rem;
-    padding: 14px 28px; border-radius: 10px; white-space: nowrap;
+    background: var(--gold); color: var(--dark); font-weight: 700; font-size: 1.1rem;
+    padding: 16px 28px; border-radius: 12px; white-space: nowrap; text-align: center;
   }
-  .cartao-preco span { font-size: .8rem; font-weight: 400; display: block; }
+  .cartao-preco span { font-size: .8rem; font-weight: 400; display: block; margin-top: 2px; }
 
   /* ── SOBRE ── */
   #sobre { background: var(--light); }
@@ -142,7 +145,7 @@
   .sobre-img img { width: 100%; height: 100%; object-fit: cover; }
   .sobre-img::after {
     content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
-    background: linear-gradient(transparent, rgba(15,36,25,.5));
+    background: linear-gradient(transparent, rgba(12,35,64,.5));
   }
   .sobre-tag {
     position: absolute; bottom: 20px; left: 20px; z-index: 1;
@@ -167,13 +170,13 @@
     display: flex; align-items: center; justify-content: center;
     font-size: .7rem; color: white; font-weight: 700; flex-shrink: 0;
   }
-  .btn-green {
+  .btn-blue {
     background: var(--primary); color: white; font-weight: 700; font-size: .95rem;
     padding: 14px 28px; border-radius: 8px; text-decoration: none;
     transition: transform .2s, box-shadow .2s;
-    box-shadow: 0 4px 16px rgba(26,107,58,.3); display: inline-block;
+    box-shadow: 0 4px 16px rgba(2,132,199,.3); display: inline-block;
   }
-  .btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,107,58,.4); }
+  .btn-blue:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(2,132,199,.4); }
 
   /* ── SERVIÇOS ── */
   #servicos { background: var(--white); }
@@ -186,70 +189,98 @@
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
     background: var(--primary); transform: scaleX(0); transform-origin: left; transition: transform .3s;
   }
-  .servico-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,107,58,.1); border-color: var(--primary); }
+  .servico-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(2,132,199,.12); border-color: var(--primary); }
   .servico-card:hover::before { transform: scaleX(1); }
   .servico-card .icon { font-size: 2rem; margin-bottom: 16px; display: block; }
   .servico-card h3 { font-size: 1rem; font-weight: 600; color: var(--dark); margin-bottom: 8px; }
   .servico-card p { font-size: .86rem; color: var(--gray); }
   .tag-popular {
     display: inline-block; background: #fef9ee; color: var(--gold);
-    border: 1px solid #fde8a8; font-size: .72rem; font-weight: 700;
+    border: 1px solid #fde68a; font-size: .72rem; font-weight: 700;
     padding: 3px 10px; border-radius: 20px; margin-bottom: 10px;
   }
 
-  /* ── DEPOIMENTOS ── */
-  #depoimentos { background: var(--primary2); }
-  #depoimentos .sec-title h2 { color: white; }
-  #depoimentos .sec-title p { color: rgba(255,255,255,.45); }
-  #depoimentos .sec-title .label { color: #6ee7a0; }
+  /* ── AVALIAÇÕES ── */
+  #avaliacoes { background: var(--primary3); }
+  #avaliacoes .sec-title h2 { color: white; }
+  #avaliacoes .sec-title p { color: rgba(255,255,255,.45); }
+  #avaliacoes .sec-title .label { color: #7dd3fc; }
+  #avaliacoes .blue-bar { background: #7dd3fc; }
+  .depo-slider { position: relative; overflow: hidden; }
   .depo-track { display: flex; transition: transform .5s ease; }
   .depo-card { min-width: 100%; padding: 0 20px; }
   .depo-inner {
-    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
-    border-radius: 20px; padding: 40px; max-width: 680px; margin: 0 auto; text-align: center;
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px; padding: 36px 40px; max-width: 720px; margin: 0 auto;
   }
-  .depo-stars { color: var(--gold); font-size: 1.1rem; margin-bottom: 20px; letter-spacing: 2px; }
+  .depo-top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .depo-foto {
+    width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
+    border: 3px solid rgba(125,211,252,.4); flex-shrink: 0;
+  }
+  .depo-info strong { display: block; color: white; font-size: .95rem; }
+  .depo-info span { color: rgba(255,255,255,.45); font-size: .82rem; }
+  .depo-stars { color: var(--gold); font-size: 1rem; letter-spacing: 2px; margin-top: 3px; }
   .depo-inner blockquote {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
-    color: white; font-style: italic; line-height: 1.5; margin-bottom: 28px;
+    font-size: .95rem; color: rgba(255,255,255,.82);
+    line-height: 1.7; border-left: 3px solid #7dd3fc; padding-left: 16px;
   }
-  .depo-autor { display: flex; align-items: center; justify-content: center; gap: 14px; }
-  .depo-avatar {
-    width: 48px; height: 48px; border-radius: 50%; background: var(--primary);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; color: white; font-size: 1.1rem;
-  }
-  .depo-nome strong { display: block; color: white; font-size: .9rem; }
-  .depo-nome span { color: rgba(255,255,255,.45); font-size: .8rem; }
   .depo-dots { text-align: center; margin-top: 28px; }
   .dot {
     display: inline-block; width: 8px; height: 8px; border-radius: 50%;
     background: rgba(255,255,255,.25); margin: 0 4px; cursor: pointer; transition: background .2s, width .2s;
   }
-  .dot.active { background: #6ee7a0; width: 24px; border-radius: 4px; }
-
-  /* ── CONTATO ── */
-  #contato { background: var(--light); }
-  .contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-  .contato-info h3 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.6rem;
-    font-weight: 700; color: var(--dark); margin-bottom: 16px;
+  .dot.active { background: #7dd3fc; width: 24px; border-radius: 4px; }
+  .depo-nav {
+    display: flex; justify-content: center; gap: 12px; margin-top: 20px;
   }
-  .contato-info p { color: var(--gray); font-size: .9rem; margin-bottom: 28px; }
-  .info-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 20px; }
-  .info-icon {
+  .depo-nav button {
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    color: white; width: 40px; height: 40px; border-radius: 50%;
+    cursor: pointer; font-size: 1rem; transition: background .2s;
+  }
+  .depo-nav button:hover { background: rgba(255,255,255,.2); }
+
+  /* ── LOCALIZAÇÃO ── */
+  #localizacao { background: var(--light); }
+  .local-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .local-info h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+    font-weight: 700; color: var(--dark); margin-bottom: 20px;
+  }
+  .local-item { display: flex; gap: 14px; margin-bottom: 20px; align-items: flex-start; }
+  .local-icon {
     width: 44px; height: 44px; background: var(--accent); border-radius: 10px;
     display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
   }
-  .info-item strong { display: block; font-size: .88rem; color: var(--dark); margin-bottom: 2px; }
-  .info-item span { font-size: .85rem; color: var(--gray); }
-  .contato-form {
-    background: white; border: 1px solid var(--border); border-radius: 20px; padding: 36px;
+  .local-item strong { display: block; font-size: .88rem; color: var(--dark); margin-bottom: 2px; }
+  .local-item span { font-size: .85rem; color: var(--gray); }
+  .social-links { display: flex; gap: 12px; margin-top: 28px; }
+  .social-btn {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 18px; border-radius: 8px; text-decoration: none;
+    font-size: .88rem; font-weight: 600; transition: opacity .2s;
   }
-  .contato-form h4 {
-    font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
-    font-weight: 700; color: var(--dark); margin-bottom: 20px;
+  .social-btn:hover { opacity: .85; }
+  .social-btn.instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+  .social-btn.facebook { background: #1877f2; color: white; }
+  .mapa-embed {
+    border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,.06);
   }
+  .mapa-embed iframe { display: block; width: 100%; height: 320px; border: none; }
+
+  /* ── CONTATO ── */
+  #contato { background: var(--white); }
+  .contato-form-wrap {
+    background: var(--light); border: 1px solid var(--border);
+    border-radius: 20px; padding: 40px; max-width: 600px; margin: 0 auto;
+  }
+  .contato-form-wrap h4 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+    font-weight: 700; color: var(--dark); margin-bottom: 24px; text-align: center;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .form-group { margin-bottom: 16px; }
   .form-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
   .form-group input,
@@ -257,18 +288,78 @@
   .form-group textarea {
     width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px;
     font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--text);
-    background: var(--light); outline: none; transition: border-color .2s;
+    background: white; outline: none; transition: border-color .2s;
   }
   .form-group input:focus,
   .form-group select:focus,
   .form-group textarea:focus { border-color: var(--primary); }
-  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-group textarea { resize: vertical; min-height: 90px; }
   .btn-form {
     width: 100%; background: #25d366; color: white;
-    font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 700;
-    padding: 14px; border: none; border-radius: 8px; cursor: pointer; transition: opacity .2s; margin-top: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 700;
+    padding: 15px; border: none; border-radius: 8px; cursor: pointer;
+    transition: opacity .2s; display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .btn-form:hover { opacity: .9; }
+
+  /* ── CHATBOT ── */
+  .chat-toggle {
+    position: fixed; bottom: 100px; right: 28px; z-index: 200;
+    width: 58px; height: 58px; background: var(--primary); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(2,132,199,.45); cursor: pointer;
+    font-size: 1.5rem; border: none; transition: transform .2s;
+    animation: pulse-chat 2.5s infinite;
+  }
+  .chat-toggle:hover { transform: scale(1.1); }
+  @keyframes pulse-chat {
+    0%, 100% { box-shadow: 0 4px 20px rgba(2,132,199,.45); }
+    50% { box-shadow: 0 4px 32px rgba(2,132,199,.75); }
+  }
+  .chat-box {
+    position: fixed; bottom: 170px; right: 28px; z-index: 201;
+    width: 320px; background: white; border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,.18); overflow: hidden;
+    display: none; flex-direction: column;
+    animation: slideUp .3s ease;
+  }
+  .chat-box.open { display: flex; }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .chat-header {
+    background: var(--primary); color: white; padding: 16px 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .chat-avatar {
+    width: 36px; height: 36px; background: rgba(255,255,255,.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  }
+  .chat-header-info strong { display: block; font-size: .9rem; }
+  .chat-header-info span { font-size: .75rem; color: rgba(255,255,255,.7); }
+  .online-dot {
+    width: 8px; height: 8px; background: #4ade80;
+    border-radius: 50%; margin-right: 4px; display: inline-block;
+  }
+  .chat-msgs {
+    padding: 16px; overflow-y: auto; max-height: 300px;
+    display: flex; flex-direction: column; gap: 10px; background: #f8fafc;
+  }
+  .msg {
+    max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: .85rem; line-height: 1.5;
+  }
+  .msg.bot { background: white; color: var(--text); border: 1px solid var(--border); align-self: flex-start; border-radius: 4px 12px 12px 12px; }
+  .msg.user { background: var(--primary); color: white; align-self: flex-end; border-radius: 12px 4px 12px 12px; }
+  .chat-options { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .chat-opt {
+    background: var(--accent); border: 1px solid var(--border); color: var(--primary);
+    font-size: .8rem; font-weight: 600; padding: 8px 12px; border-radius: 8px;
+    cursor: pointer; text-align: left; transition: background .2s;
+  }
+  .chat-opt:hover { background: var(--light-blue); }
+  .chat-footer { padding: 10px 14px; border-top: 1px solid var(--border); text-align: center; }
+  .chat-footer a {
+    font-size: .8rem; color: var(--primary); text-decoration: none; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
 
   /* ── WPP FLOAT ── */
   .wpp-float {
@@ -293,25 +384,32 @@
   .topo-btn.show { opacity: 1; pointer-events: auto; }
 
   /* ── FOOTER ── */
-  footer {
-    background: var(--dark); color: rgba(255,255,255,.35);
-    text-align: center; padding: 28px 20px; font-size: .82rem;
+  footer { background: var(--dark); color: rgba(255,255,255,.35); text-align: center; padding: 32px 20px; font-size: .82rem; }
+  footer strong { color: rgba(255,255,255,.65); }
+  footer a { color: #7dd3fc; text-decoration: none; }
+  .footer-social { display: flex; justify-content: center; gap: 16px; margin: 16px 0; }
+  .footer-social a {
+    width: 38px; height: 38px; border-radius: 8px; background: rgba(255,255,255,.08);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 1.1rem; transition: background .2s;
   }
-  footer strong { color: rgba(255,255,255,.6); }
-  footer a { color: #6ee7a0; text-decoration: none; }
+  .footer-social a:hover { background: rgba(255,255,255,.18); }
 
   /* ── REVEAL ── */
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s, transform .65s; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    nav.scrolled { padding: 12px 20px; }
+    nav { padding: 14px 20px; }
+    nav.scrolled { padding: 10px 20px; }
+    .nav-logo { font-size: 1.6rem; }
     .nav-links { display: none; }
     #hero { padding: 100px 24px 60px; }
     #hero::before { display: none; }
-    .sobre-grid, .contato-grid { grid-template-columns: 1fr; gap: 32px; }
+    .sobre-grid, .local-grid { grid-template-columns: 1fr; gap: 32px; }
     .cartao-inner { flex-direction: column; text-align: center; }
+    .form-row { grid-template-columns: 1fr; }
+    .chat-box { width: calc(100vw - 56px); right: 28px; }
   }
 </style>
 </head>
@@ -319,23 +417,27 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a class="nav-logo" href="#">❤️ <span>Amor</span> Saúde</a>
+  <a class="nav-logo" href="#"><span>Amor</span>&nbsp;Saúde</a>
   <ul class="nav-links">
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#servicos">Serviços</a></li>
-    <li><a href="#depoimentos">Depoimentos</a></li>
-    <li><a href="#contato" class="nav-cta">Agendar consulta</a></li>
+    <li><a href="#avaliacoes">Avaliações</a></li>
+    <li><a href="#localizacao">Localização</a></li>
+    <li><a href="#contato" class="nav-cta">Agendar</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="hero-content">
-    <div class="hero-badge">💚 Saúde acessível para toda a família</div>
-    <h1>Cuidando de você<br>com <em>amor</em> e qualidade</h1>
-    <p>Consultas médicas, exames laboratoriais e odontologia — tudo em um só lugar, com preço justo e atendimento de qualidade em Balneário Camboriú.</p>
+    <div class="hero-badge">💙 Saúde acessível para toda a família</div>
+    <h1 class="hero-title">Cuidando de você<br>com <em>amor</em> e qualidade</h1>
+    <p>Consultas médicas, exames laboratoriais e odontologia — tudo em um só lugar, com preço justo e atendimento humanizado em Balneário Camboriú.</p>
     <div class="hero-buttons">
-      <a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="btn-wpp" target="_blank">💬 Agendar pelo WhatsApp</a>
+      <a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="btn-wpp" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Agendar pelo WhatsApp
+      </a>
       <a href="#servicos" class="btn-outline">Ver serviços</a>
     </div>
     <div class="hero-stats">
@@ -346,15 +448,15 @@
   </div>
 </section>
 
-<!-- FAIXA CARTÃO -->
+<!-- CARTÃO -->
 <div id="cartao">
   <div class="cartao-inner">
     <div class="cartao-texto">
-      <h3>Cartão de Todos — Saúde popular de verdade</h3>
-      <p>Com o Cartão de Todos você tem acesso a consultas, exames e odontologia com desconto. Sem carência, sem mensalidade mínima.</p>
+      <h3>💳 Cartão de Todos — Saúde popular de verdade</h3>
+      <p>Com o Cartão de Todos você tem acesso a consultas, exames e odontologia com desconto. Sem carência, sem mensalidade mínima, sem burocracia.</p>
     </div>
     <div class="cartao-preco">
-      Consultas a partir de <br><strong>R$ 15,00</strong>
+      Consultas a partir de<br><strong style="font-size:1.6rem">R$ 15,00</strong>
       <span>com o Cartão de Todos</span>
     </div>
   </div>
@@ -366,7 +468,7 @@
     <div class="sobre-grid">
       <div class="sobre-img reveal">
         <img src="https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Clínica Amor Saúde">
-        <div class="sobre-tag">Balneário Camboriú, SC</div>
+        <div class="sobre-tag">📍 Balneário Camboriú, SC</div>
       </div>
       <div class="sobre-texto reveal">
         <div class="label">Sobre a clínica</div>
@@ -379,7 +481,7 @@
           <li><span class="check">✓</span> Odontologia para toda a família</li>
           <li><span class="check">✓</span> Cartão de Todos aceito</li>
         </ul>
-        <a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+saber+mais+sobre+a+cl%C3%ADnica." class="btn-green" target="_blank">Falar no WhatsApp →</a>
+        <a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+saber+mais+sobre+a+cl%C3%ADnica." class="btn-blue" target="_blank">Falar no WhatsApp →</a>
       </div>
     </div>
   </div>
@@ -392,7 +494,7 @@
       <div class="label">O que oferecemos</div>
       <h2>Nossos Serviços</h2>
       <p>Tudo que sua família precisa para cuidar da saúde em um só lugar.</p>
-      <div class="green-bar"></div>
+      <div class="blue-bar"></div>
     </div>
     <div class="servicos-grid">
       <div class="servico-card reveal">
@@ -430,52 +532,140 @@
   </div>
 </section>
 
-<!-- DEPOIMENTOS -->
-<section id="depoimentos">
+<!-- AVALIAÇÕES -->
+<section id="avaliacoes">
   <div class="container">
     <div class="sec-title reveal">
-      <div class="label">Depoimentos</div>
+      <div class="label">Avaliações</div>
       <h2>O que dizem nossos pacientes</h2>
-      <p style="color:rgba(255,255,255,.45)">Famílias que confiam na Clínica Amor Saúde.</p>
-      <div class="green-bar"></div>
+      <p style="color:rgba(255,255,255,.45)">Mais de 500 famílias atendidas em Balneário Camboriú.</p>
+      <div class="blue-bar"></div>
     </div>
     <div class="depo-slider reveal">
       <div class="depo-track" id="track">
+
         <div class="depo-card">
           <div class="depo-inner">
-            <div class="depo-stars">★★★★★</div>
-            <blockquote>"Atendimento maravilhoso! Fiz os exames de manhã e já tinha o resultado à tarde. Preço justo e equipe super atenciosa. Recomendo demais!"</blockquote>
-            <div class="depo-autor">
-              <div class="depo-avatar">C</div>
-              <div class="depo-nome"><strong>Claudia R.</strong><span>Exames laboratoriais</span></div>
+            <div class="depo-top">
+              <img class="depo-foto" src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Claudia">
+              <div class="depo-info">
+                <strong>Claudia Ribeiro</strong>
+                <span>Exames laboratoriais</span>
+                <div class="depo-stars">★★★★★</div>
+              </div>
             </div>
+            <blockquote>"Fiz os exames de manhã e já tinha o resultado à tarde. Preço super justo e a equipe foi muito atenciosa. É raro encontrar esse nível de cuidado em clínica popular. Já indiquei para toda a minha família!"</blockquote>
           </div>
         </div>
+
         <div class="depo-card">
           <div class="depo-inner">
-            <div class="depo-stars">★★★★★</div>
-            <blockquote>"Uso o Cartão de Todos e aqui é o melhor lugar para consultar. Médico atencioso, agendamento pelo WhatsApp, sem complicação nenhuma."</blockquote>
-            <div class="depo-autor">
-              <div class="depo-avatar">M</div>
-              <div class="depo-nome"><strong>Marcos S.</strong><span>Consulta médica</span></div>
+            <div class="depo-top">
+              <img class="depo-foto" src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Marcos">
+              <div class="depo-info">
+                <strong>Marcos Souza</strong>
+                <span>Consulta médica</span>
+                <div class="depo-stars">★★★★★</div>
+              </div>
             </div>
+            <blockquote>"Uso o Cartão de Todos e aqui é o melhor lugar para consultar em Balneário. Médico atencioso, agendamento pelo WhatsApp sem complicação e preço honesto. Virei cliente fiel!"</blockquote>
           </div>
         </div>
+
         <div class="depo-card">
           <div class="depo-inner">
-            <div class="depo-stars">★★★★★</div>
-            <blockquote>"Trouxe minha filha para a dentista e ficamos encantadas. Ela tem medo e aqui o atendimento foi tão cuidadoso que ela nem percebeu o tempo passar!"</blockquote>
-            <div class="depo-autor">
-              <div class="depo-avatar">P</div>
-              <div class="depo-nome"><strong>Patricia L.</strong><span>Odontologia</span></div>
+            <div class="depo-top">
+              <img class="depo-foto" src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Patricia">
+              <div class="depo-info">
+                <strong>Patrícia Lima</strong>
+                <span>Odontologia</span>
+                <div class="depo-stars">★★★★★</div>
+              </div>
             </div>
+            <blockquote>"Trouxe minha filha para a dentista e ficamos encantadas. Ela tem muito medo e o atendimento foi tão cuidadoso que ela saiu sorrindo! Ambiente limpo, organizado e preço acessível."</blockquote>
           </div>
+        </div>
+
+        <div class="depo-card">
+          <div class="depo-inner">
+            <div class="depo-top">
+              <img class="depo-foto" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Roberto">
+              <div class="depo-info">
+                <strong>Roberto Alves</strong>
+                <span>Consulta + Exames</span>
+                <div class="depo-stars">★★★★★</div>
+              </div>
+            </div>
+            <blockquote>"Fiz consulta e exames no mesmo dia, tudo muito organizado. Nunca imaginei conseguir tudo isso com o Cartão de Todos. Atendimento de qualidade com preço que cabe no bolso. Recomendo!"</blockquote>
+          </div>
+        </div>
+
+        <div class="depo-card">
+          <div class="depo-inner">
+            <div class="depo-top">
+              <img class="depo-foto" src="https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=100" alt="Fernanda">
+              <div class="depo-info">
+                <strong>Fernanda Costa</strong>
+                <span>Atendimento familiar</span>
+                <div class="depo-stars">★★★★★</div>
+              </div>
+            </div>
+            <blockquote>"Toda minha família é atendida aqui — marido, filhos e eu. Sempre conseguimos horário rápido, equipe simpática e preço justo. É a clínica da nossa família em Balneário!"</blockquote>
+          </div>
+        </div>
+
+      </div>
+      <div class="depo-nav">
+        <button onclick="moverDepo(-1)">‹</button>
+        <button onclick="moverDepo(1)">›</button>
+      </div>
+      <div class="depo-dots" id="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCALIZAÇÃO -->
+<section id="localizacao">
+  <div class="container">
+    <div class="sec-title reveal">
+      <div class="label">Onde estamos</div>
+      <h2>Nossa Localização</h2>
+      <p>Fácil acesso no centro de Balneário Camboriú.</p>
+      <div class="blue-bar"></div>
+    </div>
+    <div class="local-grid reveal">
+      <div class="local-info">
+        <h3>Venha nos visitar</h3>
+        <div class="local-item">
+          <div class="local-icon">📍</div>
+          <div><strong>Endereço</strong><span>Av. Brasil, 1420 — Centro<br>Balneário Camboriú, SC — CEP 88330-020</span></div>
+        </div>
+        <div class="local-item">
+          <div class="local-icon">🕐</div>
+          <div><strong>Horário de funcionamento</strong><span>Segunda a Sexta: 8h às 18h<br>Sábado: 8h às 12h</span></div>
+        </div>
+        <div class="local-item">
+          <div class="local-icon">💬</div>
+          <div><strong>WhatsApp</strong><span>(58) 14040-1194</span></div>
+        </div>
+        <div class="local-item">
+          <div class="local-icon">💳</div>
+          <div><strong>Formas de pagamento</strong><span>Cartão de Todos, cartão débito/crédito, Pix, dinheiro</span></div>
+        </div>
+        <div class="social-links">
+          <a href="https://instagram.com/amorsaudeclinica" class="social-btn instagram" target="_blank">
+            📷 @amorsaudeclinica
+          </a>
+          <a href="https://facebook.com/amorsaudeclinica" class="social-btn facebook" target="_blank">
+            👍 Amor Saúde
+          </a>
         </div>
       </div>
-      <div class="depo-dots">
-        <span class="dot active" onclick="goTo(0)"></span>
-        <span class="dot" onclick="goTo(1)"></span>
-        <span class="dot" onclick="goTo(2)"></span>
+      <div class="mapa-embed">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3540.1!2d-48.6355!3d-26.9934!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94d8e1a!2sAv.+Brasil%2C+Balne%C3%A1rio+Cambori%C3%BA!5e0!3m2!1spt-BR!2sbr!4v1"
+          allowfullscreen loading="lazy">
+        </iframe>
       </div>
     </div>
   </div>
@@ -487,32 +677,12 @@
     <div class="sec-title reveal">
       <div class="label">Fale conosco</div>
       <h2>Agende sua Consulta</h2>
-      <p>Rápido, fácil e sem complicação. Estamos prontos para te atender.</p>
-      <div class="green-bar"></div>
+      <p>Preencha abaixo e receba a confirmação pelo WhatsApp em minutos.</p>
+      <div class="blue-bar"></div>
     </div>
-    <div class="contato-grid">
-      <div class="contato-info reveal">
-        <h3>Entre em contato agora</h3>
-        <p>Atendemos de segunda a sábado com horários flexíveis para toda a família.</p>
-        <div class="info-item">
-          <div class="info-icon">📍</div>
-          <div><strong>Localização</strong><span>Balneário Camboriú, SC</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon">🕐</div>
-          <div><strong>Horário</strong><span>Seg–Sex: 8h às 18h<br>Sábado: 8h às 12h</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon">💬</div>
-          <div><strong>WhatsApp</strong><span>(58) 14040-1194</span></div>
-        </div>
-        <div class="info-item">
-          <div class="info-icon">💳</div>
-          <div><strong>Formas de pagamento</strong><span>Cartão de Todos, cartão, Pix, dinheiro</span></div>
-        </div>
-      </div>
-      <div class="contato-form reveal">
-        <h4>Solicite seu agendamento</h4>
+    <div class="contato-form-wrap reveal">
+      <h4>Solicite seu agendamento</h4>
+      <div class="form-row">
         <div class="form-group">
           <label>Seu nome</label>
           <input type="text" placeholder="Como podemos te chamar?">
@@ -521,56 +691,111 @@
           <label>WhatsApp</label>
           <input type="tel" placeholder="(47) 00000-0000" oninput="mascaraTel(this)">
         </div>
-        <div class="form-group">
-          <label>Serviço de interesse</label>
-          <select>
-            <option value="">Selecione...</option>
-            <option>Consulta médica</option>
-            <option>Exames laboratoriais</option>
-            <option>Odontologia</option>
-            <option>Cartão de Todos</option>
-            <option>Outro</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Mensagem (opcional)</label>
-          <textarea placeholder="Alguma dúvida ou observação?"></textarea>
-        </div>
-        <button class="btn-form" onclick="enviarWpp()">💬 Enviar pelo WhatsApp</button>
       </div>
+      <div class="form-group">
+        <label>Serviço de interesse</label>
+        <select>
+          <option value="">Selecione...</option>
+          <option>Consulta médica</option>
+          <option>Exames laboratoriais</option>
+          <option>Odontologia</option>
+          <option>Cartão de Todos</option>
+          <option>Outro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Mensagem (opcional)</label>
+        <textarea placeholder="Alguma dúvida ou observação?"></textarea>
+      </div>
+      <button class="btn-form" onclick="enviarWpp()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Enviar pelo WhatsApp
+      </button>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <p><strong>Clínica Amor Saúde</strong> · Balneário Camboriú, SC · <a href="https://wa.me/5558140401194" target="_blank">(58) 14040-1194</a></p>
-  <p style="margin-top:6px">© 2026 — Todos os direitos reservados</p>
+  <div class="footer-social">
+    <a href="https://instagram.com/amorsaudeclinica" target="_blank" title="Instagram">📷</a>
+    <a href="https://facebook.com/amorsaudeclinica" target="_blank" title="Facebook">👍</a>
+    <a href="https://wa.me/5558140401194" target="_blank" title="WhatsApp">💬</a>
+  </div>
+  <p><strong>Clínica Amor Saúde</strong> · Av. Brasil, 1420 — Centro · Balneário Camboriú, SC</p>
+  <p style="margin-top:6px"><a href="https://wa.me/5558140401194">(58) 14040-1194</a> · <a href="https://instagram.com/amorsaudeclinica" target="_blank">@amorsaudeclinica</a></p>
+  <p style="margin-top:10px">© 2026 — Todos os direitos reservados</p>
 </footer>
 
-<a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="wpp-float" target="_blank" title="Falar no WhatsApp">💬</a>
+<!-- BOTÃO WPP -->
+<a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+agendar+uma+consulta." class="wpp-float" target="_blank" title="Falar no WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+</a>
+
+<!-- CHATBOT -->
+<button class="chat-toggle" id="chatToggle" onclick="toggleChat()" title="Fale conosco">💬</button>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">
+    <div class="chat-avatar">❤️</div>
+    <div class="chat-header-info">
+      <strong>Amor Saúde</strong>
+      <span><span class="online-dot"></span>Online agora</span>
+    </div>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="msg bot">Olá! 😊 Bem-vindo à Clínica Amor Saúde! Como posso te ajudar hoje?</div>
+  </div>
+  <div class="chat-options" id="chatOpts">
+    <button class="chat-opt" onclick="responder('horario')">🕐 Horário de funcionamento</button>
+    <button class="chat-opt" onclick="responder('servicos')">🩺 Quais serviços oferecem?</button>
+    <button class="chat-opt" onclick="responder('cartao')">💳 Aceitam Cartão de Todos?</button>
+    <button class="chat-opt" onclick="responder('agendar')">📅 Como agendar?</button>
+    <button class="chat-opt" onclick="responder('preco')">💰 Quanto custa a consulta?</button>
+    <button class="chat-opt" onclick="responder('localizacao')">📍 Onde ficam?</button>
+  </div>
+  <div class="chat-footer">
+    <a href="https://wa.me/5558140401194?text=Ol%C3%A1!+Gostaria+de+falar+com+um+atendente." target="_blank">
+      💬 Falar com atendente no WhatsApp
+    </a>
+  </div>
+</div>
+
 <button class="topo-btn" id="topoBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
+  // Nav + topo
   window.addEventListener('scroll', () => {
     document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
     document.getElementById('topoBtn').classList.toggle('show', window.scrollY > 400);
   });
 
+  // Reveal
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+  // Carrossel avaliações
+  const total = 5;
   let current = 0;
   const track = document.getElementById('track');
-  const dots = document.querySelectorAll('.dot');
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('span');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  }
   function goTo(i) {
     current = i;
     track.style.transform = `translateX(-${i * 100}%)`;
-    dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+    document.querySelectorAll('.dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
   }
-  setInterval(() => goTo((current + 1) % 3), 5000);
+  function moverDepo(dir) { goTo((current + dir + total) % total); }
+  setInterval(() => moverDepo(1), 6000);
 
+  // Máscara tel
   function mascaraTel(el) {
     let v = el.value.replace(/\D/g, '').slice(0, 11);
     if (v.length > 10) v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
@@ -579,6 +804,7 @@
     el.value = v;
   }
 
+  // Formulário WPP
   function enviarWpp() {
     const nome = document.querySelector('input[placeholder*="chamar"]').value.trim();
     const tel = document.querySelector('input[type="tel"]').value.trim();
@@ -589,6 +815,78 @@
     if (serv) texto += `\n*Serviço:* ${serv}`;
     if (msg) texto += `\n*Mensagem:* ${msg}`;
     window.open(`https://wa.me/5558140401194?text=${encodeURIComponent(texto)}`, '_blank');
+  }
+
+  // Chatbot
+  const respostas = {
+    horario: {
+      user: '🕐 Horário de funcionamento',
+      bot: 'Nosso horário é:\n\n📅 Segunda a Sexta: 8h às 18h\n📅 Sábado: 8h às 12h\n\nDomingos e feriados estamos fechados. Para urgências, entre em contato pelo WhatsApp! 😊'
+    },
+    servicos: {
+      user: '🩺 Quais serviços oferecem?',
+      bot: 'Oferecemos:\n\n🩺 Consultas médicas (clínico geral e especialistas)\n🔬 Exames laboratoriais\n🦷 Odontologia completa\n💳 Aceitamos Cartão de Todos\n\nTudo em um só lugar, com preço justo! 😊'
+    },
+    cartao: {
+      user: '💳 Aceitam Cartão de Todos?',
+      bot: 'Sim! ✅ Aceitamos o Cartão de Todos.\n\nCom ele as consultas custam a partir de R$ 15,00. Sem carência, sem mensalidade mínima e sem burocracia. É saúde de verdade ao alcance de todos! 💙'
+    },
+    agendar: {
+      user: '📅 Como agendar?',
+      bot: 'É super fácil! 😊\n\nBasta nos enviar uma mensagem no WhatsApp com:\n\n✅ Seu nome\n✅ Serviço desejado\n✅ Melhor horário\n\nConfirmamos em minutos! Clique no botão abaixo para falar com a gente.'
+    },
+    preco: {
+      user: '💰 Quanto custa a consulta?',
+      bot: 'Nossos preços são acessíveis! 💙\n\n💳 Com Cartão de Todos: a partir de R$ 15\n💵 Particular: a partir de R$ 60\n🔬 Exames: a partir de R$ 10\n🦷 Odontologia: a partir de R$ 40\n\nParcelamos no cartão! Quer agendar?'
+    },
+    localizacao: {
+      user: '📍 Onde ficam?',
+      bot: '📍 Estamos na:\n\nAv. Brasil, 1420 — Centro\nBalneário Camboriú, SC\n\nFácil acesso, estacionamento próximo. Nos mande mensagem que te ajudamos com mais detalhes! 😊'
+    }
+  };
+
+  function toggleChat() {
+    document.getElementById('chatBox').classList.toggle('open');
+  }
+
+  function addMsg(texto, tipo) {
+    const msgs = document.getElementById('chatMsgs');
+    const div = document.createElement('div');
+    div.className = 'msg ' + tipo;
+    div.innerText = texto;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function responder(chave) {
+    const r = respostas[chave];
+    document.getElementById('chatOpts').style.display = 'none';
+    addMsg(r.user, 'user');
+    setTimeout(() => {
+      addMsg(r.bot, 'bot');
+      setTimeout(() => {
+        const opts = document.getElementById('chatOpts');
+        opts.style.display = 'flex';
+        // adiciona botão voltar
+        if (!document.getElementById('voltarBtn')) {
+          const btn = document.createElement('button');
+          btn.id = 'voltarBtn';
+          btn.className = 'chat-opt';
+          btn.innerText = '↩ Ver outras perguntas';
+          btn.onclick = reiniciarChat;
+          opts.appendChild(btn);
+        }
+      }, 300);
+    }, 700);
+  }
+
+  function reiniciarChat() {
+    const opts = document.getElementById('chatOpts');
+    const voltar = document.getElementById('voltarBtn');
+    if (voltar) voltar.remove();
+    opts.style.display = 'flex';
+    addMsg('Mais alguma dúvida? 😊', 'bot');
+    document.getElementById('chatMsgs').scrollTop = 9999;
   }
 </script>
 </body>
