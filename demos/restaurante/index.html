@@ -321,6 +321,150 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s, transform .6s; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* === HERO ANIMAÇÃO === */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(32px)} to{opacity:1;transform:translateY(0)} }
+    .hero-badge { animation: fadeUp .7s ease both; }
+    .hero h1 { animation: fadeUp .7s .15s ease both; }
+    .hero-tagline { animation: fadeUp .7s .28s ease both; }
+    .status-badge { animation: fadeUp .7s .38s ease both; }
+    .hero-infos { animation: fadeUp .7s .48s ease both; }
+    .hero-cards { animation: fadeUp .7s .56s ease both; }
+    .hero-ctas { animation: fadeUp .7s .64s ease both; }
+
+    /* === BANNER PROMOÇÃO === */
+    .promo-banner {
+      background: linear-gradient(90deg, #c17f24, #e8a020, #c17f24);
+      background-size: 200% 100%; animation: shimmer 3s infinite linear;
+      color: #fff; padding: 10px 5%; display: flex; align-items: center;
+      justify-content: center; gap: 12px; font-size: .88rem; font-weight: 700;
+      position: relative; z-index: 101;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .promo-banner p { text-align: center; flex: 1; }
+    .promo-banner button { background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); color: #fff; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: .9rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .promo-banner.hidden { display: none; }
+
+    /* === MODO ESCURO === */
+    body.dark { --cream: #1a1208; --white: #221809; --text: #e8d8b8; --text-light: #a89070; --border: rgba(193,127,36,.25); background: #1a1208; }
+    body.dark nav { background: rgba(20,13,4,.96); }
+    body.dark .nav-brand { color: #f5e8cc; }
+    body.dark .nav-links a { color: #c8b090; }
+    body.dark .menu-card { background: #221809; border-color: rgba(193,127,36,.2); }
+    body.dark .menu-section.white .menu-card { background: #1a1208; }
+    body.dark .menu-section.white { background: #1a1208; }
+    body.dark .galeria { background: #1a1208; }
+    body.dark .sobre { background: #1a1208; }
+    body.dark .localizacao { background: #221809; }
+    body.dark .cta-section { background: #1a1208; }
+    body.dark .menu-card-body h3 { color: #f5e8cc; }
+    body.dark .cat-tabs { background: #221809; }
+    body.dark .cat-tab { color: #a89070; }
+    body.dark .cards-strip { background: #0d0a05; }
+    body.dark .mobile-menu { background: rgba(20,13,4,.98); }
+    .dark-toggle {
+      width: 38px; height: 22px; background: var(--border); border-radius: 11px;
+      border: none; cursor: pointer; position: relative; transition: background .3s; flex-shrink: 0;
+      display: flex; align-items: center;
+    }
+    .dark-toggle::after { content:''; position: absolute; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); transition: transform .3s; }
+    body.dark .dark-toggle { background: rgba(193,127,36,.4); }
+    body.dark .dark-toggle::after { transform: translateX(16px); }
+    .dark-icon { font-size: .85rem; }
+
+    /* === BUSCA === */
+    .search-bar {
+      background: var(--white); padding: 16px 5%;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    body.dark .search-bar { background: #221809; }
+    .search-input {
+      flex: 1; max-width: 480px; margin: 0 auto;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 11px 16px 11px 42px; font-size: .9rem; outline: none;
+      font-family: inherit; background: var(--cream); color: var(--text);
+      transition: border-color .2s;
+    }
+    body.dark .search-input { background: #1a1208; color: #e8d8b8; }
+    .search-input:focus { border-color: var(--primary); }
+    .search-wrap { position: relative; flex: 1; max-width: 480px; margin: 0 auto; }
+    .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; pointer-events: none; opacity: .45; }
+    .search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: .9rem; opacity: .4; display: none; }
+    .menu-card.search-hidden { display: none; }
+    .no-results { text-align: center; padding: 40px; color: var(--text-light); font-size: .95rem; display: none; grid-column: 1/-1; }
+
+    /* === MAIS PEDIDOS === */
+    .mais-pedidos { padding: 72px 5%; background: var(--cream); }
+    body.dark .mais-pedidos { background: #1a1208; }
+    .mais-pedidos .section-header { margin-bottom: 40px; }
+    .top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+    .top-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+      transition: transform .3s, box-shadow .3s; position: relative;
+    }
+    body.dark .top-card { background: #221809; }
+    .top-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,.1); }
+    .top-card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+    .top-rank { position: absolute; top: 10px; left: 10px; background: var(--primary); color: #fff; font-size: .7rem; font-weight: 800; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .top-body { padding: 14px 16px; flex: 1; display: flex; flex-direction: column; }
+    .top-body h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    body.dark .top-body h4 { color: #f5e8cc; }
+    .top-body .top-price { font-size: 1.2rem; font-weight: 700; color: var(--primary); font-family: 'Cormorant Garamond', serif; margin-top: auto; padding-top: 10px; }
+    .top-btn { display: block; text-align: center; padding: 9px; background: var(--dark); color: #fff; font-size: .82rem; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: background .2s; width: 100%; }
+    .top-btn:hover { background: var(--primary); }
+
+    /* === CARRINHO === */
+    .cart-float {
+      position: fixed; bottom: 168px; right: 24px; z-index: 998;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--primary); color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; box-shadow: 0 4px 16px rgba(193,127,36,.4);
+      transition: transform .2s;
+    }
+    .cart-float:hover { transform: scale(1.1); }
+    .cart-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: #ef4444; color: #fff; font-size: .62rem; font-weight: 800;
+      width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      display: none;
+    }
+    .cart-float { position: relative; }
+    .cart-modal {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 2000;
+      width: 360px; background: #fff; box-shadow: -8px 0 40px rgba(0,0,0,.2);
+      display: flex; flex-direction: column; transform: translateX(100%);
+      transition: transform .35s ease;
+    }
+    body.dark .cart-modal { background: #221809; }
+    .cart-modal.open { transform: translateX(0); }
+    .cart-modal-head { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    .cart-modal-head h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--dark); }
+    body.dark .cart-modal-head h3 { color: #f5e8cc; }
+    .cart-modal-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-light); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .cart-empty { text-align: center; padding: 48px 24px; color: var(--text-light); }
+    .cart-empty p { font-size: .9rem; margin-top: 12px; }
+    .cart-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--cream); border-radius: 10px; }
+    body.dark .cart-item { background: #1a1208; }
+    .cart-item-name { flex: 1; font-size: .88rem; font-weight: 600; color: var(--dark); }
+    body.dark .cart-item-name { color: #e8d8b8; }
+    .cart-item-price { font-size: .9rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
+    .cart-item-rm { background: none; border: none; color: #ef4444; font-size: 1rem; cursor: pointer; padding: 2px 6px; }
+    .cart-footer { padding: 20px 24px; border-top: 1px solid var(--border); }
+    .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .cart-total strong { font-size: 1rem; color: var(--text); }
+    body.dark .cart-total strong { color: #e8d8b8; }
+    .cart-total span { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .cart-send { width: 100%; padding: 14px; background: #25d366; color: #fff; border: none; border-radius: 10px; font-size: .95rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+    .cart-send:hover { background: #1da851; }
+    .cart-overlay { position: fixed; inset: 0; z-index: 1999; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* === CONTADOR ANIMADO === */
+    .dep-count { font-size: 3rem; font-weight: 800; color: #f5c97a; font-family: 'Cormorant Garamond', serif; display: block; }
+
     @media(max-width: 900px) {
       .sobre-grid, .loc-grid { grid-template-columns: 1fr; }
       .sobre-img { display: none; }
@@ -338,6 +482,28 @@
   </style>
 </head>
 <body>
+
+<!-- BANNER PROMOÇÃO -->
+<div class="promo-banner" id="promoBanner">
+  <p>🎉 <strong>Hoje:</strong> Sobremesa GRÁTIS em pedidos acima de R$ 60! &nbsp;·&nbsp; Use o código <strong>GRATIS</strong> no WhatsApp</p>
+  <button onclick="document.getElementById('promoBanner').classList.add('hidden')" aria-label="Fechar">✕</button>
+</div>
+
+<!-- CARRINHO MODAL -->
+<div class="cart-overlay" id="cartOverlay" onclick="fecharCarrinho()"></div>
+<div class="cart-modal" id="cartModal">
+  <div class="cart-modal-head">
+    <h3>🛒 Meu Pedido</h3>
+    <button class="cart-modal-close" onclick="fecharCarrinho()">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><div style="font-size:2.5rem">🍽️</div><p>Seu pedido está vazio.<br>Adicione itens do cardápio!</p></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><strong>Total:</strong><span id="cartTotal">R$ 0,00</span></div>
+    <button class="cart-send" onclick="enviarPedidoWpp()">💬 Enviar pedido pelo WhatsApp</button>
+  </div>
+</div>
 
 <!-- LGPD -->
 <div class="lgpd" id="lgpd">
@@ -358,6 +524,12 @@
 
 <!-- Chat flutuante -->
 <button class="chat-float" onclick="toggleChat()" title="Chat">🍽️</button>
+
+<!-- Carrinho flutuante -->
+<button class="cart-float" onclick="abrirCarrinho()" title="Meu pedido" style="position:fixed;bottom:168px;right:24px;z-index:998">
+  🛒
+  <span class="cart-badge" id="cartBadge">0</span>
+</button>
 
 <!-- Voltar à página anterior -->
 <button class="back-page" onclick="history.back()" title="Voltar">← Voltar</button>
@@ -411,9 +583,13 @@
     <a href="#sobre">Sobre nós</a>
     <a href="#localizacao">Localização</a>
   </div>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span class="dark-icon" id="darkIcon">🌙</span>
+    <button class="dark-toggle" id="darkToggle" onclick="toggleDark()" title="Modo escuro"></button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -447,6 +623,7 @@
 <!-- DELIVERY BANNER -->
 <div class="delivery-banner">
   <span>🛵 <strong>Delivery</strong> disponível na região</span>
+  <span>🕐 Entrega em <strong id="tempoEntrega">~35 min</strong></span>
   <span>💳 <strong>Cartão</strong> débito e crédito</span>
   <span>📱 <strong>Pix</strong> aceito</span>
   <span>💵 <strong>Dinheiro</strong> aceito</span>
@@ -463,6 +640,15 @@
   <span class="card-brand">American Express</span>
   <span class="card-brand">VR / Vale Refeição</span>
   <span class="card-brand">Alelo</span>
+</div>
+
+<!-- BUSCA -->
+<div class="search-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" placeholder="Buscar no cardápio... ex: frango, chocolate" oninput="buscarItem(this.value)" />
+    <button class="search-clear" id="searchClear" onclick="limparBusca()">✕</button>
+  </div>
 </div>
 
 <!-- CATEGORY TABS -->
@@ -516,6 +702,53 @@
   </div>
 </section>
 
+<!-- MAIS PEDIDOS -->
+<section class="mais-pedidos">
+  <div class="section-header reveal">
+    <span class="section-label">✦ Campeões de venda</span>
+    <h2>Mais Pedidos da Semana</h2>
+    <p>Os favoritos dos nossos clientes — escolha fácil!</p>
+  </div>
+  <div class="top-grid">
+    <div class="top-card reveal">
+      <span class="top-rank">1</span>
+      <img src="https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Filé Madeira" loading="lazy" />
+      <div class="top-body">
+        <h4>Filé ao Molho Madeira</h4>
+        <span class="top-price">R$ 54,90</span>
+      </div>
+      <button class="top-btn" onclick="adicionarAoCarrinho('Filé ao Molho Madeira', 54.90)">+ Adicionar ao pedido</button>
+    </div>
+    <div class="top-card reveal">
+      <span class="top-rank">2</span>
+      <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Combo do Dia" loading="lazy" />
+      <div class="top-body">
+        <h4>Combo do Dia</h4>
+        <span class="top-price">R$ 42,90</span>
+      </div>
+      <button class="top-btn" onclick="adicionarAoCarrinho('Combo do Dia', 42.90)">+ Adicionar ao pedido</button>
+    </div>
+    <div class="top-card reveal">
+      <span class="top-rank">3</span>
+      <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Petit Gateau" loading="lazy" />
+      <div class="top-body">
+        <h4>Petit Gateau com Sorvete</h4>
+        <span class="top-price">R$ 24,90</span>
+      </div>
+      <button class="top-btn" onclick="adicionarAoCarrinho('Petit Gateau com Sorvete', 24.90)">+ Adicionar ao pedido</button>
+    </div>
+    <div class="top-card reveal">
+      <span class="top-rank">4</span>
+      <img src="https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg?auto=compress&cs=tinysrgb&w=700" alt="Coxinha" loading="lazy" />
+      <div class="top-body">
+        <h4>Coxinha de Frango (6 un.)</h4>
+        <span class="top-price">R$ 24,90</span>
+      </div>
+      <button class="top-btn" onclick="adicionarAoCarrinho('Coxinha de Frango (6 un.)', 24.90)">+ Adicionar ao pedido</button>
+    </div>
+  </div>
+</section>
+
 <!-- ENTRADAS -->
 <section class="menu-section" id="entradas" data-section="entradas">
   <div class="section-header reveal"><span class="section-label">✦ Para começar</span><h2>Entradas</h2><p>Petiscos e entradas para abrir o apetite</p></div>
@@ -526,7 +759,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Batata Frita Crocante</h3>
         <p>Batatas douradas por fora, macias por dentro. Servidas com molho especial da casa.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 19,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Batata Frita!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 19,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Batata Frita Crocante', 19.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -535,7 +768,7 @@
         <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Bruschetta Italiana</h3>
         <p>Pão italiano tostado com tomate, manjericão fresco, alho e azeite extravirgem.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 22,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Bruschetta!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 22,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Bruschetta Italiana', 22.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -544,7 +777,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-home">🏠 Artesanal</span></div>
         <h3>Coxinha de Frango (6 un.)</h3>
         <p>Coxinhas artesanais com massa crocante e recheio cremoso de frango com catupiry.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 24,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Coxinha!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 24,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Coxinha de Frango (6 un.)', 24.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -553,7 +786,7 @@
         <div class="item-tags"><span class="item-tag tag-fit">🥗 Fit</span></div>
         <h3>Salada Caesar</h3>
         <p>Alface romana, croutons crocantes, parmesão e molho caesar da casa. Refrescante e saborosa.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 21,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Salada Caesar!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 21,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Salada Caesar', 21.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -562,7 +795,7 @@
         <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Bolinho de Bacalhau (6 un.)</h3>
         <p>Bolinhos crocantes de bacalhau com batata, salsinha e azeitona. Acompanha molho de aioli.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 26,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Bolinho de Bacalhau!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 26,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Bolinho de Bacalhau (6 un.)', 26.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -571,7 +804,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Iscas de Frango Crocante</h3>
         <p>Tiras de frango empanadas e fritas, crocantes por fora e suculentas por dentro. Com molho barbecue.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 29,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Iscas de Frango!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 29,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Iscas de Frango Crocante', 29.90)">+ Pedido</button></div>
       </div>
     </div>
   </div>
@@ -587,7 +820,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Filé ao Molho Madeira</h3>
         <p>Filé mignon grelhado ao ponto com molho madeira, arroz, feijão e batata sauté.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 54,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Filé ao Molho Madeira!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 54,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Filé ao Molho Madeira', 54.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -596,7 +829,7 @@
         <div class="item-tags"><span class="item-tag tag-fit">🥗 Fit</span></div>
         <h3>Frango Grelhado com Legumes</h3>
         <p>Peito de frango marinado e grelhado, legumes salteados na manteiga e arroz integral.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 42,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Frango Grelhado!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 42,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Frango Grelhado com Legumes', 42.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -605,7 +838,7 @@
         <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Macarrão à Bolonhesa</h3>
         <p>Macarrão al dente com molho bolonhesa artesanal e generosa porção de parmesão ralado.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 38,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Macarrão à Bolonhesa!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 38,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Macarrão à Bolonhesa', 38.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -614,7 +847,7 @@
         <div class="item-tags"><span class="item-tag tag-fit">🥗 Fit</span></div>
         <h3>Tilápia Grelhada</h3>
         <p>Filé de tilápia com ervas finas grelhado na brasa. Acompanha arroz, farofa e salada.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 46,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Tilápia Grelhada!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 46,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Tilápia Grelhada', 46.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -623,7 +856,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Parmegiana de Frango</h3>
         <p>Frango empanado coberto com molho de tomate caseiro e queijo gratinado. Com arroz e fritas.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 48,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Parmegiana de Frango!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 48,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Parmegiana de Frango', 48.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -632,7 +865,7 @@
         <div class="item-tags"><span class="item-tag tag-offer">💰 Oferta</span></div>
         <h3>Prato do Dia</h3>
         <p>Especial que muda diariamente com ingredientes da estação. Consulte o prato de hoje!</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 35,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Qual é o prato do dia?" target="_blank">Consultar</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 35,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Prato do Dia', 35.90)">+ Pedido</button></div>
       </div>
     </div>
   </div>
@@ -648,7 +881,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Petit Gateau com Sorvete</h3>
         <p>Bolinho de chocolate quente com interior cremoso, sorvete de creme e calda de chocolate.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 24,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Petit Gateau!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 24,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Petit Gateau com Sorvete', 24.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -657,7 +890,7 @@
         <div class="item-tags"><span class="item-tag tag-home">🏠 Caseiro</span></div>
         <h3>Pudim de Leite Condensado</h3>
         <p>Receita tradicional, pudim cremoso feito diariamente aqui, com calda de caramelo artesanal.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 16,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Pudim!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 16,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Pudim de Leite Condensado', 16.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -666,7 +899,7 @@
         <div class="item-tags"><span class="item-tag tag-hot">🔥 Destaque</span></div>
         <h3>Brownie com Sorvete</h3>
         <p>Brownie quentinho com nozes, sorvete de creme artesanal e calda de caramelo. Irresistível!</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 22,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Brownie!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 22,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Brownie com Sorvete', 22.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -675,7 +908,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Sorvete 3 Bolas</h3>
         <p>Três bolas de sorvete artesanal à escolha: creme, chocolate, morango, maracujá ou baunilha.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 14,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Sorvete 3 Bolas!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 14,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Sorvete 3 Bolas', 14.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -684,7 +917,7 @@
         <div class="item-tags"><span class="item-tag tag-home">🏠 Caseiro</span></div>
         <h3>Mousse de Maracujá</h3>
         <p>Mousse cremoso de maracujá natural, levinho e refrescante. Perfeito para fechar com chave de ouro.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 15,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Mousse de Maracujá!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 15,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Mousse de Maracujá', 15.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -693,7 +926,7 @@
         <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Cheesecake de Morango</h3>
         <p>Base crocante de biscoito, creme de cream cheese e calda de morango fresco por cima.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 20,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Cheesecake!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 20,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Cheesecake de Morango', 20.90)">+ Pedido</button></div>
       </div>
     </div>
   </div>
@@ -709,7 +942,7 @@
         <div class="item-tags"><span class="item-tag tag-fit">🥗 Natural</span><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Suco Natural (400ml)</h3>
         <p>Feito na hora: laranja, limão, maracujá, morango, abacaxi ou manga.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 10,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Suco Natural!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 10,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Suco Natural (400ml)', 10.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -718,7 +951,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Limonada Suíça (500ml)</h3>
         <p>Limonada cremosa com leite condensado, limão tahiti e raspas. Gelada e irresistível!</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 12,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Limonada Suíça!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 12,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Limonada Suíça (500ml)', 12.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -727,7 +960,7 @@
         <div class="item-tags"></div>
         <h3>Refrigerante (Lata 350ml)</h3>
         <p>Coca-Cola, Pepsi, Guaraná Antarctica, Sprite ou Fanta. Sempre bem gelado!</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 7,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Refrigerante!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 7,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Refrigerante (Lata 350ml)', 7.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -736,7 +969,7 @@
         <div class="item-tags"><span class="item-tag tag-fav">⭐ Favorito</span></div>
         <h3>Cerveja (600ml)</h3>
         <p>Brahma, Skol, Itaipava ou Heineken. Servida bem gelada, do jeito que você gosta.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 14,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Cerveja!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 14,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Cerveja (600ml)', 14.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -745,7 +978,7 @@
         <div class="item-tags"><span class="item-tag tag-fit">🥗 Saudável</span></div>
         <h3>Água Mineral (500ml)</h3>
         <p>Água mineral gelada, com ou sem gás. Opção saudável para acompanhar qualquer prato.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 5,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Água Mineral!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 5,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Água Mineral (500ml)', 5.90)">+ Pedido</button></div>
       </div>
     </div>
     <div class="menu-card reveal">
@@ -754,7 +987,7 @@
         <div class="item-tags"><span class="item-tag tag-new">🆕 Novidade</span></div>
         <h3>Chá Gelado (400ml)</h3>
         <p>Chá gelado artesanal. Sabores: pêssego, maracujá, limão com hortelã ou verde com gengibre.</p>
-        <div class="menu-card-footer"><span class="menu-price">R$ 9,90</span><a class="pedido-btn" href="https://wa.me/5547999990000?text=Quero pedir Chá Gelado!" target="_blank">Pedir</a></div>
+        <div class="menu-card-footer"><span class="menu-price">R$ 9,90</span><button class="pedido-btn" onclick="adicionarAoCarrinho('Chá Gelado (400ml)', 9.90)">+ Pedido</button></div>
       </div>
     </div>
   </div>
@@ -776,7 +1009,7 @@
 
 <!-- DEPOIMENTOS -->
 <section class="depoimentos-dark">
-  <div class="section-header reveal"><span class="section-label">✦ O que dizem</span><h2>Avaliações dos Clientes</h2><p>Mais de 200 avaliações 5 estrelas no Google</p></div>
+  <div class="section-header reveal"><span class="section-label">✦ O que dizem</span><h2>Avaliações dos Clientes</h2><div style="margin:16px 0 4px"><span class="dep-count" id="reviewCount">0</span><span style="color:rgba(255,255,255,.55);font-size:.95rem;display:block;margin-top:4px">avaliações 5 estrelas no Google ⭐</span></div></div>
   <div class="dep-carousel">
     <div class="dep-track" id="depTrack">
       <div class="dep-card">
@@ -899,7 +1132,12 @@
 <footer>
   <p><strong>Grill & Sabor</strong> — Seg–Sex: 11h às 22h &nbsp;|&nbsp; Sáb–Dom: 11h às 23h</p>
   <p>📍 Rua das Flores, 123 — Centro, Balneário Camboriú — SC &nbsp;|&nbsp; 📞 (47) 99999-0000</p>
-  <p style="margin-top:12px">© 2025 Grill & Sabor &nbsp;·&nbsp; <span>Demo</span> criado por Fabrizia Soluções Digitais</p>
+  <div style="display:flex;gap:20px;justify-content:center;margin:18px 0;flex-wrap:wrap">
+    <a href="#" target="_blank" style="color:rgba(255,255,255,.45);text-decoration:none;font-size:.85rem;display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#f5c97a'" onmouseout="this.style.color='rgba(255,255,255,.45)'">📸 Instagram</a>
+    <a href="#" target="_blank" style="color:rgba(255,255,255,.45);text-decoration:none;font-size:.85rem;display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#f5c97a'" onmouseout="this.style.color='rgba(255,255,255,.45)'">👍 Facebook</a>
+    <a href="https://wa.me/5547999990000" target="_blank" style="color:rgba(255,255,255,.45);text-decoration:none;font-size:.85rem;display:flex;align-items:center;gap:5px;transition:color .2s" onmouseover="this.style.color='#25d366'" onmouseout="this.style.color='rgba(255,255,255,.45)'">💬 WhatsApp</a>
+  </div>
+  <p style="margin-top:4px">© 2025 Grill & Sabor &nbsp;·&nbsp; <span>Demo</span> criado por Fabrizia Soluções Digitais</p>
 </footer>
 
 <script>
@@ -997,6 +1235,108 @@
   function renderOpts(opts){document.getElementById('chatOpts').innerHTML=opts.map(o=>`<button class="chat-opt" onclick="chatResp('${o}')">${labels[o]}</button>`).join('');}
   function chatResp(key){const r=respostas[key]||respostas.padrao;addMsg(labels[key]||key,'user');setTimeout(()=>{addMsg(r.bot,'bot');renderOpts(r.opts);},420);}
   function enviarMsg(){const i=document.getElementById('chatInput');const t=i.value.trim();if(!t)return;addMsg(t,'user');i.value='';setTimeout(()=>{addMsg(respostas.padrao.bot,'bot');renderOpts(respostas.padrao.opts);},500);}
+
+  // DARK MODE
+  function toggleDark(){
+    document.body.classList.toggle('dark');
+    document.getElementById('darkIcon').textContent=document.body.classList.contains('dark')?'☀️':'🌙';
+    localStorage.setItem('gs_dark',document.body.classList.contains('dark')?'1':'');
+  }
+  if(localStorage.getItem('gs_dark')){document.body.classList.add('dark');document.getElementById('darkIcon').textContent='☀️';}
+
+  // BUSCA
+  function buscarItem(val){
+    document.getElementById('searchClear').style.display=val?'block':'none';
+    const q=val.toLowerCase().trim();
+    document.querySelectorAll('.menu-section[data-section]').forEach(s=>{
+      s.querySelectorAll('.menu-card').forEach(c=>{
+        const txt=(c.querySelector('h3')||{}).textContent||'';
+        c.classList.toggle('search-hidden',!(!q||txt.toLowerCase().includes(q)));
+      });
+    });
+  }
+  function limparBusca(){
+    document.getElementById('searchInput').value='';
+    document.getElementById('searchClear').style.display='none';
+    document.querySelectorAll('.menu-card').forEach(c=>c.classList.remove('search-hidden'));
+  }
+
+  // CARRINHO
+  let carrinho=[];
+  function adicionarAoCarrinho(nome,preco){
+    const ex=carrinho.find(i=>i.nome===nome);
+    if(ex){ex.qtd++;}else{carrinho.push({nome,preco,qtd:1});}
+    atualizarCarrinho();
+    const btn=document.querySelector('.cart-float');
+    btn.style.transform='scale(1.25)';setTimeout(()=>btn.style.transform='',200);
+  }
+  function atualizarCarrinho(){
+    const total=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
+    const qtdTotal=carrinho.reduce((s,i)=>s+i.qtd,0);
+    const badge=document.getElementById('cartBadge');
+    badge.textContent=qtdTotal;
+    badge.style.display=qtdTotal>0?'flex':'none';
+    document.getElementById('cartTotal').textContent='R$ '+total.toFixed(2).replace('.',',');
+    const box=document.getElementById('cartItems');
+    if(carrinho.length===0){
+      box.innerHTML='<div class="cart-empty"><div style="font-size:2.5rem">🍽️</div><p>Seu pedido está vazio.<br>Adicione itens do cardápio!</p></div>';
+      return;
+    }
+    box.innerHTML=carrinho.map((item,idx)=>`<div class="cart-item"><div class="cart-item-name">${item.nome}${item.qtd>1?` <strong>×${item.qtd}</strong>`:''}</div><div class="cart-item-price">R$ ${(item.preco*item.qtd).toFixed(2).replace('.',',')}</div><button class="cart-item-rm" onclick="removerDoCarrinho(${idx})">✕</button></div>`).join('');
+  }
+  function removerDoCarrinho(idx){carrinho.splice(idx,1);atualizarCarrinho();}
+  function abrirCarrinho(){
+    document.getElementById('cartModal').classList.add('open');
+    document.getElementById('cartOverlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function fecharCarrinho(){
+    document.getElementById('cartModal').classList.remove('open');
+    document.getElementById('cartOverlay').classList.remove('open');
+    document.body.style.overflow='';
+  }
+  function enviarPedidoWpp(){
+    if(carrinho.length===0){alert('Adicione itens ao pedido antes de enviar!');return;}
+    const total=carrinho.reduce((s,i)=>s+i.preco*i.qtd,0);
+    const itens=carrinho.map(i=>`• ${i.nome}${i.qtd>1?` (×${i.qtd})`:''} — R$ ${(i.preco*i.qtd).toFixed(2).replace('.',',')}`).join('\n');
+    const msg=encodeURIComponent(`Olá! Gostaria de fazer o seguinte pedido:\n\n${itens}\n\n*Total: R$ ${total.toFixed(2).replace('.',',')}*\n\nAguardo confirmação! 😊`);
+    window.open(`https://wa.me/5547999990000?text=${msg}`,'_blank');
+  }
+
+  // FOTO HERO BASEADA NO HORÁRIO
+  (function(){
+    const h=new Date().getHours();
+    const fotos=[
+      'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=1400',
+      'https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1400',
+      'https://images.pexels.com/photos/2233729/pexels-photo-2233729.jpeg?auto=compress&cs=tinysrgb&w=1400',
+      'https://images.pexels.com/photos/941861/pexels-photo-941861.jpeg?auto=compress&cs=tinysrgb&w=1400'
+    ];
+    const f=h<11?fotos[0]:h<15?fotos[1]:h<18?fotos[2]:fotos[3];
+    document.querySelector('.hero-bg').style.backgroundImage=`url('${f}')`;
+  })();
+
+  // TEMPO DE ENTREGA DINÂMICO
+  (function(){
+    const h=new Date().getHours();
+    const t=h>=12&&h<=14?'~45 min':h>=19&&h<=21?'~50 min':'~30 min';
+    const el=document.getElementById('tempoEntrega');
+    if(el)el.textContent=t;
+  })();
+
+  // CONTADOR ANIMADO DE AVALIAÇÕES
+  (function(){
+    const el=document.getElementById('reviewCount');
+    if(!el)return;
+    const obs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        let n=0,target=247;
+        const iv=setInterval(()=>{n=Math.min(n+5,target);el.textContent=n+'+';if(n>=target)clearInterval(iv);},25);
+        obs.disconnect();
+      }
+    },{threshold:.3});
+    obs.observe(el);
+  })();
 </script>
 </body>
 </html>
