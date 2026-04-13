@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consultório Dental — Agenda</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #0f1f35;
+    --navy2:     #1a3450;
+    --gold:      #b8973a;
+    --gold-light:#f5edda;
+    --gold-mid:  #e8d49a;
+    --cream:     #faf7f2;
+    --white:     #ffffff;
+    --gray:      #6b7280;
+    --border:    #e8d49a;
+    --text:      #1f2937;
+    --light:     #f0f4f8;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; }
+
+  /* ════ HEADER ════ */
+  header {
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    padding:0 24px; display:flex; align-items:center; justify-content:space-between;
+    gap:12px; flex-wrap:wrap; box-shadow:0 4px 24px rgba(15,31,53,.4);
+    position:sticky; top:0; z-index:50; min-height:70px;
+  }
+  .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .logo-icon {
+    width:46px; height:46px; background:linear-gradient(135deg,var(--gold),#d4a84b);
+    border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:1.35rem; box-shadow:0 4px 14px rgba(184,151,58,.4); flex-shrink:0;
+  }
+  .logo-text strong { display:block; font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:700; color:white; line-height:1; }
+  .logo-text span { font-size:.62rem; color:rgba(255,255,255,.5); letter-spacing:.18em; text-transform:uppercase; }
+  .header-center { display:flex; align-items:center; gap:7px; flex:1; justify-content:center; }
+  .nav-date { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:white; min-width:200px; text-align:center; line-height:1.3; }
+  .nav-date small { display:block; font-family:'DM Sans',sans-serif; font-size:.65rem; color:rgba(255,255,255,.5); font-weight:400; }
+  .btn-nav { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:white; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:.95rem; display:flex; align-items:center; justify-content:center; transition:background .2s; }
+  .btn-nav:hover { background:rgba(255,255,255,.2); }
+  .btn-hoje { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:white; padding:0 12px; height:32px; border-radius:8px; cursor:pointer; font-size:.75rem; font-weight:600; font-family:'DM Sans',sans-serif; transition:background .2s; }
+  .btn-hoje:hover { background:rgba(255,255,255,.2); }
+  .header-right { display:flex; align-items:center; gap:8px; }
+  .btn-add {
+    background:linear-gradient(135deg,var(--gold),#d4a84b); color:var(--navy); font-weight:700; font-size:.82rem;
+    padding:0 16px; height:36px; border-radius:8px; border:none; cursor:pointer;
+    display:none; align-items:center; gap:6px; font-family:'DM Sans',sans-serif;
+    box-shadow:0 3px 10px rgba(184,151,58,.3); transition:opacity .2s; white-space:nowrap;
+  }
+  .btn-add:hover { opacity:.88; }
+  .btn-lock {
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+    color:white; width:36px; height:36px; border-radius:8px;
+    cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center;
+    transition:background .2s; position:relative;
+  }
+  .btn-lock:hover { background:rgba(255,255,255,.2); }
+  .modo-badge { position:absolute; top:-5px; right:-5px; background:#4ade80; width:12px; height:12px; border-radius:50%; border:2px solid white; display:none; }
+
+  /* ════ BANNERS MODO ════ */
+  .modo-banner { padding:8px 24px; font-size:.8rem; font-weight:600; text-align:center; display:none; align-items:center; justify-content:center; gap:10px; }
+  .modo-banner.cliente { background:var(--gold-light); color:#7a5c00; display:flex; border-bottom:1px solid var(--gold-mid); }
+  .modo-banner.prof    { background:#d1fae5; color:#065f46; display:flex; }
+  .modo-banner button { background:none; border:none; cursor:pointer; font-size:.78rem; font-weight:700; color:inherit; text-decoration:underline; }
+
+  /* ════ RESUMO ════ */
+  .resumo-bar { background:white; border-bottom:1px solid #e5e7eb; padding:9px 24px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .resumo-label { font-size:.68rem; font-weight:700; color:var(--gray); text-transform:uppercase; letter-spacing:.1em; }
+  .resumo-chips { display:flex; gap:8px; flex-wrap:wrap; }
+  .resumo-chip { display:flex; align-items:center; gap:5px; background:var(--cream); border:1px solid var(--border); border-radius:20px; padding:3px 12px; font-size:.77rem; font-weight:600; }
+  .prof-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .resumo-total { margin-left:auto; font-size:.76rem; background:var(--gold-light); border:1px solid var(--gold-mid); border-radius:20px; padding:3px 12px; font-weight:600; color:#7a5c00; }
+  .pendentes-alerta { font-size:.76rem; background:#fef9c3; border:1px solid #fde047; border-radius:20px; padding:3px 12px; font-weight:600; color:#854d0e; cursor:pointer; }
+
+  /* ════ GRID ════ */
+  .agenda-wrap { overflow-x:auto; padding-bottom:100px; }
+  .agenda-grid { display:grid; min-width:440px; }
+  .col-header {
+    background:white; border-bottom:2px solid var(--border); padding:12px 7px; text-align:center;
+    font-size:.8rem; font-weight:600; color:var(--navy);
+    position:sticky; top:70px; z-index:10; border-right:1px solid #e5e7eb;
+  }
+  .col-header:first-child { background:var(--cream); }
+  .prof-avatar { width:38px; height:38px; border-radius:50%; margin:0 auto 4px; display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:800; color:white; box-shadow:0 2px 8px rgba(0,0,0,.18); }
+  .time-cell { background:var(--cream); border-right:1px solid #e5e7eb; border-bottom:1px solid #f0ead8; padding:0 7px; display:flex; align-items:flex-start; justify-content:flex-end; padding-top:4px; font-size:.67rem; color:var(--gray); font-weight:500; }
+  .time-cell.hora-cheia { color:var(--navy); font-weight:700; font-size:.71rem; }
+  .slot { border-bottom:1px solid #f0ead8; border-right:1px solid #e5e7eb; min-height:36px; position:relative; transition:background .12s; }
+  .slot.meia { border-bottom-style:dashed; border-bottom-color:#e8d49a55; }
+  .slot.clicavel { cursor:pointer; }
+  .slot.clicavel:hover { background:var(--gold-light); }
+  .slot.clicavel:hover::after { content:'+ agendar'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:700; color:var(--gold); letter-spacing:.03em; pointer-events:none; }
+
+  /* Cards agendamento */
+  .appt {
+    position:absolute; inset:2px; border-radius:8px; padding:4px 8px;
+    cursor:pointer; z-index:5; overflow:hidden; border-left:3px solid transparent;
+    transition:opacity .2s, transform .15s, box-shadow .15s; box-shadow:0 1px 4px rgba(0,0,0,.1);
+  }
+  .appt:hover { opacity:.92; transform:scale(1.02); box-shadow:0 4px 14px rgba(0,0,0,.14); }
+  .appt-nome { font-size:.75rem; font-weight:700; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .appt-serv { font-size:.66rem; opacity:.75; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
+  .appt-hora { font-size:.59rem; opacity:.5; margin-top:2px; }
+  .appt-status { position:absolute; top:3px; right:5px; font-size:.55rem; font-weight:700; padding:1px 5px; border-radius:4px; text-transform:uppercase; }
+
+  .appt.pendente { border-style:dashed; border-width:2px; border-left-width:3px; opacity:.85; }
+  .appt.pendente::after { content:'PENDENTE'; position:absolute; top:3px; right:4px; font-size:.53rem; font-weight:800; color:#7a5c00; background:#fef9c3; padding:1px 5px; border-radius:4px; }
+
+  .s-consulta    { background:#e0f2fe; border-color:#0284c7; color:#0c4a6e; }
+  .s-limpeza     { background:#d1fae5; border-color:#059669; color:#064e3b; }
+  .s-restauracao { background:#fef3c7; border-color:#d97706; color:#78350f; }
+  .s-extracao    { background:#fee2e2; border-color:#dc2626; color:#7f1d1d; }
+  .s-clareamento { background:#f5edda; border-color:#b8973a; color:#7a5c00; }
+  .s-canal       { background:#ede9fe; border-color:#7c3aed; color:#4c1d95; }
+  .s-ortodontia  { background:#fce7f3; border-color:#ec4899; color:#9d174d; }
+  .s-outro       { background:#f1f5f9; border-color:#64748b; color:#334155; }
+
+  .st-confirmado { background:#d1fae5; color:#065f46; }
+  .st-aguardando { background:#fef3c7; color:#92400e; }
+  .st-cancelado  { background:#fee2e2; color:#991b1b; }
+  .st-concluido  { background:#e0e7ff; color:#3730a3; }
+
+  /* ════ MODAIS ════ */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; display:none; align-items:center; justify-content:center; padding:16px; }
+  .overlay.open { display:flex; }
+  .modal { background:white; border-radius:20px; width:100%; max-width:440px; box-shadow:0 24px 60px rgba(0,0,0,.22); animation:fadeUp .25s ease; max-height:90vh; overflow-y:auto; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+  .modal-header { padding:18px 20px; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; justify-content:space-between; background:linear-gradient(135deg,var(--navy),var(--navy2)); border-radius:20px 20px 0 0; }
+  .modal-header h3 { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:700; color:white; }
+  .btn-close { background:rgba(255,255,255,.15); border:none; color:white; width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
+  .modal-body { padding:20px; display:flex; flex-direction:column; gap:14px; }
+  .modal-footer { padding:14px 20px; border-top:1px solid #f1f5f9; display:flex; gap:10px; }
+  .fgroup { display:flex; flex-direction:column; gap:5px; }
+  .fgroup label { font-size:.77rem; font-weight:700; color:var(--navy); }
+  .fgroup input,.fgroup select,.fgroup textarea { padding:9px 12px; border:1.5px solid #e5e7eb; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:.88rem; color:var(--text); outline:none; transition:border .15s; background:white; }
+  .fgroup input:focus,.fgroup select:focus,.fgroup textarea:focus { border-color:var(--gold); }
+  .fgroup textarea { resize:vertical; min-height:70px; }
+  .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .btn-salvar { flex:1; background:linear-gradient(135deg,var(--navy),var(--navy2)); color:white; font-weight:700; font-size:.88rem; padding:11px; border:none; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-salvar:hover { opacity:.9; }
+  .btn-cancelar { background:#f8fafc; color:var(--gray); font-weight:600; font-size:.87rem; padding:11px 14px; border:1.5px solid #e5e7eb; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-excluir { background:#fee2e2; color:#dc2626; font-weight:600; font-size:.87rem; padding:11px 12px; border:1.5px solid #fecaca; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; }
+  .btn-confirmar-pend { width:100%; background:#16a34a; color:white; font-weight:700; font-size:.87rem; padding:11px; border:none; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; }
+  .btn-wpp-detail { width:100%; background:#25d366; color:white; font-weight:700; font-size:.87rem; padding:11px; border:none; border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; display:flex; align-items:center; justify-content:center; gap:7px; }
+  .detalhe-card { background:var(--cream); border-radius:11px; padding:13px 15px; display:flex; flex-direction:column; gap:6px; border:1px solid var(--border); }
+  .d-row { display:flex; gap:7px; align-items:flex-start; font-size:.85rem; }
+  .d-label { font-weight:700; color:var(--navy); min-width:90px; flex-shrink:0; }
+  .d-val { color:var(--gray); }
+
+  /* ════ PIN MODAL ════ */
+  .pin-modal { max-width:320px; }
+  .pin-modal .modal-header { background:linear-gradient(135deg,var(--navy),var(--navy2)); }
+  .pin-modal input { text-align:center; font-size:1.4rem; letter-spacing:.3em; font-weight:700; }
+  .pin-erro { color:#dc2626; font-size:.78rem; font-weight:600; text-align:center; display:none; }
+
+  /* ════ QUICK-ADD POPOVER ════ */
+  .quick-pop {
+    position:fixed; z-index:400; background:white; border-radius:16px;
+    box-shadow:0 8px 40px rgba(15,31,53,.2); padding:14px 16px;
+    width:240px; display:none; flex-direction:column; gap:9px;
+    border:1.5px solid var(--gold-mid); animation:fadeUp .18s ease;
+  }
+  .quick-pop.open { display:flex; }
+  .quick-pop-header { display:flex; align-items:center; justify-content:space-between; }
+  .quick-pop-title { font-size:.78rem; font-weight:700; color:var(--navy); }
+  .quick-pop-slot { font-size:.72rem; color:var(--gray); }
+  .quick-pop input,.quick-pop select {
+    width:100%; padding:7px 10px; border:1.5px solid #e5e7eb;
+    border-radius:8px; font-family:'DM Sans',sans-serif; font-size:.83rem;
+    color:var(--text); outline:none; transition:border .15s;
+  }
+  .quick-pop input:focus,.quick-pop select:focus { border-color:var(--gold); }
+  .quick-pop-btns { display:flex; gap:7px; }
+  .quick-pop-btns button { flex:1; padding:8px 0; border-radius:8px; border:none; font-family:'DM Sans',sans-serif; font-size:.8rem; font-weight:700; cursor:pointer; }
+  .qp-salvar { background:linear-gradient(135deg,var(--navy),var(--navy2)); color:white; }
+  .qp-salvar:hover { opacity:.88; }
+  .qp-cancelar { background:var(--cream); color:var(--gray); border:1.5px solid var(--border) !important; }
+  .qp-tel-toggle { font-size:.72rem; color:var(--gold); cursor:pointer; text-decoration:underline; background:none; border:none; font-family:'DM Sans',sans-serif; padding:0; }
+  .qp-tel-wrap { display:none; }
+  .qp-tel-wrap.open { display:block; }
+
+  /* ════ CHATBOT ════ */
+  .chat-toggle {
+    position:fixed; bottom:28px; right:28px; z-index:200;
+    width:54px; height:54px; border-radius:50%;
+    background:linear-gradient(135deg,var(--navy),var(--navy2));
+    border:none; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 20px rgba(15,31,53,.4); animation:pulse-navy 2.5s infinite;
+  }
+  @keyframes pulse-navy { 0%,100%{box-shadow:0 4px 20px rgba(15,31,53,.4)} 50%{box-shadow:0 4px 30px rgba(15,31,53,.65)} }
+  .chat-badge {
+    position:absolute; top:-4px; right:-4px; background:var(--gold);
+    color:var(--navy); font-size:.6rem; font-weight:800; min-width:18px; height:18px;
+    border-radius:9px; display:none; align-items:center; justify-content:center;
+    padding:0 4px; border:2px solid white;
+  }
+  .chat-box {
+    position:fixed; bottom:94px; right:28px; z-index:200;
+    width:320px; background:white; border-radius:18px;
+    box-shadow:0 12px 48px rgba(15,31,53,.2); display:none; flex-direction:column;
+    max-height:480px; border:1px solid var(--border); overflow:hidden;
+  }
+  .chat-box.open { display:flex; }
+  .chat-header {
+    background:linear-gradient(135deg,var(--navy),var(--navy2));
+    padding:14px 16px; display:flex; align-items:center; gap:10px; border-radius:18px 18px 0 0;
+  }
+  .chat-av { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--gold),#d4a84b); display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0; }
+  .chat-hinfo { flex:1; }
+  .chat-hinfo strong { display:block; font-size:.85rem; font-weight:700; color:white; }
+  .chat-hinfo span { font-size:.7rem; color:rgba(255,255,255,.6); }
+  .chat-close { background:rgba(255,255,255,.15); border:none; color:white; width:28px; height:28px; border-radius:7px; cursor:pointer; font-size:.9rem; display:flex; align-items:center; justify-content:center; }
+  .chat-msgs { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:8px; background:#f8f9fa; }
+  .msg { max-width:88%; padding:9px 12px; border-radius:12px; font-size:.82rem; line-height:1.5; }
+  .msg.bot { background:white; color:var(--text); border:1px solid var(--border); align-self:flex-start; border-radius:4px 12px 12px 12px; }
+  .msg.user { background:linear-gradient(135deg,var(--navy),var(--navy2)); color:white; align-self:flex-end; border-radius:12px 4px 12px 12px; }
+  .chat-appt-list { margin-top:8px; display:flex; flex-direction:column; gap:5px; }
+  .chat-appt-item { display:flex; align-items:center; gap:8px; background:var(--cream); border:1px solid var(--border); border-radius:8px; padding:7px 10px; }
+  .chat-appt-info { flex:1; min-width:0; }
+  .chat-appt-info strong { display:block; font-size:.78rem; color:var(--navy); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chat-appt-info span { font-size:.7rem; color:var(--gray); }
+  .btn-confirm-wpp { background:#25d366; border:none; color:white; width:28px; height:28px; border-radius:7px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .chat-opts { padding:9px 11px; display:flex; flex-direction:column; gap:4px; }
+  .chat-opt { background:var(--gold-light); border:1px solid var(--gold-mid); color:#7a5c00; font-size:.77rem; font-weight:600; padding:7px 10px; border-radius:7px; cursor:pointer; text-align:left; font-family:'DM Sans',sans-serif; transition:background .15s; }
+  .chat-opt:hover { background:var(--gold-mid); }
+  .chat-opt.destaque { background:#e0f2fe; border-color:#7dd3fc; color:#0c4a6e; }
+  .chat-footer-link { padding:7px 12px; border-top:1px solid var(--border); text-align:center; font-size:.72rem; color:var(--gray); }
+
+  /* ════ TOAST ════ */
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; padding:9px 18px; border-radius:9px; font-size:.8rem; font-weight:500; z-index:300; opacity:0; pointer-events:none; transition:opacity .3s; white-space:nowrap; }
+  .toast.show { opacity:1; }
+
+  @media(max-width:600px) {
+    header { padding:0 14px; min-height:64px; }
+    .logo-text strong { font-size:1.15rem; }
+    .nav-date { font-size:.9rem; min-width:130px; }
+    .col-header { padding:9px 4px; font-size:.72rem; }
+    .prof-avatar { width:28px; height:28px; font-size:.68rem; }
+    .chat-box { width:calc(100vw - 48px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <a class="logo" href="#">
+    <div class="logo-icon">🦷</div>
+    <div class="logo-text">
+      <strong>OralClin</strong>
+      <span>consultório odontológico</span>
+    </div>
+  </a>
+
+  <div class="header-center">
+    <button class="btn-nav" onclick="mudarDia(-1)">‹</button>
+    <div class="nav-date" id="navDate"></div>
+    <button class="btn-nav" onclick="mudarDia(1)">›</button>
+    <button class="btn-hoje" onclick="irHoje()">Hoje</button>
+  </div>
+
+  <div class="header-right">
+    <button class="btn-add" id="btnAdd" onclick="abrirModalNovo()">+ Agendar</button>
+    <button class="btn-lock" id="btnLock" onclick="abrirPinModal()" title="Acesso profissional">
+      🔒<div class="modo-badge" id="modoBadge"></div>
+    </button>
+  </div>
+</header>
+
+<!-- ══ BANNER MODO ══ -->
+<div class="modo-banner cliente" id="bannerCliente">
+  👁️ Visualizando como <strong>paciente</strong> — somente leitura.
+  &nbsp;<button onclick="abrirPinModal()">Sou da clínica →</button>
+</div>
+<div class="modo-banner prof" id="bannerProf" style="display:none">
+  ✅ Modo <strong>profissional</strong> ativo — edições liberadas.
+  &nbsp;<button onclick="sairModoProf()">Sair</button>
+</div>
+
+<!-- ══ RESUMO ══ -->
+<div class="resumo-bar">
+  <span class="resumo-label">Dia:</span>
+  <div class="resumo-chips" id="resumoChips"></div>
+  <div id="resumoExtra" style="margin-left:auto;display:flex;gap:6px;flex-wrap:wrap"></div>
+</div>
+
+<!-- ══ AGENDA ══ -->
+<div class="agenda-wrap">
+  <div class="agenda-grid" id="agendaGrid"></div>
+</div>
+
+<!-- ══ QUICK-ADD POPOVER ══ -->
+<div class="quick-pop" id="quickPop">
+  <div class="quick-pop-header">
+    <span class="quick-pop-title">🦷 Novo agendamento</span>
+    <span class="quick-pop-slot" id="qpSlotLabel"></span>
+  </div>
+  <input id="qpNome" type="text" placeholder="Nome do paciente" autocomplete="off" />
+  <select id="qpServico" onchange="qpAutoPreco()">
+    <option value="consulta">🦷 Consulta Inicial</option>
+    <option value="limpeza">✨ Limpeza / Profilaxia</option>
+    <option value="restauracao">🔧 Restauração</option>
+    <option value="extracao">⚕️ Extração</option>
+    <option value="clareamento">💎 Clareamento</option>
+    <option value="canal">🏥 Tratamento de Canal</option>
+    <option value="ortodontia">😁 Ortodontia</option>
+    <option value="outro">📋 Outro</option>
+  </select>
+  <input id="qpValor" type="number" min="0" step="0.01" placeholder="Valor R$" />
+  <button class="qp-tel-toggle" onclick="toggleQpTel()">+ Adicionar telefone</button>
+  <div class="qp-tel-wrap" id="qpTelWrap">
+    <input id="qpTel" type="tel" placeholder="WhatsApp (opcional)" oninput="mascaraTel(this)" />
+  </div>
+  <div class="quick-pop-btns">
+    <button class="qp-cancelar" onclick="fecharQuickPop()">Cancelar</button>
+    <button class="qp-salvar" onclick="salvarQuickAdd()">Salvar ✓</button>
+  </div>
+</div>
+
+<!-- ══ MODAL PROFISSIONAL ══ -->
+<div class="overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitulo">Novo Agendamento</h3>
+      <button class="btn-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row-2">
+        <div class="fgroup"><label>Data</label><input type="date" id="fData"></div>
+        <div class="fgroup"><label>Horário</label><select id="fHora"></select></div>
+      </div>
+      <div class="fgroup"><label>Nome do paciente</label><input type="text" id="fCliente" placeholder="Ex: João Souza"></div>
+      <div class="fgroup"><label>Telefone / WhatsApp</label><input type="tel" id="fTel" placeholder="(51) 00000-0000" oninput="mascaraTel(this)"></div>
+      <div class="form-row-2">
+        <div class="fgroup"><label>Procedimento</label>
+          <select id="fServico">
+            <option value="consulta">🦷 Consulta Inicial</option>
+            <option value="limpeza">✨ Limpeza / Profilaxia</option>
+            <option value="restauracao">🔧 Restauração</option>
+            <option value="extracao">⚕️ Extração</option>
+            <option value="clareamento">💎 Clareamento</option>
+            <option value="canal">🏥 Tratamento de Canal</option>
+            <option value="ortodontia">😁 Ortodontia</option>
+            <option value="outro">📋 Outro</option>
+          </select>
+        </div>
+        <div class="fgroup"><label>Dentista</label>
+          <select id="fProfissional">
+            <option value="Dr. Silva">Dr. Silva</option>
+            <option value="Dra. Ana">Dra. Ana</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="fgroup"><label>Duração</label>
+          <select id="fDuracao">
+            <option value="1">30 min</option>
+            <option value="2" selected>1 hora</option>
+            <option value="3">1h30</option>
+            <option value="4">2 horas</option>
+            <option value="6">3 horas</option>
+          </select>
+        </div>
+        <div class="fgroup"><label>Valor (R$)</label>
+          <input type="number" id="fValor" min="0" step="0.01" placeholder="0,00" />
+        </div>
+      </div>
+      <div class="fgroup"><label>Status</label>
+        <select id="fStatus">
+          <option value="aguardando">⏳ Aguardando</option>
+          <option value="confirmado">✅ Confirmado</option>
+          <option value="concluido">🎀 Concluído</option>
+          <option value="cancelado">❌ Cancelado</option>
+        </select>
+      </div>
+      <div class="fgroup"><label>Observações</label><textarea id="fObs" placeholder="Ex: anestesia necessária, histórico..."></textarea></div>
+    </div>
+    <div class="modal-footer" id="modalFooter">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvar()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL DETALHE ══ -->
+<div class="overlay" id="detalheOverlay">
+  <div class="modal">
+    <div class="modal-header" id="detalheHeader">
+      <h3 id="detalheTitulo">Agendamento</h3>
+      <button class="btn-close" onclick="fecharDetalhe()">✕</button>
+    </div>
+    <div class="modal-body" id="detalheBody"></div>
+    <div class="modal-footer" id="detalheFooter"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL PIN ══ -->
+<div class="overlay" id="pinOverlay">
+  <div class="modal pin-modal">
+    <div class="modal-header">
+      <h3>🔐 Acesso Profissional</h3>
+      <button class="btn-close" onclick="fecharPin()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fgroup" style="text-align:center">
+        <label>Digite a senha da clínica</label>
+        <input type="password" id="pinInput" placeholder="••••••••" maxlength="12" onkeydown="if(event.key==='Enter')verificarPin()" />
+        <span class="pin-erro" id="pinErro">Senha incorreta. Tente novamente.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharPin()">Cancelar</button>
+      <button class="btn-salvar" onclick="verificarPin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHATBOT ══ -->
+<button class="chat-toggle" id="chatToggle" onclick="toggleChat()">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  <div class="chat-badge" id="chatBadge"></div>
+</button>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">
+    <div class="chat-av">🦷</div>
+    <div class="chat-hinfo">
+      <strong>Assistente OralClin</strong>
+      <span>Agenda inteligente</span>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="msg bot">Olá! 🦷 Sou a assistente da OralClin.<br>Posso ajudar com agendamentos, lembretes e o fechamento do dia.</div>
+  </div>
+  <div class="chat-opts" id="chatOpts">
+    <button class="chat-opt destaque" onclick="chatCmd('hoje')">📋 Pacientes de hoje</button>
+    <button class="chat-opt" onclick="chatCmd('amanha')">🔔 Lembretes de amanhã</button>
+    <button class="chat-opt" onclick="chatCmd('proximo')">⏭️ Próximo paciente</button>
+    <button class="chat-opt" onclick="chatCmd('pendentes')">⏳ Consultas pendentes</button>
+    <button class="chat-opt" onclick="chatCmd('silva')">🩺 Agenda Dr. Silva</button>
+    <button class="chat-opt" onclick="chatCmd('ana')">🩺 Agenda Dra. Ana</button>
+    <button class="chat-opt" onclick="chatCmd('livre')">✅ Próximo horário livre</button>
+    <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>
+  </div>
+  <div class="chat-footer-link">Clique no ícone para enviar confirmação via WhatsApp</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════
+//  DADOS E CONSTANTES
+// ══════════════════════════════════════
+const PROFISSIONAIS = ['Dr. Silva', 'Dra. Ana'];
+const COR = { 'Dr. Silva':'#0f1f35', 'Dra. Ana':'#b8973a' };
+const SERVICOS = {
+  consulta:    { nome:'Consulta Inicial',    emoji:'🦷', dur:1, preco:150  },
+  limpeza:     { nome:'Limpeza/Profilaxia',  emoji:'✨', dur:2, preco:200  },
+  restauracao: { nome:'Restauração',         emoji:'🔧', dur:2, preco:300  },
+  extracao:    { nome:'Extração',            emoji:'⚕️', dur:2, preco:250  },
+  clareamento: { nome:'Clareamento',         emoji:'💎', dur:3, preco:600  },
+  canal:       { nome:'Canal',               emoji:'🏥', dur:4, preco:900  },
+  ortodontia:  { nome:'Ortodontia',          emoji:'😁', dur:1, preco:180  },
+  outro:       { nome:'Outro',               emoji:'📋', dur:2, preco:0    },
+};
+const STATUS_LABEL = { aguardando:'⏳ Aguardando', confirmado:'✅ Confirmado', concluido:'🎀 Concluído', cancelado:'❌ Cancelado', pendente:'🕐 Pendente' };
+const STATUS_CLS   = { aguardando:'st-aguardando', confirmado:'st-confirmado', concluido:'st-concluido', cancelado:'st-cancelado' };
+const PIN_CORRETO  = 'oral1234';
+
+const SLOTS = [];
+for (let h=8; h<19; h++) { SLOTS.push(`${pad(h)}:00`); SLOTS.push(`${pad(h)}:30`); }
+SLOTS.push('19:00');
+
+let dataAtual    = hoje();
+let agendamentos = JSON.parse(localStorage.getItem('oralclin_ag') || '[]');
+let modoProf     = sessionStorage.getItem('oralclin_prof') === '1';
+let editandoId   = null, detalheId = null;
+
+// ══════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════
+function hoje() { const d=new Date(); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function amanha() { const d=new Date(); d.setDate(d.getDate()+1); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+function pad(n) { return String(n).padStart(2,'0'); }
+function salvarStorage() { localStorage.setItem('oralclin_ag', JSON.stringify(agendamentos)); }
+function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2400); }
+function mascaraTel(el) {
+  let v=el.value.replace(/\D/g,'').slice(0,11);
+  if(v.length>10) v=v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  else if(v.length>6) v=v.replace(/(\d{2})(\d{4})(\d+)/,'($1) $2-$3');
+  else if(v.length>2) v=v.replace(/(\d{2})(\d+)/,'($1) $2');
+  el.value=v;
+}
+function fmt(v) { return Number(v||0).toFixed(2).replace('.',','); }
+
+// ══════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════
+const DIAS  = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function renderizar() {
+  const d = new Date(dataAtual+'T12:00:00');
+  document.getElementById('navDate').innerHTML =
+    `${DIAS[d.getDay()]}<small>${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}</small>`;
+
+  const agDia = agendamentos.filter(a => a.data===dataAtual && a.status!=='cancelado');
+  const chips = document.getElementById('resumoChips');
+  chips.innerHTML = '';
+  PROFISSIONAIS.forEach(p => {
+    const ags = agDia.filter(a => a.profissional===p);
+    const total = ags.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
+    const c = document.createElement('div'); c.className='resumo-chip';
+    const vStr = modoProf && total>0 ? ` · <span style="color:#065f46;font-weight:700">R$ ${fmt(total)}</span>` : '';
+    c.innerHTML = `<div class="prof-dot" style="background:${COR[p]}"></div>${p}: <strong>${ags.length}</strong>${vStr}`;
+    chips.appendChild(c);
+  });
+  const extra = document.getElementById('resumoExtra');
+  const totalDia = agDia.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
+  const tStr = modoProf && totalDia>0 ? ` · R$ ${fmt(totalDia)}` : '';
+  extra.innerHTML = `<div class="resumo-total">${agDia.length} consulta${agDia.length!==1?'s':''}${tStr}</div>`;
+  const pend = agendamentos.filter(a=>a.status==='pendente').length;
+  if (pend > 0) {
+    const al = document.createElement('div'); al.className='pendentes-alerta';
+    al.textContent=`⏳ ${pend} pendente${pend>1?'s':''}`;
+    al.onclick = ()=>chatCmd('pendentes');
+    extra.appendChild(al);
+  }
+
+  // Grid
+  const numProf = PROFISSIONAIS.length;
+  const grid = document.getElementById('agendaGrid');
+  grid.style.gridTemplateColumns = `60px repeat(${numProf},1fr)`;
+  grid.innerHTML = '';
+
+  // Cabeçalhos
+  const th0 = document.createElement('div'); th0.className='col-header'; grid.appendChild(th0);
+  PROFISSIONAIS.forEach(p => {
+    const th = document.createElement('div'); th.className='col-header';
+    const initials = p.split(' ').filter(w=>!['Dr.','Dra.'].includes(w)).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    th.innerHTML = `<div class="prof-avatar" style="background:${COR[p]}">${initials}</div>${p}`;
+    grid.appendChild(th);
+  });
+
+  // Slots
+  SLOTS.forEach(slot => {
+    if (slot === '19:00') return;
+    const tc = document.createElement('div');
+    tc.className = 'time-cell'+(slot.endsWith(':00')?' hora-cheia':'');
+    tc.textContent = slot.endsWith(':00') ? slot : '';
+    grid.appendChild(tc);
+
+    PROFISSIONAIS.forEach(prof => {
+      const cell = document.createElement('div');
+      const agProf = agDia.filter(a=>a.profissional===prof);
+      let isOcupado = false;
+
+      agProf.forEach(ag => {
+        const ini = SLOTS.indexOf(ag.hora);
+        const fim = ini + parseInt(ag.duracao);
+        const si  = SLOTS.indexOf(slot);
+        if (si === ini) {
+          const card = document.createElement('div');
+          const isPend = ag.status==='pendente';
+          card.className = `appt s-${ag.servico}${isPend?' pendente':''}`;
+          card.style.height = `${parseInt(ag.duracao)*36-4}px`;
+          const stBadge = (!isPend && ag.status) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
+          card.innerHTML = `${stBadge}<div class="appt-nome">${ag.cliente}</div><div class="appt-serv">${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}</div><div class="appt-hora">${ag.hora}</div>`;
+          card.onclick = e => { e.stopPropagation(); abrirDetalhe(ag.id); };
+          cell.appendChild(card);
+        } else if (si>ini && si<fim) { isOcupado=true; }
+      });
+
+      if (isOcupado) { cell.className='slot meia'; cell.style.background='#f0f4f0'; }
+      else {
+        cell.className = 'slot'+(slot.endsWith(':30')?' meia':'');
+        if (modoProf) {
+          cell.classList.add('clicavel');
+          cell.onclick = e => abrirQuickPop(slot, prof, e.currentTarget);
+        }
+      }
+      grid.appendChild(cell);
+    });
+  });
+
+  atualizarBadge();
+}
+
+function mudarDia(dir) {
+  const d = new Date(dataAtual+'T12:00:00');
+  d.setDate(d.getDate()+dir);
+  dataAtual = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  renderizar();
+}
+function irHoje() { dataAtual=hoje(); renderizar(); }
+
+// ══════════════════════════════════════
+//  MODO PROFISSIONAL
+// ══════════════════════════════════════
+function aplicarModo() {
+  document.getElementById('bannerCliente').style.display = modoProf ? 'none' : 'flex';
+  document.getElementById('bannerProf').style.display    = modoProf ? 'flex' : 'none';
+  document.getElementById('btnAdd').style.display        = modoProf ? 'flex' : 'none';
+  document.getElementById('modoBadge').style.display     = modoProf ? 'flex' : 'none';
+  document.getElementById('btnLock').title = modoProf ? 'Sair do modo profissional' : 'Acesso profissional';
+  document.getElementById('btnLock').textContent = modoProf ? '🔓' : '🔒';
+  if (modoProf) document.getElementById('modoBadge').style.display='flex';
+  renderizar();
+}
+function abrirPinModal() {
+  if (modoProf) { sairModoProf(); return; }
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinErro').style.display = 'none';
+  document.getElementById('pinOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('pinInput').focus(),100);
+}
+function fecharPin() { document.getElementById('pinOverlay').classList.remove('open'); }
+function verificarPin() {
+  const val = document.getElementById('pinInput').value;
+  if (val === PIN_CORRETO) {
+    modoProf = true;
+    sessionStorage.setItem('oralclin_prof','1');
+    fecharPin();
+    aplicarModo();
+    toast('Bem-vinda! Modo profissional ativo. ✅');
+  } else {
+    document.getElementById('pinErro').style.display = 'block';
+  }
+}
+function sairModoProf() {
+  modoProf = false;
+  sessionStorage.removeItem('oralclin_prof');
+  aplicarModo();
+}
+
+// ══════════════════════════════════════
+//  QUICK-ADD
+// ══════════════════════════════════════
+let qpSlot=null, qpProf=null;
+function qpAutoPreco() {
+  const s=document.getElementById('qpServico').value;
+  document.getElementById('qpValor').value=SERVICOS[s]?.preco||'';
+}
+function abrirQuickPop(slot, prof, cell) {
+  qpSlot=slot; qpProf=prof;
+  document.getElementById('qpNome').value='';
+  document.getElementById('qpServico').value='consulta';
+  document.getElementById('qpValor').value=SERVICOS['consulta'].preco;
+  document.getElementById('qpTel').value='';
+  document.getElementById('qpTelWrap').classList.remove('open');
+  document.getElementById('qpSlotLabel').textContent=`${slot} · ${prof}`;
+  const pop=document.getElementById('quickPop');
+  const rect=cell.getBoundingClientRect();
+  const top=Math.min(rect.top+window.scrollY, window.innerHeight+window.scrollY-320);
+  const left=Math.min(rect.left+window.scrollX+rect.width+6, window.innerWidth+window.scrollX-256);
+  pop.style.top=Math.max(top,80)+'px';
+  pop.style.left=Math.max(left,8)+'px';
+  pop.classList.add('open');
+  setTimeout(()=>document.getElementById('qpNome').focus(),60);
+}
+function fecharQuickPop() { document.getElementById('quickPop').classList.remove('open'); qpSlot=null; qpProf=null; }
+function toggleQpTel() {
+  const w=document.getElementById('qpTelWrap');
+  w.classList.toggle('open');
+  if(w.classList.contains('open')) document.getElementById('qpTel').focus();
+}
+function salvarQuickAdd() {
+  const nome=document.getElementById('qpNome').value.trim();
+  if(!nome){ document.getElementById('qpNome').style.borderColor='#b8973a'; document.getElementById('qpNome').focus(); return; }
+  document.getElementById('qpNome').style.borderColor='';
+  const servico=document.getElementById('qpServico').value;
+  const tel=document.getElementById('qpTel').value.trim();
+  const valor=parseFloat(document.getElementById('qpValor').value)||0;
+  const dur=SERVICOS[servico]?.dur||2;
+  agendamentos.push({ id:Date.now().toString(), data:dataAtual, hora:qpSlot, cliente:nome, tel, servico, profissional:qpProf, duracao:String(dur), status:'confirmado', obs:'', origem:'prof', valor });
+  salvarStorage(); fecharQuickPop(); renderizar(); toast(`✅ ${nome} — ${qpSlot}`);
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fecharQuickPop(); } });
+
+// ══════════════════════════════════════
+//  MODAL COMPLETO
+// ══════════════════════════════════════
+function preencherHoras() {
+  const sel=document.getElementById('fHora'); sel.innerHTML='';
+  SLOTS.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=s; sel.appendChild(o); });
+}
+function abrirModalNovo(hora=null, prof=null) {
+  if (!modoProf) return;
+  editandoId=null;
+  document.getElementById('modalTitulo').textContent='Novo Agendamento';
+  preencherHoras();
+  document.getElementById('fData').value=dataAtual;
+  document.getElementById('fHora').value=hora||SLOTS[0];
+  document.getElementById('fCliente').value='';
+  document.getElementById('fTel').value='';
+  document.getElementById('fServico').value='consulta';
+  document.getElementById('fServico').onchange=()=>{ const s=document.getElementById('fServico').value; document.getElementById('fValor').value=SERVICOS[s]?.preco||''; };
+  document.getElementById('fValor').value=SERVICOS['consulta'].preco;
+  document.getElementById('fProfissional').value=prof||PROFISSIONAIS[0];
+  document.getElementById('fDuracao').value='1';
+  document.getElementById('fStatus').value='aguardando';
+  document.getElementById('fObs').value='';
+  document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Salvar</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function fecharModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function salvar() {
+  const data=document.getElementById('fData').value, hora=document.getElementById('fHora').value,
+        cliente=document.getElementById('fCliente').value.trim(), tel=document.getElementById('fTel').value.trim(),
+        servico=document.getElementById('fServico').value, prof=document.getElementById('fProfissional').value,
+        duracao=document.getElementById('fDuracao').value, status=document.getElementById('fStatus').value,
+        obs=document.getElementById('fObs').value.trim(),
+        valor=parseFloat(document.getElementById('fValor').value)||0;
+  if (!cliente) { alert('Informe o nome do paciente.'); return; }
+  if (editandoId) {
+    const idx=agendamentos.findIndex(a=>a.id===editandoId);
+    if (idx>-1) agendamentos[idx]={id:editandoId,data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor};
+  } else {
+    agendamentos.push({id:Date.now().toString(),data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor});
+  }
+  salvarStorage(); fecharModal(); if(data===dataAtual) renderizar();
+  toast(editandoId?'Atualizado! ✨':'Consulta agendada! 🦷');
+}
+
+// ══════════════════════════════════════
+//  DETALHE
+// ══════════════════════════════════════
+function abrirDetalhe(id) {
+  detalheId=id;
+  const ag=agendamentos.find(a=>a.id===id); if(!ag) return;
+  const d=new Date(ag.data+'T12:00:00');
+  const dur=ag.duracao==='1'?'30 min':`${Math.floor(parseInt(ag.duracao)/2)}h${parseInt(ag.duracao)%2?'30':''}`;
+  document.getElementById('detalheTitulo').textContent=ag.cliente;
+  let botoes='';
+  if (ag.tel) botoes+=`<button class="btn-wpp-detail" onclick="enviarConfirmacaoWpp('${id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Confirmar consulta via WhatsApp</button>`;
+  if (modoProf && ag.status==='pendente') botoes+=`<button class="btn-confirmar-pend" onclick="confirmarPendente('${id}')">✅ Confirmar esta consulta</button>`;
+  document.getElementById('detalheBody').innerHTML=`${botoes}<div class="detalhe-card">
+    <div class="d-row"><span class="d-label">📅 Data</span><span class="d-val">${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}</span></div>
+    <div class="d-row"><span class="d-label">🕐 Horário</span><span class="d-val">${ag.hora} — ${dur}</span></div>
+    <div class="d-row"><span class="d-label">🦷 Procedimento</span><span class="d-val">${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}</span></div>
+    <div class="d-row"><span class="d-label">🩺 Dentista</span><span class="d-val" style="font-weight:700;color:${COR[ag.profissional]}">${ag.profissional}</span></div>
+    ${ag.tel?`<div class="d-row"><span class="d-label">📱 WhatsApp</span><span class="d-val">${ag.tel}</span></div>`:''}
+    <div class="d-row"><span class="d-label">📌 Status</span><span class="d-val">${STATUS_LABEL[ag.status]||'—'}</span></div>
+    ${ag.valor>0?`<div class="d-row"><span class="d-label">💰 Valor</span><span class="d-val" style="font-weight:700;color:#16a34a">R$ ${fmt(ag.valor)}</span></div>`:''}
+    ${ag.obs?`<div class="d-row"><span class="d-label">📝 Obs</span><span class="d-val">${ag.obs}</span></div>`:''}
+  </div>`;
+  const footer=document.getElementById('detalheFooter');
+  if (modoProf) {
+    footer.innerHTML=`<button class="btn-excluir" onclick="excluir()">🗑️</button><button class="btn-cancelar" onclick="fecharDetalhe()">Fechar</button><button class="btn-salvar" onclick="editarAtual()" style="flex:1">✏️ Editar</button>`;
+  } else {
+    footer.innerHTML=`<button class="btn-salvar" onclick="fecharDetalhe()">Fechar</button>`;
+  }
+  document.getElementById('detalheOverlay').classList.add('open');
+}
+function fecharDetalhe() { document.getElementById('detalheOverlay').classList.remove('open'); }
+function excluir() {
+  if (!confirm('Excluir este agendamento?')) return;
+  agendamentos=agendamentos.filter(a=>a.id!==detalheId);
+  salvarStorage(); fecharDetalhe(); renderizar(); toast('Excluído.');
+}
+function confirmarPendente(id) {
+  const idx=agendamentos.findIndex(a=>a.id===id);
+  if (idx>-1) { agendamentos[idx].status='confirmado'; salvarStorage(); fecharDetalhe(); renderizar(); toast('Consulta confirmada! ✅'); }
+}
+function editarAtual() {
+  const ag=agendamentos.find(a=>a.id===detalheId); if(!ag) return;
+  fecharDetalhe(); editandoId=ag.id;
+  document.getElementById('modalTitulo').textContent='Editar Agendamento';
+  preencherHoras();
+  document.getElementById('fData').value=ag.data; document.getElementById('fHora').value=ag.hora;
+  document.getElementById('fCliente').value=ag.cliente; document.getElementById('fTel').value=ag.tel||'';
+  document.getElementById('fServico').value=ag.servico; document.getElementById('fProfissional').value=ag.profissional;
+  document.getElementById('fServico').onchange=()=>{ const s=document.getElementById('fServico').value; document.getElementById('fValor').value=SERVICOS[s]?.preco||''; };
+  document.getElementById('fDuracao').value=ag.duracao; document.getElementById('fStatus').value=ag.status||'aguardando';
+  document.getElementById('fValor').value=ag.valor!=null?ag.valor:(SERVICOS[ag.servico]?.preco||0);
+  document.getElementById('fObs').value=ag.obs||'';
+  document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Atualizar</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+// ══════════════════════════════════════
+//  WHATSAPP
+// ══════════════════════════════════════
+function enviarConfirmacaoWpp(id) {
+  const ag=agendamentos.find(a=>a.id===id); if(!ag||!ag.tel) return;
+  const d=new Date(ag.data+'T12:00:00');
+  const tel=ag.tel.replace(/\D/g,'');
+  const msg=`Olá, ${ag.cliente}! 🦷\n\nLembramos que você tem consulta agendada:\n\n📅 Data: ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}\n🕐 Horário: ${ag.hora}\n🦷 Procedimento: ${SERVICOS[ag.servico]?.nome||ag.servico}\n🩺 Dentista: ${ag.profissional}\n\nConfirme sua presença respondendo esta mensagem. Até logo! 😊`;
+  window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+function enviarLembreteWpp(id) {
+  const ag=agendamentos.find(a=>a.id===id); if(!ag||!ag.tel) return;
+  const d=new Date(ag.data+'T12:00:00');
+  const tel=ag.tel.replace(/\D/g,'');
+  const msg=`Olá, ${ag.cliente}! 🦷\n\n🔔 *Lembrete de consulta amanhã!*\n\n📅 Data: ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}\n🕐 Horário: ${ag.hora}\n🦷 Procedimento: ${SERVICOS[ag.servico]?.nome||ag.servico}\n🩺 Dentista: ${ag.profissional}\n\nAté amanhã! 😊`;
+  window.open(`https://wa.me/55${tel}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ══════════════════════════════════════
+//  CHATBOT
+// ══════════════════════════════════════
+let chatAberto=false;
+function toggleChat() {
+  chatAberto=!chatAberto;
+  document.getElementById('chatBox').classList.toggle('open',chatAberto);
+}
+function addMsgChat(html, tipo) {
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div'); div.className=`msg ${tipo}`; div.innerHTML=html;
+  msgs.appendChild(div); msgs.scrollTop=9999;
+}
+function atualizarBadge() {
+  const n=agendamentos.filter(a=>a.data===amanha()&&a.tel&&a.status!=='cancelado').length;
+  const badge=document.getElementById('chatBadge');
+  badge.textContent=n; badge.style.display=n>0?'flex':'none';
+}
+
+function chatCmd(cmd) {
+  const labels={
+    hoje:'📋 Pacientes de hoje', amanha:'🔔 Lembretes de amanhã',
+    proximo:'⏭️ Próximo paciente', pendentes:'⏳ Consultas pendentes',
+    silva:'🩺 Agenda Dr. Silva', ana:'🩺 Agenda Dra. Ana',
+    livre:'✅ Próximo horário livre', fechamento:'💰 Fechamento do dia'
+  };
+  addMsgChat(labels[cmd]||cmd,'user');
+
+  setTimeout(()=>{
+    const agDia=agendamentos.filter(a=>a.data===dataAtual && a.status!=='cancelado');
+    const agAmanha=agendamentos.filter(a=>a.data===amanha() && a.status!=='cancelado');
+
+    const wppSVG=`<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>`;
+
+    function buildList(lista, tipo='confirmacao') {
+      if (!lista.length) return '';
+      let html='<div class="chat-appt-list">';
+      const fn=tipo==='lembrete'?'enviarLembreteWpp':'enviarConfirmacaoWpp';
+      lista.sort((a,b)=>a.hora.localeCompare(b.hora)).forEach(ag=>{
+        const wppBtn=ag.tel?`<button class="btn-confirm-wpp" title="Enviar pelo WhatsApp" onclick="${fn}('${ag.id}')">${wppSVG}</button>`:'';
+        html+=`<div class="chat-appt-item"><div class="chat-appt-info"><strong style="color:${COR[ag.profissional]}">${ag.profissional}</strong> <strong>${ag.cliente}</strong><span>${ag.hora} · ${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}</span></div>${wppBtn}</div>`;
+      });
+      return html+'</div>';
+    }
+
+    if (cmd==='hoje') {
+      if (!agDia.length) { addMsgChat('Nenhuma consulta para hoje. 🗓️','bot'); return; }
+      addMsgChat(`<strong>${agDia.length} consulta${agDia.length>1?'s':''} hoje:</strong>${buildList(agDia)}`, 'bot');
+    }
+    else if (cmd==='amanha') {
+      if (!agAmanha.length) { addMsgChat('Nenhuma consulta para amanhã. 🗓️','bot'); return; }
+      const comTel=agAmanha.filter(a=>a.tel);
+      addMsgChat(`<strong>🔔 ${agAmanha.length} consulta${agAmanha.length>1?'s':''} amanhã.</strong><br>${comTel.length} com WhatsApp — envie o lembrete:${buildList(agAmanha,'lembrete')}`, 'bot');
+    }
+    else if (cmd==='proximo') {
+      const agora=new Date();
+      const horaAgora=`${pad(agora.getHours())}:${pad(agora.getMinutes()>=30?30:0)}`;
+      const prox=agendamentos.filter(a=>a.data===dataAtual&&a.status!=='cancelado'&&a.hora>=horaAgora).sort((a,b)=>a.hora.localeCompare(b.hora))[0];
+      if (!prox) { addMsgChat('Não há mais pacientes hoje. 🌙','bot'); return; }
+      addMsgChat(`<strong>⏭️ Próximo paciente:</strong><br><br>👤 <strong>${prox.cliente}</strong><br>🕐 ${prox.hora} — ${SERVICOS[prox.servico]?.emoji} ${SERVICOS[prox.servico]?.nome||prox.servico}<br>🩺 <strong style="color:${COR[prox.profissional]}">${prox.profissional}</strong>`, 'bot');
+    }
+    else if (cmd==='pendentes') {
+      const pend=agendamentos.filter(a=>a.status==='pendente');
+      if (!pend.length) { addMsgChat('Nenhuma consulta pendente. ✅','bot'); return; }
+      addMsgChat(`<strong>⏳ ${pend.length} consulta${pend.length>1?'s':''} pendente${pend.length>1?'s':''}:</strong>${buildList(pend)}`, 'bot');
+    }
+    else if (cmd==='silva'||cmd==='ana') {
+      const nome=cmd==='silva'?'Dr. Silva':'Dra. Ana';
+      const lista=agDia.filter(a=>a.profissional===nome);
+      if (!lista.length) { addMsgChat(`${nome} não tem consultas hoje. 😊`,'bot'); return; }
+      addMsgChat(`<strong>${nome} — ${lista.length} consulta${lista.length>1?'s':''} hoje:</strong>${buildList(lista)}`, 'bot');
+    }
+    else if (cmd==='livre') {
+      const agora=new Date();
+      const horaAgora=`${pad(agora.getHours())}:${pad(agora.getMinutes()>=30?30:0)}`;
+      const ocupados={};
+      agDia.forEach(ag=>{ const ini=SLOTS.indexOf(ag.hora); for(let i=ini;i<ini+parseInt(ag.duracao);i++){if(!ocupados[ag.profissional])ocupados[ag.profissional]=new Set();ocupados[ag.profissional].add(SLOTS[i]);} });
+      const res=PROFISSIONAIS.map(p=>{ const prox=SLOTS.find(s=>s>=horaAgora&&!(ocupados[p]?.has(s))); return prox?`<strong style="color:${COR[p]}">${p}</strong>: ${prox}`:null; }).filter(Boolean);
+      addMsgChat(res.length?`Próximos horários livres:<br>${res.join('<br>')}`:'Não há mais horários livres hoje. 🌙','bot');
+    }
+    else if (cmd==='fechamento') {
+      const agF=agendamentos.filter(a=>a.data===dataAtual&&a.status!=='cancelado');
+      if (!agF.length) { addMsgChat('Nenhuma consulta registrada hoje. 📋','bot'); return; }
+      let html=`<strong>💰 Fechamento — ${document.getElementById('navDate').textContent.replace(/\s+/g,' ')}</strong><br><br>`;
+      let totalGeral=0;
+      PROFISSIONAIS.forEach(p=>{
+        const lista=agF.filter(a=>a.profissional===p);
+        if(!lista.length) return;
+        const sub=lista.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
+        totalGeral+=sub;
+        html+=`<div style="margin:6px 0 3px;font-weight:700;color:${COR[p]}">${p} — ${lista.length} consulta${lista.length>1?'s':''} — <span style="color:#16a34a">R$ ${fmt(sub)}</span></div>`;
+        lista.sort((a,b)=>a.hora.localeCompare(b.hora)).forEach(a=>{
+          const v=parseFloat(a.valor)||0;
+          html+=`<div style="font-size:.77rem;color:#374151;padding-left:10px">🕐 ${a.hora} ${a.cliente} · ${SERVICOS[a.servico]?.nome||a.servico}${v>0?` — <strong>R$ ${fmt(v)}</strong>`:' — <em>sem valor</em>'}</div>`;
+        });
+      });
+      html+=`<div style="margin-top:10px;padding-top:8px;border-top:2px solid var(--border);font-weight:800;font-size:.9rem;color:#15803d">💵 TOTAL DO DIA: R$ ${fmt(totalGeral)}</div>`;
+      addMsgChat(html,'bot');
+    }
+    document.getElementById('chatMsgs').scrollTop=9999;
+  },500);
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+aplicarModo();
+</script>
+</body>
+</html>
