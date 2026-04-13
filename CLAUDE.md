@@ -23,7 +23,8 @@ Sempre responder em **português (pt-BR)**.
 │   ├── dentista/               ← demo clínica odontológica genérica
 │   ├── amor-saude/             ← demo personalizado Clínica Amor Saúde (Cartão de Todos)
 │   ├── odontologia/            ← demo odontologia (git próprio → fabriziagonsales/odontologia)
-│   └── petshop/                ← demo petshop (git próprio → fabriziagonsales/petshop)
+│   ├── petshop/                ← demo petshop (git próprio → fabriziagonsales/petshop)
+│   └── agenda-salao/           ← demo agenda p/ salão Alto Beleza (git próprio → fabriziagonsales/demo-agenda-teste1)
 └── site-teste/                 ← git próprio — não versionar aqui
 ```
 
@@ -64,9 +65,50 @@ Todos os demos são **single-file HTML** (`index.html`) com CSS e JS inline. Sem
 - **Banner promoção:** faixa com `@keyframes shimmer` no topo, fechável via `classList.add('hidden')`
 - **Modal lateral do carrinho:** `transform: translateX(100%)` → `translateX(0)` com overlay escuro
 
+### Funcionalidades do demo agenda-salao (referência para apps de agendamento)
+
+Arquivo: `demos/agenda-salao/index.html` — publicado em `https://fabriziagonsales.github.io/demo-agenda-teste1/`
+
+**Constantes principais:**
+```javascript
+const PIN_CORRETO  = 'alto1234';               // senha profissional
+const PROFISSIONAIS = ['Aline','Fabia','Bruna'];
+const COR = { Aline:'#ec4899', Fabia:'#8b5cf6', Bruna:'#f43f5e' };
+const SERVICOS = { escova, progressiva, pintura, cilios, unhas, outro }; // cada item: { nome, emoji, dur (slots de 30min), preco }
+// localStorage: 'altobeleza_ag' → array de agendamentos
+// sessionStorage: 'altobeleza_prof' = '1' → modo profissional ativo
+```
+
+**Padrões de acesso:**
+- Sem PIN: modo leitura — grade visível, nenhum slot clicável
+- Com PIN `alto1234` (sessionStorage): `modoProf=true` → slots clicáveis, botão `+ Agendar` visível, botões de editar/excluir no detalhe
+
+**Grid de horários:**
+- Grade CSS: `grid-template-columns: 64px repeat(3,1fr)` — coluna de horários + 1 coluna por profissional
+- Slots de 30min, 8h–20h (`SLOTS[]`). Agendamento ocupa `duracao` slots (altura = `duracao * 36 - 4 px`)
+- Slot livre clicável (prof) → abre **quick-pop** inline; card existente → abre modal de detalhe
+
+**Quick-pop (adição rápida):**
+- Popover posicionado via `getBoundingClientRect` da célula clicada
+- Campos: nome (autofocus), serviço (muda → preenche valor automaticamente), valor R$ (editável), telefone (opcional, expansível)
+- Salva com `status:'confirmado'` direto, sem abrir modal completo
+
+**Fechamento do dia (chatbot):**
+- Comando `chatCmd('fechamento')` lista atendimentos por profissional com valor individual e subtotal
+- Total geral calculado em `agendamentos.filter(data===hoje && status!=='cancelado').reduce(valor)`
+- Barra de resumo no topo mostra `Profissional: N · R$ X` (apenas em modoProf)
+
+**WhatsApp SVG inline** (reutilizar nos botões):
+```html
+<svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+  <path d="M17.472 14.382c..."/><path d="M12 0C5.373 0..."/>
+</svg>
+```
+Ver o SVG completo em `demos/agenda-salao/index.html` dentro de `.btn-wpp-detail`.
+
 ## Git
 
 - **Branch principal:** `main` (repositório teste2)
-- **Demos com git próprio:** `demos/odontologia/` (branch `master`) e `demos/petshop/` (branch `master`) — **não adicionar como submodule, não commitar arquivos dessas pastas no repositório pai**
+- **Demos com git próprio:** `demos/odontologia/` (branch `master`), `demos/petshop/` (branch `master`), `demos/agenda-salao/` (branch `main` → repo `demo-agenda-teste1`) — **não commitar arquivos dessas pastas no repositório pai**
 - **Nunca commitar:** `*.lnk`, `*.url`, `desktop.ini`, `ROMS/`, `SUPER NINTENDO/`, `Dura_Client-6.2/`, `Miracle74-1.3/`, `Novo(a) Documento de Texto.txt`
-- Para commitar em odontologia ou petshop, entrar na pasta e usar o git deles separadamente
+- Para commitar em odontologia, petshop ou agenda-salao, entrar na pasta e usar o git deles separadamente
