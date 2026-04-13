@@ -530,7 +530,7 @@ SLOTS.push('20:00');
 
 let dataAtual    = hoje();
 let agendamentos = JSON.parse(localStorage.getItem('barberpro_ag') || '[]');
-let modoProf     = sessionStorage.getItem('barberpro_prof') === '1';
+let modoProf     = localStorage.getItem('barberpro_prof') === '1';
 let editandoId   = null, detalheId = null;
 
 // ══════════════════════════════════════
@@ -625,7 +625,7 @@ function renderizar() {
           const stBadge = (!isPend && ag.status && !isBloq) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
           const nomeLabel = isBloq ? `🚫 ${ag.cliente}` : ag.cliente;
           card.innerHTML = `${stBadge}<div class="appt-nome">${nomeLabel}</div>${!isBloq?`<div class="appt-serv">${SERVICOS[ag.servico]?.emoji||''} ${SERVICOS[ag.servico]?.nome||ag.servico}</div><div class="appt-hora">${ag.hora}</div>`:''}`;
-          if (!isBloq) card.onclick = e => { e.stopPropagation(); abrirDetalhe(ag.id); };
+          if (!isBloq) card.onclick = e => { e.stopPropagation(); modoProf ? abrirEditar(ag.id) : abrirDetalhe(ag.id); };
           cell.appendChild(card);
         } else if (si>ini && si<fim) { isOcupado=true; }
       });
@@ -679,7 +679,7 @@ function verificarPin() {
   const val = document.getElementById('pinInput').value;
   if (val === PIN_CORRETO) {
     modoProf = true;
-    sessionStorage.setItem('barberpro_prof','1');
+    localStorage.setItem('barberpro_prof','1');
     fecharPin();
     aplicarModo();
     toast('Bem-vindo! Modo profissional ativo. ✅');
@@ -689,7 +689,7 @@ function verificarPin() {
 }
 function sairModoProf() {
   modoProf = false;
-  sessionStorage.removeItem('barberpro_prof');
+  localStorage.removeItem('barberpro_prof');
   aplicarModo();
 }
 
@@ -768,7 +768,7 @@ function abrirModalNovo(hora=null, prof=null) {
   document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Salvar</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
-function fecharModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+function fecharModal() { document.getElementById('modalOverlay').classList.remove('open'); editandoId=null; }
 function salvar() {
   const data=document.getElementById('fData').value, hora=document.getElementById('fHora').value,
         cliente=document.getElementById('fCliente').value.trim(), tel=document.getElementById('fTel').value.trim(),
@@ -828,6 +828,11 @@ function excluir() {
   agendamentos=agendamentos.filter(a=>a.id!==detalheId);
   salvarStorage(); fecharDetalhe(); renderizar(); toast('Excluído.');
 }
+function excluirDireto() {
+  if (!confirm('Excluir este agendamento?')) return;
+  agendamentos=agendamentos.filter(a=>a.id!==editandoId);
+  editandoId=null; salvarStorage(); fecharModal(); renderizar(); toast('Excluído.');
+}
 function confirmarPendente(id) {
   const idx=agendamentos.findIndex(a=>a.id===id);
   if (idx>-1) { agendamentos[idx].status='confirmado'; salvarStorage(); fecharDetalhe(); renderizar(); toast('Atendimento confirmado! ✅'); }
@@ -845,7 +850,7 @@ function editarAtual() {
   document.getElementById('fValor').value=ag.valor!=null?ag.valor:(SERVICOS[ag.servico]?.preco||0);
   document.getElementById('fObs').value=ag.obs||'';
   document.getElementById('fUrgencia').checked=!!ag.urgencia;
-  document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Atualizar</button>`;
+  document.getElementById('modalFooter').innerHTML=`<button class="btn-excluir" onclick="excluirDireto()">🗑️</button><button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Atualizar ✓</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -1085,6 +1090,11 @@ function abrirFicha(tel, nome) {
   document.getElementById('fichaOverlay').classList.add('open');
 }
 function fecharFicha() { document.getElementById('fichaOverlay').classList.remove('open'); }
+
+function abrirEditar(id) {
+  detalheId = id;
+  editarAtual();
+}
 
 function abrirRetorno(id) {
   const ag = agendamentos.find(a=>a.id===id); if(!ag) return;
