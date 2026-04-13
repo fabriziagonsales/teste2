@@ -34,7 +34,7 @@
   .logo-icon {
     width:46px; height:46px; background:linear-gradient(135deg,var(--gold),#d4a84b);
     border-radius:12px; display:flex; align-items:center; justify-content:center;
-    font-size:1.35rem; box-shadow:0 4px 14px rgba(184,151,58,.4); flex-shrink:0;
+    box-shadow:0 4px 14px rgba(184,151,58,.4); flex-shrink:0;
   }
   .logo-text strong { display:block; font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:700; color:white; line-height:1; }
   .logo-text span { font-size:.62rem; color:rgba(255,255,255,.5); letter-spacing:.18em; text-transform:uppercase; }
@@ -249,7 +249,13 @@
 <!-- ══ HEADER ══ -->
 <header>
   <a class="logo" href="#">
-    <div class="logo-icon">🦷</div>
+    <div class="logo-icon">
+      <svg width="26" height="28" viewBox="0 0 52 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M26 2C17 2 10 9 10 18C10 25 12 31 14 37C16 43 16.5 51 18.5 55C19.2 57.2 21.5 57.8 23 56.2C24.2 54.8 24.5 50 26 50C27.5 50 27.8 54.8 29 56.2C30.5 57.8 32.8 57.2 33.5 55C35.5 51 36 43 38 37C40 31 42 25 42 18C42 9 35 2 26 2Z" fill="white"/>
+        <path d="M15.5 14.5C16 10.5 18.8 7.5 22.5 6.5C23.6 6.2 24.2 7.1 23.6 8.1C21.5 11 19.2 14 17.5 17.5C16.3 16.5 15.5 15.6 15.5 14.5Z" fill="rgba(255,255,255,0.45)"/>
+        <path d="M26 2C35 2 42 9 42 18C42 18 39 13 33 10.5C29 9 26 9.5 26 9.5C26 9.5 23 9 19 10.5C13 13 10 18 10 18C10 9 17 2 26 2Z" fill="rgba(255,255,255,0.15)"/>
+      </svg>
+    </div>
     <div class="logo-text">
       <strong>OralClin</strong>
       <span>consultório odontológico</span>
@@ -427,27 +433,20 @@
 
 <div class="chat-box" id="chatBox">
   <div class="chat-header">
-    <div class="chat-av">🦷</div>
+    <div class="chat-av">
+      <svg width="20" height="22" viewBox="0 0 52 58" fill="none"><path d="M26 2C17 2 10 9 10 18C10 25 12 31 14 37C16 43 16.5 51 18.5 55C19.2 57.2 21.5 57.8 23 56.2C24.2 54.8 24.5 50 26 50C27.5 50 27.8 54.8 29 56.2C30.5 57.8 32.8 57.2 33.5 55C35.5 51 36 43 38 37C40 31 42 25 42 18C42 9 35 2 26 2Z" fill="white"/><path d="M15.5 14.5C16 10.5 18.8 7.5 22.5 6.5C23.6 6.2 24.2 7.1 23.6 8.1C21.5 11 19.2 14 17.5 17.5C16.3 16.5 15.5 15.6 15.5 14.5Z" fill="rgba(255,255,255,0.5)"/></svg>
+    </div>
     <div class="chat-hinfo">
-      <strong>Assistente OralClin</strong>
-      <span>Agenda inteligente</span>
+      <strong id="chatHTitle">Assistente OralClin</strong>
+      <span id="chatHSub">Tire suas dúvidas</span>
     </div>
     <button class="chat-close" onclick="toggleChat()">✕</button>
   </div>
   <div class="chat-msgs" id="chatMsgs">
-    <div class="msg bot">Olá! 🦷 Sou a assistente da OralClin.<br>Posso ajudar com agendamentos, lembretes e o fechamento do dia.</div>
+    <div class="msg bot" id="chatMsgInicial">Olá! 😊 Sou a assistente da <strong>OralClin</strong>.<br>Como posso ajudar você hoje?</div>
   </div>
-  <div class="chat-opts" id="chatOpts">
-    <button class="chat-opt destaque" onclick="chatCmd('hoje')">📋 Pacientes de hoje</button>
-    <button class="chat-opt" onclick="chatCmd('amanha')">🔔 Lembretes de amanhã</button>
-    <button class="chat-opt" onclick="chatCmd('proximo')">⏭️ Próximo paciente</button>
-    <button class="chat-opt" onclick="chatCmd('pendentes')">⏳ Consultas pendentes</button>
-    <button class="chat-opt" onclick="chatCmd('silva')">🩺 Agenda Dr. Silva</button>
-    <button class="chat-opt" onclick="chatCmd('ana')">🩺 Agenda Dra. Ana</button>
-    <button class="chat-opt" onclick="chatCmd('livre')">✅ Próximo horário livre</button>
-    <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>
-  </div>
-  <div class="chat-footer-link">Clique no ícone para enviar confirmação via WhatsApp</div>
+  <div class="chat-opts" id="chatOpts"></div>
+  <div class="chat-footer-link" id="chatFooterLink"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -611,6 +610,7 @@ function aplicarModo() {
   document.getElementById('btnLock').textContent = modoProf ? '🔓' : '🔒';
   if (modoProf) document.getElementById('modoBadge').style.display='flex';
   renderizar();
+  renderChatOpts();
 }
 function abrirPinModal() {
   if (modoProf) { sairModoProf(); return; }
@@ -808,6 +808,62 @@ let chatAberto=false;
 function toggleChat() {
   chatAberto=!chatAberto;
   document.getElementById('chatBox').classList.toggle('open',chatAberto);
+  if (chatAberto) renderChatOpts();
+}
+
+function renderChatOpts() {
+  const opts = document.getElementById('chatOpts');
+  const footer = document.getElementById('chatFooterLink');
+  const titulo = document.getElementById('chatHTitle');
+  const sub = document.getElementById('chatHSub');
+  const msgInicial = document.getElementById('chatMsgInicial');
+
+  if (modoProf) {
+    titulo.textContent = 'Agenda — Profissional';
+    sub.textContent = 'Acesso completo ativo';
+    if (msgInicial) msgInicial.innerHTML = 'Modo profissional ativo. 🩺<br>Selecione uma opção abaixo:';
+    opts.innerHTML = `
+      <button class="chat-opt destaque" onclick="chatCmd('hoje')">📋 Pacientes de hoje</button>
+      <button class="chat-opt" onclick="chatCmd('amanha')">🔔 Lembretes de amanhã</button>
+      <button class="chat-opt" onclick="chatCmd('proximo')">⏭️ Próximo paciente</button>
+      <button class="chat-opt" onclick="chatCmd('pendentes')">⏳ Consultas pendentes</button>
+      <button class="chat-opt" onclick="chatCmd('silva')">🩺 Agenda Dr. Silva</button>
+      <button class="chat-opt" onclick="chatCmd('ana')">🩺 Agenda Dra. Ana</button>
+      <button class="chat-opt" onclick="chatCmd('livre')">✅ Próximo horário livre</button>
+      <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>`;
+    footer.innerHTML = 'Clique no ícone para enviar confirmação via WhatsApp';
+  } else {
+    titulo.textContent = 'Assistente OralClin';
+    sub.textContent = 'Tire suas dúvidas';
+    if (msgInicial) msgInicial.innerHTML = 'Olá! 😊 Sou a assistente da <strong>OralClin</strong>.<br>Como posso ajudar você hoje?';
+    opts.innerHTML = `
+      <button class="chat-opt destaque" onclick="chatFaq('horarios')">🕐 Horário de funcionamento</button>
+      <button class="chat-opt" onclick="chatFaq('procedimentos')">🦷 Quais procedimentos realizam?</button>
+      <button class="chat-opt" onclick="chatFaq('valores')">💰 Valores dos procedimentos</button>
+      <button class="chat-opt" onclick="chatFaq('agendar')">📅 Como faço para agendar?</button>
+      <button class="chat-opt" onclick="chatFaq('convenio')">🏥 Atendem convênio?</button>
+      <button class="chat-opt" onclick="chatFaq('dor')">😣 E se estiver com dor?</button>
+      <button class="chat-opt" onclick="chatFaq('local')">📍 Onde fica o consultório?</button>`;
+    footer.innerHTML = `<a href="https://wa.me/5551000000000?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta." target="_blank" style="color:var(--gold);font-weight:700;text-decoration:none">💬 Falar com atendente →</a>`;
+  }
+}
+
+const FAQ_RESPOSTAS = {
+  horarios:     { q:'🕐 Horário de funcionamento', r:'🕐 <strong>Nosso horário de atendimento:</strong><br><br>📅 Segunda a Sexta: <strong>8h às 19h</strong><br>📅 Sábado: <strong>8h às 13h</strong><br>🔒 Domingo: fechado<br><br>Agendamentos pelo WhatsApp ou direto na recepção!' },
+  procedimentos:{ q:'🦷 Quais procedimentos?', r:'🦷 <strong>Realizamos:</strong><br><br>✔️ Consulta inicial<br>✔️ Limpeza / Profilaxia<br>✔️ Restaurações em resina<br>✔️ Extração dental<br>✔️ Clareamento dental<br>✔️ Tratamento de canal<br>✔️ Ortodontia / aparelho<br><br>Temos dentistas especializados para cada procedimento! 😊' },
+  valores:      { q:'💰 Valores', r:'💰 <strong>Valores orientativos:</strong><br><br>🦷 Consulta inicial — <strong>R$ 150</strong><br>✨ Limpeza — <strong>R$ 200</strong><br>🔧 Restauração — <strong>R$ 300</strong><br>⚕️ Extração — <strong>R$ 250</strong><br>💎 Clareamento — <strong>R$ 600</strong><br>🏥 Canal — <strong>R$ 900</strong><br>😁 Ortodontia — <strong>R$ 180</strong>/consulta<br><br><em style="font-size:.76rem;color:#888">Valores aproximados. Consulte para orçamento.</em>' },
+  agendar:      { q:'📅 Como faço para agendar?', r:'📅 <strong>Agendar é simples!</strong><br><br>1️⃣ Clique em <em>"Falar com atendente"</em> abaixo<br>2️⃣ Informe seu nome e o procedimento<br>3️⃣ Escolha o dia e horário disponível<br><br>Nossa equipe confirma sua consulta em até <strong>24 horas</strong>! 🦷' },
+  convenio:     { q:'🏥 Convênio e pagamento', r:'🏥 <strong>Formas de pagamento:</strong><br><br>✔️ Planos odontológicos<br>✔️ Cartão de crédito / débito<br>✔️ PIX<br>✔️ Parcelamento disponível<br><br>Entre em contato para confirmar se seu plano é aceito!' },
+  dor:          { q:'😣 Estou com dor!', r:'😣 <strong>Atendimento de urgência!</strong><br><br>Entendemos que dor de dente é urgente. 💙<br><br>Entre em contato <strong>agora</strong> pelo WhatsApp e faremos o possível para te atender o quanto antes, mesmo sem agendamento prévio.<br><br>Não sofra — clique em <em>"Falar com atendente"</em> abaixo!' },
+  local:        { q:'📍 Localização', r:'📍 <strong>Nossa clínica fica no centro!</strong><br><br>Fale conosco pelo WhatsApp para receber o endereço completo e instruções de como chegar. 🗺️<br><br>Temos estacionamento próximo! 🚗' }
+};
+
+function chatFaq(key) {
+  const item = FAQ_RESPOSTAS[key]; if (!item) return;
+  addMsgChat(item.q, 'user');
+  setTimeout(()=>{
+    addMsgChat(item.r + `<br><div style="margin-top:8px"><button class="chat-opt" style="width:100%;font-size:.75rem" onclick="renderChatOpts()">↩️ Ver outras perguntas</button></div>`, 'bot');
+  }, 480);
 }
 function addMsgChat(html, tipo) {
   const msgs=document.getElementById('chatMsgs');
