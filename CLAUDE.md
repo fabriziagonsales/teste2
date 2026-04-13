@@ -13,17 +13,21 @@ Sempre responder em **português (pt-BR)**.
 ## Estrutura
 
 ```
-Área de Trabalho/          ← raiz do repositório (branch: main)
-├── demos/                 ← sites demo para prospecção de clientes
-│   ├── index.html         ← portfólio público com lista dos demos
-│   ├── academia/          ← demo para academia
-│   ├── clinica-estetica/  ← demo para clínica estética
-│   ├── restaurante/       ← demo cardápio digital com carrinho
-│   ├── odontologia/       ← demo odontologia (git próprio → fabriziagonsales/odontologia)
-│   └── petshop/           ← demo petshop (git próprio → fabriziagonsales/petshop)
-├── sabor-e-saude/         ← blog de receitas (deletado do disco, ainda no git)
-└── site-teste/            ← git próprio — não versionar aqui
+Área de Trabalho/               ← raiz do repositório (branch: main)
+├── apresentacao-servicos.html  ← página de vendas dos serviços da Fabrizia
+├── demos/                      ← sites demo para prospecção de clientes
+│   ├── index.html              ← portfólio público com lista dos demos
+│   ├── academia/               ← demo para academia
+│   ├── clinica-estetica/       ← demo para clínica estética
+│   ├── restaurante/            ← demo cardápio digital com carrinho
+│   ├── dentista/               ← demo clínica odontológica genérica
+│   ├── amor-saude/             ← demo personalizado Clínica Amor Saúde (Cartão de Todos)
+│   ├── odontologia/            ← demo odontologia (git próprio → fabriziagonsales/odontologia)
+│   └── petshop/                ← demo petshop (git próprio → fabriziagonsales/petshop)
+└── site-teste/                 ← git próprio — não versionar aqui
 ```
+
+> `sabor-e-saude/` foi deletado do disco mas ainda existe no histórico git.
 
 ## Demos — padrão de desenvolvimento
 
@@ -33,19 +37,23 @@ Todos os demos são **single-file HTML** (`index.html`) com CSS e JS inline. Sem
 - **Fontes:** Cormorant Garamond + DM Sans (demos premium) ou Inter + Playfair Display (portfólio)
 - **Paleta restaurante:** `--primary #c17f24`, `--dark #1c1208`, `--cream #fdf9f3`
 - **Paleta odontologia:** `--navy #0f1f35`, `--gold #b8973a`, `--cream #faf7f2`
+- **Paleta dentista/amor-saude:** `--primary #0284c7`, `--primary3 #075985`, `--dark #0c2340`, `--accent #e0f2fe`
 - **Fotos:** Pexels (`images.pexels.com/photos/{ID}/pexels-photo-{ID}.jpeg?auto=compress&cs=tinysrgb&w=700`)
 - **WhatsApp:** links `https://wa.me/55{DDD}{NUMERO}?text=...`
 
 ### Funcionalidades recorrentes nos demos
-- Chatbot de atendimento (JS puro, respostas em objeto `const respostas = {}`, opções como botões)
+- **Chatbot:** botão flutuante abre `.chat-box`, respostas em `const respostas = {}`, opções renderizadas como botões `.chat-opt`; botão "Ver outras perguntas" reinicia o fluxo — ver `demos/amor-saude/index.html` como referência
 - Scroll reveal via `IntersectionObserver` (classe `.reveal` → `.reveal.visible`)
 - Comparison slider antes/depois (drag com mouse/touch, `clip-path` no `.comp-after`)
-- Carrossel de depoimentos com auto-avanço e dots
+- Carrossel de depoimentos com auto-avanço, dots e botões ‹ › (`moverDepo(dir)`)
+- Avaliações com fotos reais via Pexels (`w=100` para thumbnails)
 - Banner LGPD com `localStorage` para salvar consentimento
 - Máscara de telefone (`mascaraTel()`)
 - Botão "Voltar ao topo" aparece após 400px de scroll
 - Navbar ganha sombra ao rolar (`nav.scrolled`)
-- Botão WhatsApp flutuante com animação pulse (`@keyframes pulse-wpp`)
+- Botão WhatsApp flutuante SVG com animação pulse (`@keyframes pulse-wpp`)
+- Formulário monta mensagem formatada e abre `wa.me` com `encodeURIComponent`
+- Seção localização com `<iframe>` do Google Maps embed + links Instagram/Facebook
 
 ### Funcionalidades do demo restaurante (referência para novos demos)
 - **Carrinho:** `adicionarAoCarrinho(nome, preco)` acumula itens → `enviarPedidoWpp()` monta mensagem formatada e abre WhatsApp
