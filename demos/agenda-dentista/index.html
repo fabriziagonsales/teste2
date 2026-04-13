@@ -234,6 +234,40 @@
   .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--navy); color:white; padding:9px 18px; border-radius:9px; font-size:.8rem; font-weight:500; z-index:300; opacity:0; pointer-events:none; transition:opacity .3s; white-space:nowrap; }
   .toast.show { opacity:1; }
 
+  /* ════ URGÊNCIA / ALERTA / BLOQUEIO ════ */
+  .appt.urgencia { border-left-width:4px !important; animation:pulso-urg 1.6s infinite; }
+  @keyframes pulso-urg { 0%,100%{border-left-color:#dc2626;box-shadow:0 0 0 0 rgba(220,38,38,.4)} 50%{border-left-color:#dc2626;box-shadow:0 0 0 4px rgba(220,38,38,.15)} }
+  .appt.bloqueio { background:#f1f5f9 !important; border-color:#94a3b8 !important; border-style:dashed !important; color:#64748b !important; opacity:.7; }
+  .appt.bloqueio .appt-nome { font-style:italic; }
+  .alerta-badge { position:absolute; bottom:3px; right:4px; font-size:.55rem; background:#fee2e2; color:#dc2626; border-radius:4px; padding:1px 5px; font-weight:800; }
+
+  /* ════ FICHA MODAL ════ */
+  .ficha-modal { max-width:480px; }
+  .ficha-alerta-box { background:#fee2e2; border:1.5px solid #fca5a5; border-radius:9px; padding:10px 13px; display:flex; gap:8px; align-items:flex-start; margin-bottom:4px; }
+  .ficha-alerta-box span { font-size:.82rem; font-weight:700; color:#dc2626; }
+  .ficha-hist-list { display:flex; flex-direction:column; gap:7px; }
+  .ficha-hist-item { background:var(--cream); border:1px solid var(--border); border-radius:9px; padding:9px 13px; display:flex; align-items:center; gap:10px; }
+  .fh-data { font-size:.7rem; color:var(--gray); min-width:72px; flex-shrink:0; }
+  .fh-proc { font-size:.82rem; font-weight:600; color:var(--navy); flex:1; }
+  .fh-val { font-size:.78rem; color:#16a34a; font-weight:700; flex-shrink:0; }
+  .fidelidade-wrap { background:var(--gold-light); border:1px solid var(--gold-mid); border-radius:11px; padding:13px 16px; }
+  .fidelidade-wrap h4 { font-size:.82rem; font-weight:700; color:#7a5c00; margin-bottom:6px; }
+  .fidelidade-bar-outer { background:var(--gold-mid); border-radius:20px; height:10px; overflow:hidden; margin-bottom:5px; }
+  .fidelidade-bar-inner { height:100%; border-radius:20px; background:linear-gradient(90deg,var(--gold),#d4a84b); transition:width .6s ease; }
+  .fidelidade-label { font-size:.73rem; color:#7a5c00; font-weight:600; display:flex; justify-content:space-between; }
+  .fidelidade-ganhou { background:#d1fae5; border:1px solid #6ee7b7; border-radius:9px; padding:10px; text-align:center; font-size:.85rem; font-weight:700; color:#065f46; margin-top:6px; }
+
+  /* ════ TOGGLES ════ */
+  .toggle-row { display:flex; align-items:center; gap:8px; font-size:.8rem; font-weight:600; cursor:pointer; padding:2px 0; }
+  .toggle-row input[type=checkbox] { width:15px; height:15px; accent-color:var(--navy); cursor:pointer; flex-shrink:0; }
+  .toggle-alerta { color:#dc2626; }
+  .toggle-urgencia { color:#c2410c; }
+  .qp-alerta-wrap,.qp-urgencia-bloco { margin-top:2px; }
+
+  /* ════ BTN RETORNO / FICHA ════ */
+  .btn-retorno { width:100%; background:var(--gold-light); color:#7a5c00; font-weight:700; font-size:.87rem; padding:11px; border:1.5px solid var(--gold-mid); border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; }
+  .btn-ficha   { width:100%; background:var(--cream); color:var(--navy); font-weight:700; font-size:.87rem; padding:10px; border:1.5px solid var(--border); border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; }
+
   @media(max-width:600px) {
     header { padding:0 14px; min-height:64px; }
     .logo-text strong { font-size:1.15rem; }
@@ -317,14 +351,26 @@
     <option value="outro">📋 Outro</option>
   </select>
   <input id="qpValor" type="number" min="0" step="0.01" placeholder="Valor R$" />
-  <button class="qp-tel-toggle" onclick="toggleQpTel()">+ Adicionar telefone</button>
-  <div class="qp-tel-wrap" id="qpTelWrap">
+  <button class="qp-tel-toggle" onclick="toggleQpTel()">+ Adicionar telefone / alerta</button>
+  <div class="qp-tel-wrap" id="qpTelWrap" style="display:flex;flex-direction:column;gap:7px">
     <input id="qpTel" type="tel" placeholder="WhatsApp (opcional)" oninput="mascaraTel(this)" />
+    <label class="toggle-row toggle-alerta">
+      <input type="checkbox" id="qpAlertaCb" onchange="document.getElementById('qpAlertaWrap').style.display=this.checked?'block':'none'" />
+      ⚠️ Alerta médico (alergia, etc.)
+    </label>
+    <div id="qpAlertaWrap" style="display:none">
+      <input id="qpAlertaDesc" type="text" placeholder="Ex: alergia a amoxicilina..." />
+    </div>
+    <label class="toggle-row toggle-urgencia">
+      <input type="checkbox" id="qpUrgenciaCb" />
+      🚨 Urgência
+    </label>
   </div>
   <div class="quick-pop-btns">
     <button class="qp-cancelar" onclick="fecharQuickPop()">Cancelar</button>
     <button class="qp-salvar" onclick="salvarQuickAdd()">Salvar ✓</button>
   </div>
+  <button style="width:100%;padding:6px 0;border-radius:8px;border:1.5px dashed #94a3b8;background:#f8fafc;color:#64748b;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;margin-top:-3px" onclick="bloquearHorario(qpSlot,qpProf)">🚫 Bloquear este horário</button>
 </div>
 
 <!-- ══ MODAL PROFISSIONAL ══ -->
@@ -383,7 +429,15 @@
           <option value="cancelado">❌ Cancelado</option>
         </select>
       </div>
-      <div class="fgroup"><label>Observações</label><textarea id="fObs" placeholder="Ex: anestesia necessária, histórico..."></textarea></div>
+      <div class="fgroup"><label>Observações</label><textarea id="fObs" placeholder="Ex: histórico relevante..."></textarea></div>
+      <div class="fgroup">
+        <label>⚠️ Alerta médico</label>
+        <input type="text" id="fAlerta" placeholder="Ex: alergia a penicilina, usa anticoagulante, grávida..." />
+      </div>
+      <label class="toggle-row toggle-urgencia" style="padding:4px 0">
+        <input type="checkbox" id="fUrgencia" />
+        🚨 Marcar como urgência
+      </label>
     </div>
     <div class="modal-footer" id="modalFooter">
       <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
@@ -421,6 +475,20 @@
     <div class="modal-footer">
       <button class="btn-cancelar" onclick="fecharPin()">Cancelar</button>
       <button class="btn-salvar" onclick="verificarPin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL FICHA PACIENTE ══ -->
+<div class="overlay" id="fichaOverlay">
+  <div class="modal ficha-modal">
+    <div class="modal-header">
+      <h3 id="fichaTitulo">Ficha do Paciente</h3>
+      <button class="btn-close" onclick="fecharFicha()">✕</button>
+    </div>
+    <div class="modal-body" id="fichaBody"></div>
+    <div class="modal-footer">
+      <button class="btn-salvar" onclick="fecharFicha()">Fechar</button>
     </div>
   </div>
 </div>
@@ -566,11 +634,14 @@ function renderizar() {
         if (si === ini) {
           const card = document.createElement('div');
           const isPend = ag.status==='pendente';
-          card.className = `appt s-${ag.servico}${isPend?' pendente':''}`;
+          const isBloq = ag.servico==='bloqueio';
+          card.className = `appt s-${ag.servico}${isPend?' pendente':''}${ag.urgencia?' urgencia':''}${isBloq?' bloqueio':''}`;
           card.style.height = `${parseInt(ag.duracao)*36-4}px`;
-          const stBadge = (!isPend && ag.status) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
-          card.innerHTML = `${stBadge}<div class="appt-nome">${ag.cliente}</div><div class="appt-serv">${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}</div><div class="appt-hora">${ag.hora}</div>`;
-          card.onclick = e => { e.stopPropagation(); abrirDetalhe(ag.id); };
+          const stBadge = (!isPend && ag.status && !isBloq) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
+          const alertaBadge = ag.alerta ? `<span class="alerta-badge">⚠️ ALERTA</span>` : '';
+          const nomeLabel = isBloq ? `🚫 ${ag.cliente}` : ag.cliente;
+          card.innerHTML = `${stBadge}${alertaBadge}<div class="appt-nome">${nomeLabel}</div>${!isBloq?`<div class="appt-serv">${SERVICOS[ag.servico]?.emoji||''} ${SERVICOS[ag.servico]?.nome||ag.servico}</div><div class="appt-hora">${ag.hora}</div>`:''}`;
+          if (!isBloq) card.onclick = e => { e.stopPropagation(); abrirDetalhe(ag.id); };
           cell.appendChild(card);
         } else if (si>ini && si<fim) { isOcupado=true; }
       });
@@ -676,9 +747,13 @@ function salvarQuickAdd() {
   const servico=document.getElementById('qpServico').value;
   const tel=document.getElementById('qpTel').value.trim();
   const valor=parseFloat(document.getElementById('qpValor').value)||0;
+  const alerta=document.getElementById('qpAlertaCb').checked ? document.getElementById('qpAlertaDesc').value.trim() : '';
+  const urgencia=document.getElementById('qpUrgenciaCb').checked;
   const dur=SERVICOS[servico]?.dur||2;
-  agendamentos.push({ id:Date.now().toString(), data:dataAtual, hora:qpSlot, cliente:nome, tel, servico, profissional:qpProf, duracao:String(dur), status:'confirmado', obs:'', origem:'prof', valor });
-  salvarStorage(); fecharQuickPop(); renderizar(); toast(`✅ ${nome} — ${qpSlot}`);
+  agendamentos.push({ id:Date.now().toString(), data:dataAtual, hora:qpSlot, cliente:nome, tel, servico, profissional:qpProf, duracao:String(dur), status:'confirmado', obs:'', origem:'prof', valor, alerta, urgencia });
+  salvarStorage(); fecharQuickPop(); renderizar();
+  toast(`${urgencia?'🚨':'✅'} ${nome} — ${qpSlot}${alerta?' ⚠️':''}`);
+  verificarFidelidade(tel, nome);
 }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ fecharQuickPop(); } });
 
@@ -705,6 +780,8 @@ function abrirModalNovo(hora=null, prof=null) {
   document.getElementById('fDuracao').value='1';
   document.getElementById('fStatus').value='aguardando';
   document.getElementById('fObs').value='';
+  document.getElementById('fAlerta').value='';
+  document.getElementById('fUrgencia').checked=false;
   document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Salvar</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
@@ -715,16 +792,19 @@ function salvar() {
         servico=document.getElementById('fServico').value, prof=document.getElementById('fProfissional').value,
         duracao=document.getElementById('fDuracao').value, status=document.getElementById('fStatus').value,
         obs=document.getElementById('fObs').value.trim(),
-        valor=parseFloat(document.getElementById('fValor').value)||0;
+        valor=parseFloat(document.getElementById('fValor').value)||0,
+        alerta=document.getElementById('fAlerta').value.trim(),
+        urgencia=document.getElementById('fUrgencia').checked;
   if (!cliente) { alert('Informe o nome do paciente.'); return; }
   if (editandoId) {
     const idx=agendamentos.findIndex(a=>a.id===editandoId);
-    if (idx>-1) agendamentos[idx]={id:editandoId,data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor};
+    if (idx>-1) agendamentos[idx]={id:editandoId,data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia};
   } else {
-    agendamentos.push({id:Date.now().toString(),data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor});
+    agendamentos.push({id:Date.now().toString(),data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia});
   }
   salvarStorage(); fecharModal(); if(data===dataAtual) renderizar();
   toast(editandoId?'Atualizado! ✨':'Consulta agendada! 🦷');
+  if (tel) verificarFidelidade(tel, cliente);
 }
 
 // ══════════════════════════════════════
@@ -736,13 +816,17 @@ function abrirDetalhe(id) {
   const d=new Date(ag.data+'T12:00:00');
   const dur=ag.duracao==='1'?'30 min':`${Math.floor(parseInt(ag.duracao)/2)}h${parseInt(ag.duracao)%2?'30':''}`;
   document.getElementById('detalheTitulo').textContent=ag.cliente;
+  const wppSVG16=`<svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>`;
   let botoes='';
-  if (ag.tel) botoes+=`<button class="btn-wpp-detail" onclick="enviarConfirmacaoWpp('${id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.529 5.857L0 24l6.335-1.509A11.938 11.938 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.6-.5-5.1-1.373l-.366-.217-3.76.896.953-3.667-.237-.381A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Confirmar consulta via WhatsApp</button>`;
+  if (ag.alerta) botoes+=`<div class="ficha-alerta-box"><span>⚠️ ALERTA MÉDICO: ${ag.alerta}</span></div>`;
+  if (ag.tel) botoes+=`<button class="btn-wpp-detail" onclick="enviarConfirmacaoWpp('${id}')">${wppSVG16} Confirmar consulta via WhatsApp</button>`;
   if (modoProf && ag.status==='pendente') botoes+=`<button class="btn-confirmar-pend" onclick="confirmarPendente('${id}')">✅ Confirmar esta consulta</button>`;
+  if (modoProf && ag.status==='concluido') botoes+=`<button class="btn-retorno" onclick="abrirRetorno('${id}')">🔄 Agendar retorno</button>`;
+  if (ag.tel) botoes+=`<button class="btn-ficha" onclick="abrirFicha('${ag.tel}','${ag.cliente}')">📋 Ver ficha completa</button>`;
   document.getElementById('detalheBody').innerHTML=`${botoes}<div class="detalhe-card">
     <div class="d-row"><span class="d-label">📅 Data</span><span class="d-val">${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}</span></div>
     <div class="d-row"><span class="d-label">🕐 Horário</span><span class="d-val">${ag.hora} — ${dur}</span></div>
-    <div class="d-row"><span class="d-label">🦷 Procedimento</span><span class="d-val">${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}</span></div>
+    <div class="d-row"><span class="d-label">🦷 Procedimento</span><span class="d-val">${SERVICOS[ag.servico]?.emoji} ${SERVICOS[ag.servico]?.nome||ag.servico}${ag.urgencia?' 🚨':''}</span></div>
     <div class="d-row"><span class="d-label">🩺 Dentista</span><span class="d-val" style="font-weight:700;color:${COR[ag.profissional]}">${ag.profissional}</span></div>
     ${ag.tel?`<div class="d-row"><span class="d-label">📱 WhatsApp</span><span class="d-val">${ag.tel}</span></div>`:''}
     <div class="d-row"><span class="d-label">📌 Status</span><span class="d-val">${STATUS_LABEL[ag.status]||'—'}</span></div>
@@ -779,6 +863,8 @@ function editarAtual() {
   document.getElementById('fDuracao').value=ag.duracao; document.getElementById('fStatus').value=ag.status||'aguardando';
   document.getElementById('fValor').value=ag.valor!=null?ag.valor:(SERVICOS[ag.servico]?.preco||0);
   document.getElementById('fObs').value=ag.obs||'';
+  document.getElementById('fAlerta').value=ag.alerta||'';
+  document.getElementById('fUrgencia').checked=!!ag.urgencia;
   document.getElementById('modalFooter').innerHTML=`<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Atualizar</button>`;
   document.getElementById('modalOverlay').classList.add('open');
 }
@@ -830,7 +916,8 @@ function renderChatOpts() {
       <button class="chat-opt" onclick="chatCmd('silva')">🩺 Agenda Dr. Silva</button>
       <button class="chat-opt" onclick="chatCmd('ana')">🩺 Agenda Dra. Ana</button>
       <button class="chat-opt" onclick="chatCmd('livre')">✅ Próximo horário livre</button>
-      <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>`;
+      <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>
+      <button class="chat-opt" style="background:#ede9fe;border-color:#c4b5fd;color:#4c1d95" onclick="enviarLembretesEmMassa()">📤 Enviar lembretes em massa</button>`;
     footer.innerHTML = 'Clique no ícone para enviar confirmação via WhatsApp';
   } else {
     titulo.textContent = 'Assistente OralClin';
@@ -958,6 +1045,104 @@ function chatCmd(cmd) {
     }
     document.getElementById('chatMsgs').scrollTop=9999;
   },500);
+}
+
+// ══════════════════════════════════════
+//  FIDELIDADE
+// ══════════════════════════════════════
+const FIDELIDADE_META = 10;
+function getFidelidade() { return JSON.parse(localStorage.getItem('oralclin_fidelidade') || '{}'); }
+function saveFidelidade(f) { localStorage.setItem('oralclin_fidelidade', JSON.stringify(f)); }
+
+function verificarFidelidade(tel, nome) {
+  if (!tel) return;
+  const telLimpo = tel.replace(/\D/g,'');
+  if (!telLimpo) return;
+  const total = agendamentos.filter(a => a.tel && a.tel.replace(/\D/g,'') === telLimpo && a.status !== 'cancelado').length;
+  const fid = getFidelidade();
+  const anterior = fid[telLimpo] || 0;
+  fid[telLimpo] = total;
+  saveFidelidade(fid);
+  if (total > 0 && total % FIDELIDADE_META === 0 && total > anterior) {
+    setTimeout(() => toast(`🎉 ${nome} completou ${total} consultas! Prêmio disponível!`), 900);
+  }
+}
+
+function abrirFicha(tel, nome) {
+  const telLimpo = tel.replace(/\D/g,'');
+  const hist = agendamentos.filter(a => a.tel && a.tel.replace(/\D/g,'') === telLimpo)
+    .sort((a,b) => b.data.localeCompare(a.data)||b.hora.localeCompare(a.hora));
+  const fid = getFidelidade();
+  const count = fid[telLimpo] != null ? fid[telLimpo] : hist.filter(a=>a.status!=='cancelado').length;
+  const prog = Math.min(count, FIDELIDADE_META);
+  const pct = (prog / FIDELIDADE_META * 100).toFixed(0);
+  const comAlerta = hist.find(a => a.alerta);
+  document.getElementById('fichaTitulo').textContent = `📋 ${nome}`;
+  let html = '';
+  if (comAlerta) html += `<div class="ficha-alerta-box"><span>⚠️ ALERTA MÉDICO: ${comAlerta.alerta}</span></div>`;
+  html += `<div class="fidelidade-wrap">
+    <h4>⭐ Programa de Fidelidade — ${count} consulta${count!==1?'s':''}</h4>
+    <div class="fidelidade-bar-outer"><div class="fidelidade-bar-inner" style="width:${pct}%"></div></div>
+    <div class="fidelidade-label"><span>${count}/${FIDELIDADE_META} consultas</span><span>🎁 Limpeza grátis</span></div>
+    ${count >= FIDELIDADE_META ? '<div class="fidelidade-ganhou">🎉 Parabéns! Você ganhou uma limpeza gratuita!</div>' : ''}
+  </div>`;
+  if (hist.length) {
+    html += '<div class="ficha-hist-list">';
+    hist.slice(0,15).forEach(a => {
+      const d = new Date(a.data+'T12:00:00');
+      const ds = `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+      const v = parseFloat(a.valor)||0;
+      html += `<div class="ficha-hist-item">
+        <div class="fh-data">${ds}<small style="display:block">${a.hora}</small></div>
+        <div class="fh-proc">${SERVICOS[a.servico]?.emoji||''} ${SERVICOS[a.servico]?.nome||a.servico}<small style="display:block;color:var(--gray)">${STATUS_LABEL[a.status]||a.status}</small></div>
+        ${v>0?`<div class="fh-val">R$ ${fmt(v)}</div>`:''}
+      </div>`;
+    });
+    html += '</div>';
+  } else {
+    html += '<p style="text-align:center;color:var(--gray);font-size:.85rem;padding:8px 0">Nenhum histórico encontrado.</p>';
+  }
+  document.getElementById('fichaBody').innerHTML = html;
+  document.getElementById('fichaOverlay').classList.add('open');
+}
+function fecharFicha() { document.getElementById('fichaOverlay').classList.remove('open'); }
+
+function abrirRetorno(id) {
+  const ag = agendamentos.find(a=>a.id===id); if(!ag) return;
+  fecharDetalhe(); editandoId=null;
+  document.getElementById('modalTitulo').textContent = '🔄 Agendar Retorno — '+ag.cliente;
+  preencherHoras();
+  const amD = new Date(); amD.setDate(amD.getDate()+1);
+  const amStr = `${amD.getFullYear()}-${pad(amD.getMonth()+1)}-${pad(amD.getDate())}`;
+  document.getElementById('fData').value = amStr;
+  document.getElementById('fHora').value = ag.hora;
+  document.getElementById('fCliente').value = ag.cliente;
+  document.getElementById('fTel').value = ag.tel||'';
+  document.getElementById('fServico').value = ag.servico;
+  document.getElementById('fServico').onchange = ()=>{ const s=document.getElementById('fServico').value; document.getElementById('fValor').value=SERVICOS[s]?.preco||''; };
+  document.getElementById('fValor').value = ag.valor||(SERVICOS[ag.servico]?.preco||0);
+  document.getElementById('fProfissional').value = ag.profissional;
+  document.getElementById('fDuracao').value = ag.duracao;
+  document.getElementById('fStatus').value = 'aguardando';
+  document.getElementById('fObs').value = `Retorno ref. consulta de ${ag.data}`;
+  document.getElementById('fAlerta').value = ag.alerta||'';
+  document.getElementById('fUrgencia').checked = false;
+  document.getElementById('modalFooter').innerHTML = `<button class="btn-cancelar" onclick="fecharModal()">Cancelar</button><button class="btn-salvar" onclick="salvar()">Agendar Retorno</button>`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function enviarLembretesEmMassa() {
+  const lista = agendamentos.filter(a=>a.data===amanha()&&a.status!=='cancelado'&&a.tel);
+  if (!lista.length) { addMsgChat('Nenhum paciente com WhatsApp cadastrado para amanhã.','bot'); return; }
+  addMsgChat(`📤 Enviando lembretes para <strong>${lista.length} paciente${lista.length>1?'s':''}</strong>...`, 'bot');
+  lista.sort((a,b)=>a.hora.localeCompare(b.hora)).forEach((ag,i)=>{ setTimeout(()=>enviarLembreteWpp(ag.id), i*900); });
+}
+
+function bloquearHorario(slot, prof) {
+  if (!modoProf) return;
+  agendamentos.push({ id:Date.now().toString(), data:dataAtual, hora:slot, cliente:'Horário bloqueado', tel:'', servico:'bloqueio', profissional:prof, duracao:'2', status:'confirmado', obs:'', origem:'prof', valor:0, alerta:'', urgencia:false });
+  salvarStorage(); fecharQuickPop(); renderizar();
+  toast(`🚫 ${slot} bloqueado para ${prof}`);
 }
 
 // ══════════════════════════════════════
