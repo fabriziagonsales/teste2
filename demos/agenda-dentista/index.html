@@ -268,6 +268,29 @@
   .btn-retorno { width:100%; background:var(--gold-light); color:#7a5c00; font-weight:700; font-size:.87rem; padding:11px; border:1.5px solid var(--gold-mid); border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; }
   .btn-ficha   { width:100%; background:var(--cream); color:var(--navy); font-weight:700; font-size:.87rem; padding:10px; border:1.5px solid var(--border); border-radius:9px; cursor:pointer; font-family:'DM Sans',sans-serif; margin-bottom:6px; }
 
+  /* ════ BTN SOLICITAR (CLIENTE) ════ */
+  .btn-solicitar {
+    background:rgba(255,255,255,.12); border:1.5px solid rgba(255,255,255,.35);
+    color:white; font-weight:700; font-size:.8rem; padding:0 14px; height:36px;
+    border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif;
+    display:flex; align-items:center; gap:6px; white-space:nowrap;
+    transition:background .2s;
+  }
+  .btn-solicitar:hover { background:rgba(255,255,255,.22); }
+
+  /* ════ MODAL SOLICITAR ════ */
+  .sol-slot-info {
+    background:var(--gold-light); border:1px solid var(--gold-mid);
+    border-radius:10px; padding:11px 14px; font-size:.85rem; color:#7a5c00;
+    display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-weight:600;
+  }
+  .sol-slot-info span { display:flex; align-items:center; gap:5px; }
+  .sol-aviso { font-size:.75rem; color:var(--gray); text-align:center; padding:4px 0; line-height:1.5; }
+
+  /* hover diferente para slots de solicitação */
+  .slot.solicitar:hover { background:#e0f2fe !important; }
+  .slot.solicitar:hover::after { content:'📅 solicitar'; color:#0284c7; }
+
   @media(max-width:600px) {
     header { padding:0 14px; min-height:64px; }
     .logo-text strong { font-size:1.15rem; }
@@ -304,9 +327,10 @@
   </div>
 
   <div class="header-right">
+    <button class="btn-solicitar" id="btnSolicitar" onclick="abrirSolicitacaoNova()">📅 Solicitar</button>
     <button class="btn-add" id="btnAdd" onclick="abrirModalNovo()">+ Agendar</button>
     <button class="btn-lock" id="btnLock" onclick="abrirPinModal()" title="Acesso profissional">
-      🔒<div class="modo-badge" id="modoBadge"></div>
+      <span id="btnLockIcon">🔒</span><div class="modo-badge" id="modoBadge"></div>
     </button>
   </div>
 </header>
@@ -519,6 +543,45 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- ══ MODAL SOLICITAR CONSULTA (CLIENTE) ══ -->
+<div class="overlay" id="solOverlay">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h3>📅 Solicitar Consulta</h3>
+      <button class="btn-close" onclick="fecharSolicitacao()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="sol-slot-info" id="solSlotInfo"></div>
+      <div class="fgroup"><label>Seu nome *</label>
+        <input type="text" id="solNome" placeholder="Ex: Maria Costa" autocomplete="name" />
+      </div>
+      <div class="fgroup"><label>WhatsApp *</label>
+        <input type="tel" id="solTel" placeholder="(51) 00000-0000" oninput="mascaraTel(this)" />
+      </div>
+      <div class="fgroup"><label>Serviço desejado</label>
+        <select id="solServico">
+          <option value="consulta">🦷 Consulta Inicial</option>
+          <option value="limpeza">✨ Limpeza / Profilaxia</option>
+          <option value="restauracao">🔧 Restauração</option>
+          <option value="extracao">⚕️ Extração</option>
+          <option value="clareamento">💎 Clareamento</option>
+          <option value="canal">🏥 Tratamento de Canal</option>
+          <option value="ortodontia">😁 Ortodontia</option>
+          <option value="outro">📋 Outro</option>
+        </select>
+      </div>
+      <div class="fgroup"><label>Observações</label>
+        <textarea id="solObs" placeholder="Descreva brevemente sua necessidade..."></textarea>
+      </div>
+      <p class="sol-aviso">⏳ Sua solicitação ficará <strong>pendente</strong> até a clínica confirmar.<br>Você será avisado pelo WhatsApp.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharSolicitacao()">Cancelar</button>
+      <button class="btn-salvar" onclick="salvarSolicitacao()">Solicitar consulta 🦷</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════
 //  DADOS E CONSTANTES
@@ -542,9 +605,10 @@ const PIN_CORRETO  = 'oral1234';
 const SLOTS = [];
 for (let h=8; h<19; h++) { SLOTS.push(`${pad(h)}:00`); SLOTS.push(`${pad(h)}:30`); }
 SLOTS.push('19:00');
+const SLOT_IDX = Object.fromEntries(SLOTS.map((s,i) => [s, i]));
 
 let dataAtual    = hoje();
-let agendamentos = JSON.parse(localStorage.getItem('oralclin_ag') || '[]');
+let agendamentos = (() => { try { return JSON.parse(localStorage.getItem('oralclin_ag') || '[]'); } catch(e) { return []; } })();
 let modoProf     = sessionStorage.getItem('oralclin_prof') === '1';
 let editandoId   = null, detalheId = null;
 
@@ -577,10 +641,20 @@ function renderizar() {
     `${DIAS[d.getDay()]}<small>${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}</small>`;
 
   const agDia = agendamentos.filter(a => a.data===dataAtual && a.status!=='cancelado');
+
+  // Pré-agrupa por profissional uma única vez
+  const agPorProf = {};
+  let totalDia = 0;
+  PROFISSIONAIS.forEach(p => { agPorProf[p] = []; });
+  agDia.forEach(a => {
+    if (agPorProf[a.profissional]) agPorProf[a.profissional].push(a);
+    totalDia += parseFloat(a.valor) || 0;
+  });
+
   const chips = document.getElementById('resumoChips');
   chips.innerHTML = '';
   PROFISSIONAIS.forEach(p => {
-    const ags = agDia.filter(a => a.profissional===p);
+    const ags = agPorProf[p];
     const total = ags.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
     const c = document.createElement('div'); c.className='resumo-chip';
     const vStr = modoProf && total>0 ? ` · <span style="color:#065f46;font-weight:700">R$ ${fmt(total)}</span>` : '';
@@ -588,7 +662,6 @@ function renderizar() {
     chips.appendChild(c);
   });
   const extra = document.getElementById('resumoExtra');
-  const totalDia = agDia.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
   const tStr = modoProf && totalDia>0 ? ` · R$ ${fmt(totalDia)}` : '';
   extra.innerHTML = `<div class="resumo-total">${agDia.length} consulta${agDia.length!==1?'s':''}${tStr}</div>`;
   const pend = agendamentos.filter(a=>a.status==='pendente').length;
@@ -599,44 +672,46 @@ function renderizar() {
     extra.appendChild(al);
   }
 
-  // Grid
+  // Grid — DocumentFragment: todas as inserções vão ao DOM de uma vez
   const numProf = PROFISSIONAIS.length;
   const grid = document.getElementById('agendaGrid');
   grid.style.gridTemplateColumns = `60px repeat(${numProf},1fr)`;
-  grid.innerHTML = '';
+  const frag = document.createDocumentFragment();
 
   // Cabeçalhos
-  const th0 = document.createElement('div'); th0.className='col-header'; grid.appendChild(th0);
+  const th0 = document.createElement('div'); th0.className='col-header'; frag.appendChild(th0);
   PROFISSIONAIS.forEach(p => {
     const th = document.createElement('div'); th.className='col-header';
     const initials = p.split(' ').filter(w=>!['Dr.','Dra.'].includes(w)).map(w=>w[0]).join('').slice(0,2).toUpperCase();
     th.innerHTML = `<div class="prof-avatar" style="background:${COR[p]}">${initials}</div>${p}`;
-    grid.appendChild(th);
+    frag.appendChild(th);
   });
 
   // Slots
   SLOTS.forEach(slot => {
     if (slot === '19:00') return;
+    const isCheia = slot.endsWith(':00');
+    const si = SLOT_IDX[slot];
     const tc = document.createElement('div');
-    tc.className = 'time-cell'+(slot.endsWith(':00')?' hora-cheia':'');
-    tc.textContent = slot.endsWith(':00') ? slot : '';
-    grid.appendChild(tc);
+    tc.className = 'time-cell' + (isCheia ? ' hora-cheia' : '');
+    tc.textContent = isCheia ? slot : '';
+    frag.appendChild(tc);
 
     PROFISSIONAIS.forEach(prof => {
       const cell = document.createElement('div');
-      const agProf = agDia.filter(a=>a.profissional===prof);
+      const agProf = agPorProf[prof];
       let isOcupado = false;
 
       agProf.forEach(ag => {
-        const ini = SLOTS.indexOf(ag.hora);
-        const fim = ini + parseInt(ag.duracao);
-        const si  = SLOTS.indexOf(slot);
+        const ini = SLOT_IDX[ag.hora] ?? -1;
+        const dur = parseInt(ag.duracao);
+        const fim = ini + dur;
         if (si === ini) {
           const card = document.createElement('div');
           const isPend = ag.status==='pendente';
           const isBloq = ag.servico==='bloqueio';
           card.className = `appt s-${ag.servico}${isPend?' pendente':''}${ag.urgencia?' urgencia':''}${isBloq?' bloqueio':''}`;
-          card.style.height = `${parseInt(ag.duracao)*36-4}px`;
+          card.style.height = `${dur*36-4}px`;
           const stBadge = (!isPend && ag.status && !isBloq) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
           const alertaBadge = ag.alerta ? `<span class="alerta-badge">⚠️ ALERTA</span>` : '';
           const nomeLabel = isBloq ? `🚫 ${ag.cliente}` : ag.cliente;
@@ -648,15 +723,21 @@ function renderizar() {
 
       if (isOcupado) { cell.className='slot meia'; cell.style.background='#f0f4f0'; }
       else {
-        cell.className = 'slot'+(slot.endsWith(':30')?' meia':'');
+        cell.className = 'slot' + (isCheia ? '' : ' meia');
         if (modoProf) {
           cell.classList.add('clicavel');
           cell.onclick = e => abrirQuickPop(slot, prof, e.currentTarget);
+        } else {
+          cell.classList.add('clicavel', 'solicitar');
+          cell.onclick = () => abrirSolicitacao(slot, prof);
         }
       }
-      grid.appendChild(cell);
+      frag.appendChild(cell);
     });
   });
+
+  grid.innerHTML = '';
+  grid.appendChild(frag);
 
   atualizarBadge();
 }
@@ -678,8 +759,8 @@ function aplicarModo() {
   document.getElementById('btnAdd').style.display        = modoProf ? 'flex' : 'none';
   document.getElementById('modoBadge').style.display     = modoProf ? 'flex' : 'none';
   document.getElementById('btnLock').title = modoProf ? 'Sair do modo profissional' : 'Acesso profissional';
-  document.getElementById('btnLock').textContent = modoProf ? '🔓' : '🔒';
-  if (modoProf) document.getElementById('modoBadge').style.display='flex';
+  document.getElementById('btnLockIcon').textContent = modoProf ? '🔓' : '🔒';
+  document.getElementById('btnSolicitar').style.display = modoProf ? 'none' : 'flex';
   renderizar();
   renderChatOpts();
 }
@@ -798,9 +879,9 @@ function salvar() {
   if (!cliente) { alert('Informe o nome do paciente.'); return; }
   if (editandoId) {
     const idx=agendamentos.findIndex(a=>a.id===editandoId);
-    if (idx>-1) agendamentos[idx]={id:editandoId,data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia};
+    if (idx>-1) agendamentos[idx]={id:editandoId,data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia,origem:agendamentos[idx].origem||'prof'};
   } else {
-    agendamentos.push({id:Date.now().toString(),data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia});
+    agendamentos.push({id:Date.now().toString(),data,hora,cliente,tel,servico,profissional:prof,duracao,status,obs,valor,alerta,urgencia,origem:'prof'});
   }
   salvarStorage(); fecharModal(); if(data===dataAtual) renderizar();
   toast(editandoId?'Atualizado! ✨':'Consulta agendada! 🦷');
@@ -822,7 +903,7 @@ function abrirDetalhe(id) {
   if (ag.tel) botoes+=`<button class="btn-wpp-detail" onclick="enviarConfirmacaoWpp('${id}')">${wppSVG16} Confirmar consulta via WhatsApp</button>`;
   if (modoProf && ag.status==='pendente') botoes+=`<button class="btn-confirmar-pend" onclick="confirmarPendente('${id}')">✅ Confirmar esta consulta</button>`;
   if (modoProf && ag.status==='concluido') botoes+=`<button class="btn-retorno" onclick="abrirRetorno('${id}')">🔄 Agendar retorno</button>`;
-  if (ag.tel) botoes+=`<button class="btn-ficha" onclick="abrirFicha('${ag.tel}','${ag.cliente}')">📋 Ver ficha completa</button>`;
+  if (modoProf && ag.tel) botoes+=`<button class="btn-ficha" onclick="abrirFicha('${ag.tel}','${ag.cliente}')">📋 Ver ficha completa</button>`;
   document.getElementById('detalheBody').innerHTML=`${botoes}<div class="detalhe-card">
     <div class="d-row"><span class="d-label">📅 Data</span><span class="d-val">${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}</span></div>
     <div class="d-row"><span class="d-label">🕐 Horário</span><span class="d-val">${ag.hora} — ${dur}</span></div>
@@ -1020,7 +1101,7 @@ function chatCmd(cmd) {
       const agora=new Date();
       const horaAgora=`${pad(agora.getHours())}:${pad(agora.getMinutes()>=30?30:0)}`;
       const ocupados={};
-      agDia.forEach(ag=>{ const ini=SLOTS.indexOf(ag.hora); for(let i=ini;i<ini+parseInt(ag.duracao);i++){if(!ocupados[ag.profissional])ocupados[ag.profissional]=new Set();ocupados[ag.profissional].add(SLOTS[i]);} });
+      agDia.forEach(ag=>{ const ini=SLOT_IDX[ag.hora]??-1; if(ini<0) return; const dur=parseInt(ag.duracao); for(let i=ini;i<ini+dur;i++){if(!ocupados[ag.profissional])ocupados[ag.profissional]=new Set();ocupados[ag.profissional].add(SLOTS[i]);} });
       const res=PROFISSIONAIS.map(p=>{ const prox=SLOTS.find(s=>s>=horaAgora&&!(ocupados[p]?.has(s))); return prox?`<strong style="color:${COR[p]}">${p}</strong>: ${prox}`:null; }).filter(Boolean);
       addMsgChat(res.length?`Próximos horários livres:<br>${res.join('<br>')}`:'Não há mais horários livres hoje. 🌙','bot');
     }
@@ -1051,7 +1132,7 @@ function chatCmd(cmd) {
 //  FIDELIDADE
 // ══════════════════════════════════════
 const FIDELIDADE_META = 10;
-function getFidelidade() { return JSON.parse(localStorage.getItem('oralclin_fidelidade') || '{}'); }
+function getFidelidade() { try { return JSON.parse(localStorage.getItem('oralclin_fidelidade') || '{}'); } catch(e) { return {}; } }
 function saveFidelidade(f) { localStorage.setItem('oralclin_fidelidade', JSON.stringify(f)); }
 
 function verificarFidelidade(tel, nome) {
@@ -1143,6 +1224,61 @@ function bloquearHorario(slot, prof) {
   agendamentos.push({ id:Date.now().toString(), data:dataAtual, hora:slot, cliente:'Horário bloqueado', tel:'', servico:'bloqueio', profissional:prof, duracao:'2', status:'confirmado', obs:'', origem:'prof', valor:0, alerta:'', urgencia:false });
   salvarStorage(); fecharQuickPop(); renderizar();
   toast(`🚫 ${slot} bloqueado para ${prof}`);
+}
+
+// ══════════════════════════════════════
+//  SOLICITAR CONSULTA (CLIENTE)
+// ══════════════════════════════════════
+let solSlot=null, solProf=null;
+
+function abrirSolicitacao(slot, prof) {
+  solSlot = slot; solProf = prof;
+  document.getElementById('solNome').value = '';
+  document.getElementById('solNome').style.borderColor = '';
+  document.getElementById('solTel').value = '';
+  document.getElementById('solTel').style.borderColor = '';
+  document.getElementById('solServico').value = 'consulta';
+  document.getElementById('solObs').value = '';
+  const d = new Date(dataAtual+'T12:00:00');
+  document.getElementById('solSlotInfo').innerHTML =
+    `<span>📅 <strong>${d.getDate()} de ${MESES[d.getMonth()]}</strong></span>`+
+    `<span>🕐 <strong>${slot}</strong></span>`+
+    `<span>👨‍⚕️ <strong>${prof}</strong></span>`;
+  document.getElementById('solOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('solNome').focus(), 100);
+}
+
+function abrirSolicitacaoNova() {
+  abrirSolicitacao(SLOTS[0], PROFISSIONAIS[0]);
+}
+
+function fecharSolicitacao() {
+  document.getElementById('solOverlay').classList.remove('open');
+  solSlot = null; solProf = null;
+}
+
+function salvarSolicitacao() {
+  const nome = document.getElementById('solNome').value.trim();
+  const tel  = document.getElementById('solTel').value.trim();
+  const nomeInput = document.getElementById('solNome');
+  const telInput  = document.getElementById('solTel');
+  nomeInput.style.borderColor = '';
+  telInput.style.borderColor  = '';
+  if (!nome) { nomeInput.style.borderColor='#b8973a'; nomeInput.focus(); return; }
+  if (!tel)  { telInput.style.borderColor='#b8973a';  telInput.focus();  return; }
+  const servico = document.getElementById('solServico').value;
+  const obs     = document.getElementById('solObs').value.trim();
+  const dur     = SERVICOS[servico]?.dur || 2;
+  agendamentos.push({
+    id: Date.now().toString(),
+    data: dataAtual, hora: solSlot,
+    cliente: nome, tel,
+    servico, profissional: solProf,
+    duracao: String(dur), status: 'pendente',
+    obs, origem: 'cliente', valor: 0, alerta: '', urgencia: false
+  });
+  salvarStorage(); fecharSolicitacao(); renderizar();
+  toast('📅 Solicitação enviada! A clínica entrará em contato. 🦷');
 }
 
 // ══════════════════════════════════════

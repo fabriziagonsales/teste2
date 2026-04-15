@@ -304,7 +304,7 @@
   <div class="header-right">
     <button class="btn-add" id="btnAdd" onclick="abrirModalNovo()">+ Agendar</button>
     <button class="btn-lock" id="btnLock" onclick="abrirPinModal()" title="Acesso profissional">
-      🔒<div class="modo-badge" id="modoBadge"></div>
+      <span id="btnLockIcon">🔒</span><div class="modo-badge" id="modoBadge"></div>
     </button>
   </div>
 </header>
@@ -527,6 +527,8 @@ const PIN_CORRETO  = 'barber1234';
 const SLOTS = [];
 for (let h=9; h<20; h++) { SLOTS.push(`${pad(h)}:00`); SLOTS.push(`${pad(h)}:30`); }
 SLOTS.push('20:00');
+// Índice pré-calculado para lookup O(1) — evita SLOTS.indexOf() em loop
+const SLOT_IDX = Object.fromEntries(SLOTS.map((s,i) => [s, i]));
 
 let dataAtual    = hoje();
 let agendamentos = JSON.parse(localStorage.getItem('barberpro_ag') || '[]');
@@ -562,10 +564,21 @@ function renderizar() {
     `${DIAS[d.getDay()]}<small>${d.getDate()} de ${MESES[d.getMonth()]} de ${d.getFullYear()}</small>`;
 
   const agDia = agendamentos.filter(a => a.data===dataAtual && a.status!=='cancelado');
+
+  // Pré-agrupa por profissional uma única vez — evita filter() dentro do loop de slots
+  const agPorProf = {};
+  let totalDia = 0;
+  PROFISSIONAIS.forEach(p => { agPorProf[p] = []; });
+  agDia.forEach(a => {
+    if (agPorProf[a.profissional]) agPorProf[a.profissional].push(a);
+    totalDia += parseFloat(a.valor) || 0;
+  });
+
+  // Resumo chips
   const chips = document.getElementById('resumoChips');
   chips.innerHTML = '';
   PROFISSIONAIS.forEach(p => {
-    const ags = agDia.filter(a => a.profissional===p);
+    const ags = agPorProf[p];
     const total = ags.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
     const c = document.createElement('div'); c.className='resumo-chip';
     const vStr = modoProf && total>0 ? ` · <span style="color:#065f46;font-weight:700">R$ ${fmt(total)}</span>` : '';
@@ -573,7 +586,6 @@ function renderizar() {
     chips.appendChild(c);
   });
   const extra = document.getElementById('resumoExtra');
-  const totalDia = agDia.reduce((s,a)=>s+(parseFloat(a.valor)||0),0);
   const tStr = modoProf && totalDia>0 ? ` · R$ ${fmt(totalDia)}` : '';
   extra.innerHTML = `<div class="resumo-total">${agDia.length} atendimento${agDia.length!==1?'s':''}${tStr}</div>`;
   const pend = agendamentos.filter(a=>a.status==='pendente').length;
@@ -584,44 +596,45 @@ function renderizar() {
     extra.appendChild(al);
   }
 
-  // Grid
+  // Grid — usa DocumentFragment: todas as inserções vão ao DOM de uma vez só
   const numProf = PROFISSIONAIS.length;
   const grid = document.getElementById('agendaGrid');
   grid.style.gridTemplateColumns = `60px repeat(${numProf},1fr)`;
-  grid.innerHTML = '';
+  const frag = document.createDocumentFragment();
 
   // Cabeçalhos
-  const th0 = document.createElement('div'); th0.className='col-header'; grid.appendChild(th0);
+  const th0 = document.createElement('div'); th0.className='col-header'; frag.appendChild(th0);
   PROFISSIONAIS.forEach(p => {
     const th = document.createElement('div'); th.className='col-header';
-    const initials = p.slice(0,2).toUpperCase();
-    th.innerHTML = `<div class="prof-avatar" style="background:${COR[p]}">${initials}</div>${p}`;
-    grid.appendChild(th);
+    th.innerHTML = `<div class="prof-avatar" style="background:${COR[p]}">${p.slice(0,2).toUpperCase()}</div>${p}`;
+    frag.appendChild(th);
   });
 
   // Slots
   SLOTS.forEach(slot => {
     if (slot === '20:00') return;
+    const isCheia = slot.endsWith(':00'); // calculado uma vez por slot
+    const si = SLOT_IDX[slot];
     const tc = document.createElement('div');
-    tc.className = 'time-cell'+(slot.endsWith(':00')?' hora-cheia':'');
-    tc.textContent = slot.endsWith(':00') ? slot : '';
-    grid.appendChild(tc);
+    tc.className = 'time-cell' + (isCheia ? ' hora-cheia' : '');
+    tc.textContent = isCheia ? slot : '';
+    frag.appendChild(tc);
 
     PROFISSIONAIS.forEach(prof => {
       const cell = document.createElement('div');
-      const agProf = agDia.filter(a=>a.profissional===prof);
+      const agProf = agPorProf[prof]; // já agrupado — sem filter() aqui
       let isOcupado = false;
 
       agProf.forEach(ag => {
-        const ini = SLOTS.indexOf(ag.hora);
-        const fim = ini + parseInt(ag.duracao);
-        const si  = SLOTS.indexOf(slot);
+        const ini = SLOT_IDX[ag.hora] ?? -1;
+        const dur = parseInt(ag.duracao); // parseInt uma vez por agendamento
+        const fim = ini + dur;
         if (si === ini) {
           const card = document.createElement('div');
           const isPend = ag.status==='pendente';
           const isBloq = ag.servico==='bloqueio';
           card.className = `appt s-${ag.servico}${isPend?' pendente':''}${ag.urgencia?' urgencia':''}${isBloq?' bloqueio':''}`;
-          card.style.height = `${parseInt(ag.duracao)*36-4}px`;
+          card.style.height = `${dur*36-4}px`;
           const stBadge = (!isPend && ag.status && !isBloq) ? `<span class="appt-status ${STATUS_CLS[ag.status]||''}">${ag.status}</span>` : '';
           const nomeLabel = isBloq ? `🚫 ${ag.cliente}` : ag.cliente;
           card.innerHTML = `${stBadge}<div class="appt-nome">${nomeLabel}</div>${!isBloq?`<div class="appt-serv">${SERVICOS[ag.servico]?.emoji||''} ${SERVICOS[ag.servico]?.nome||ag.servico}</div><div class="appt-hora">${ag.hora}</div>`:''}`;
@@ -632,15 +645,18 @@ function renderizar() {
 
       if (isOcupado) { cell.className='slot meia'; cell.style.background='#f0f4f0'; }
       else {
-        cell.className = 'slot'+(slot.endsWith(':30')?' meia':'');
+        cell.className = 'slot' + (isCheia ? '' : ' meia');
         if (modoProf) {
           cell.classList.add('clicavel');
           cell.onclick = e => abrirQuickPop(slot, prof, e.currentTarget);
         }
       }
-      grid.appendChild(cell);
+      frag.appendChild(cell);
     });
   });
+
+  grid.innerHTML = '';       // limpa só agora
+  grid.appendChild(frag);   // insere tudo de uma vez — 1 reflow ao invés de ~92
 
   atualizarBadge();
 }
@@ -662,8 +678,7 @@ function aplicarModo() {
   document.getElementById('btnAdd').style.display        = modoProf ? 'flex' : 'none';
   document.getElementById('modoBadge').style.display     = modoProf ? 'flex' : 'none';
   document.getElementById('btnLock').title = modoProf ? 'Sair do modo profissional' : 'Acesso profissional';
-  document.getElementById('btnLock').textContent = modoProf ? '🔓' : '🔒';
-  if (modoProf) document.getElementById('modoBadge').style.display='flex';
+  document.getElementById('btnLockIcon').textContent = modoProf ? '🔓' : '🔒';
   renderizar();
   renderChatOpts();
 }
