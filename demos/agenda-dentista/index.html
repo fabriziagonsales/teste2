@@ -181,7 +181,7 @@
   .qp-cancelar { background:var(--cream); color:var(--gray); border:1.5px solid var(--border) !important; }
   .qp-tel-toggle { font-size:.72rem; color:var(--gold); cursor:pointer; text-decoration:underline; background:none; border:none; font-family:'DM Sans',sans-serif; padding:0; }
   .qp-tel-wrap { display:none; }
-  .qp-tel-wrap.open { display:block; }
+  .qp-tel-wrap.open { display:flex; flex-direction:column; gap:7px; }
 
   /* ════ CHATBOT ════ */
   .chat-toggle {
@@ -376,7 +376,7 @@
   </select>
   <input id="qpValor" type="number" min="0" step="0.01" placeholder="Valor R$" />
   <button class="qp-tel-toggle" onclick="toggleQpTel()">+ Adicionar telefone / alerta</button>
-  <div class="qp-tel-wrap" id="qpTelWrap" style="display:flex;flex-direction:column;gap:7px">
+  <div class="qp-tel-wrap" id="qpTelWrap">
     <input id="qpTel" type="tel" placeholder="WhatsApp (opcional)" oninput="mascaraTel(this)" />
     <label class="toggle-row toggle-alerta">
       <input type="checkbox" id="qpAlertaCb" onchange="document.getElementById('qpAlertaWrap').style.display=this.checked?'block':'none'" />
@@ -428,6 +428,7 @@
           <select id="fProfissional">
             <option value="Dr. Silva">Dr. Silva</option>
             <option value="Dra. Ana">Dra. Ana</option>
+            <option value="Dr. Carlos">Dr. Carlos</option>
           </select>
         </div>
       </div>
@@ -586,8 +587,8 @@
 // ══════════════════════════════════════
 //  DADOS E CONSTANTES
 // ══════════════════════════════════════
-const PROFISSIONAIS = ['Dr. Silva', 'Dra. Ana'];
-const COR = { 'Dr. Silva':'#0f1f35', 'Dra. Ana':'#b8973a' };
+const PROFISSIONAIS = ['Dr. Silva', 'Dra. Ana', 'Dr. Carlos'];
+const COR = { 'Dr. Silva':'#0f1f35', 'Dra. Ana':'#b8973a', 'Dr. Carlos':'#0d9488' };
 const SERVICOS = {
   consulta:    { nome:'Consulta Inicial',    emoji:'🦷', dur:1, preco:150  },
   limpeza:     { nome:'Limpeza/Profilaxia',  emoji:'✨', dur:2, preco:200  },
@@ -808,7 +809,7 @@ function abrirQuickPop(slot, prof, cell) {
   document.getElementById('qpSlotLabel').textContent=`${slot} · ${prof}`;
   const pop=document.getElementById('quickPop');
   const rect=cell.getBoundingClientRect();
-  const popW=256, popH=330;
+  const popW=256, popH=300;
   let left = rect.right + 6;
   if (left + popW > window.innerWidth) left = rect.left - popW - 6;
   let top = rect.top;
@@ -999,6 +1000,7 @@ function renderChatOpts() {
       <button class="chat-opt" onclick="chatCmd('pendentes')">⏳ Consultas pendentes</button>
       <button class="chat-opt" onclick="chatCmd('silva')">🩺 Agenda Dr. Silva</button>
       <button class="chat-opt" onclick="chatCmd('ana')">🩺 Agenda Dra. Ana</button>
+      <button class="chat-opt" onclick="chatCmd('carlos')">🩺 Agenda Dr. Carlos</button>
       <button class="chat-opt" onclick="chatCmd('livre')">✅ Próximo horário livre</button>
       <button class="chat-opt" style="background:#d1fae5;border-color:#6ee7b7;color:#065f46" onclick="chatCmd('fechamento')">💰 Fechamento do dia</button>
       <button class="chat-opt" style="background:#ede9fe;border-color:#c4b5fd;color:#4c1d95" onclick="enviarLembretesEmMassa()">📤 Enviar lembretes em massa</button>`;
@@ -1051,7 +1053,7 @@ function chatCmd(cmd) {
   const labels={
     hoje:'📋 Pacientes de hoje', amanha:'🔔 Lembretes de amanhã',
     proximo:'⏭️ Próximo paciente', pendentes:'⏳ Consultas pendentes',
-    silva:'🩺 Agenda Dr. Silva', ana:'🩺 Agenda Dra. Ana',
+    silva:'🩺 Agenda Dr. Silva', ana:'🩺 Agenda Dra. Ana', carlos:'🩺 Agenda Dr. Carlos',
     livre:'✅ Próximo horário livre', fechamento:'💰 Fechamento do dia'
   };
   addMsgChat(labels[cmd]||cmd,'user');
@@ -1094,8 +1096,8 @@ function chatCmd(cmd) {
       if (!pend.length) { addMsgChat('Nenhuma consulta pendente. ✅','bot'); return; }
       addMsgChat(`<strong>⏳ ${pend.length} consulta${pend.length>1?'s':''} pendente${pend.length>1?'s':''}:</strong>${buildList(pend)}`, 'bot');
     }
-    else if (cmd==='silva'||cmd==='ana') {
-      const nome=cmd==='silva'?'Dr. Silva':'Dra. Ana';
+    else if (cmd==='silva'||cmd==='ana'||cmd==='carlos') {
+      const nome=cmd==='silva'?'Dr. Silva':cmd==='ana'?'Dra. Ana':'Dr. Carlos';
       const lista=agDia.filter(a=>a.profissional===nome);
       if (!lista.length) { addMsgChat(`${nome} não tem consultas hoje. 😊`,'bot'); return; }
       addMsgChat(`<strong>${nome} — ${lista.length} consulta${lista.length>1?'s':''} hoje:</strong>${buildList(lista)}`, 'bot');
