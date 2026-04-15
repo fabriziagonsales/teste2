@@ -22,6 +22,8 @@ Sempre responder em **português (pt-BR)**.
 │   ├── restaurante/            ← demo cardápio digital com carrinho
 │   ├── dentista/               ← demo clínica odontológica genérica
 │   ├── amor-saude/             ← demo personalizado Clínica Amor Saúde (Cartão de Todos)
+│   ├── agenda-barbearia/       ← demo agenda para barbearia (BarberPro) — PIN: barber1234
+│   ├── agenda-dentista/        ← demo agenda para dentista (OralClin) — PIN: oral1234
 │   ├── odontologia/            ← demo odontologia (git próprio → fabriziagonsales/odontologia)
 │   ├── petshop/                ← demo petshop (git próprio → fabriziagonsales/petshop)
 │   └── agenda-salao/           ← demo agenda p/ salão Alto Beleza (git próprio → fabriziagonsales/demo-agenda-teste1)
@@ -37,8 +39,10 @@ Todos os demos são **single-file HTML** (`index.html`) com CSS e JS inline. Sem
 ### Stack padrão dos demos
 - **Fontes:** Cormorant Garamond + DM Sans (demos premium) ou Inter + Playfair Display (portfólio)
 - **Paleta restaurante:** `--primary #c17f24`, `--dark #1c1208`, `--cream #fdf9f3`
-- **Paleta odontologia:** `--navy #0f1f35`, `--gold #b8973a`, `--cream #faf7f2`
+- **Paleta odontologia/agenda-dentista:** `--navy #0f1f35`, `--gold #b8973a`, `--cream #faf7f2`
 - **Paleta dentista/amor-saude:** `--primary #0284c7`, `--primary3 #075985`, `--dark #0c2340`, `--accent #e0f2fe`
+- **Paleta agenda-barbearia:** `--ink #0f0f0f`, `--carbon #1c1c1c`, `--gold #c9922a`, `--cream #faf7f2`
+- **Paleta agenda-salao:** `--pink #ec4899`, `--purple #8b5cf6`, `--dark #1e1b4b`, `--cream #fdf4ff`
 - **Fotos:** Pexels (`images.pexels.com/photos/{ID}/pexels-photo-{ID}.jpeg?auto=compress&cs=tinysrgb&w=700`)
 - **WhatsApp:** links `https://wa.me/55{DDD}{NUMERO}?text=...`
 
@@ -64,6 +68,65 @@ Todos os demos são **single-file HTML** (`index.html`) com CSS e JS inline. Sem
 - **Foto do hero por horário:** IIFE que seleciona URL do Pexels conforme `new Date().getHours()`
 - **Banner promoção:** faixa com `@keyframes shimmer` no topo, fechável via `classList.add('hidden')`
 - **Modal lateral do carrinho:** `transform: translateX(100%)` → `translateX(0)` com overlay escuro
+
+### Padrões obrigatórios nos demos de agenda (salao, barbearia, dentista)
+
+Estes três demos compartilham a mesma arquitetura. Ao criar ou editar qualquer um, seguir:
+
+**Bug crítico — nunca usar `btnLock.textContent`:**
+```html
+<!-- CORRETO: ícone em <span> separado do badge -->
+<button id="btnLock"><span id="btnLockIcon">🔒</span><div class="modo-badge" id="modoBadge"></div></button>
+```
+```javascript
+// CORRETO
+document.getElementById('btnLockIcon').textContent = modoProf ? '🔓' : '🔒';
+// ERRADO — destrói o modoBadge do DOM, causa crash null reference
+document.getElementById('btnLock').textContent = '🔓';
+```
+
+**Performance em `renderizar()`** — obrigatório seguir este padrão:
+```javascript
+// 1. Pré-agrupar por profissional UMA vez (evita filter() dentro do loop)
+const agPorProf = {};
+PROFISSIONAIS.forEach(p => { agPorProf[p] = []; });
+agDia.forEach(a => { if (agPorProf[a.profissional]) agPorProf[a.profissional].push(a); });
+
+// 2. SLOT_IDX para lookup O(1) (criar junto com SLOTS)
+const SLOT_IDX = Object.fromEntries(SLOTS.map((s,i) => [s, i]));
+// usar: SLOT_IDX[ag.hora] ?? -1  (nunca SLOTS.indexOf())
+
+// 3. DocumentFragment — inserir tudo no DOM de uma vez (1 reflow)
+const frag = document.createDocumentFragment();
+// ... construir elementos no frag ...
+grid.innerHTML = '';
+grid.appendChild(frag);
+```
+
+**Posicionamento do quick-pop** — é `position:fixed`, usar coordenadas de viewport:
+```javascript
+const rect = cell.getBoundingClientRect();
+// NÃO somar window.scrollY/scrollX — position:fixed já é relativo à viewport
+let left = rect.right + 6;
+if (left + popW > window.innerWidth) left = rect.left - popW - 6; // fallback esquerda
+let top = rect.top;
+if (top + popH > window.innerHeight) top = window.innerHeight - popH - 8; // fallback cima
+```
+
+**localStorage seguro:**
+```javascript
+let agendamentos = (() => { try { return JSON.parse(localStorage.getItem('chave') || '[]'); } catch(e) { return []; } })();
+```
+
+**Campo `origem` em agendamentos:**
+- Quick-add profissional → `origem: 'prof'`
+- Solicitação cliente → `origem: 'cliente'`
+- Ao editar: preservar `origem: agendamentos[idx].origem || 'prof'`
+
+**Modo cliente com solicitação** (padrão dentista — replicar nos outros):
+- Slots livres clicáveis em modo cliente → `abrirSolicitacao(slot, prof)` → salva como `status:'pendente'`
+- Botão "📅 Solicitar" visível apenas em modo cliente (`aplicarModo()` controla via `style.display`)
+- Ficha do cliente visível apenas com `modoProf` ativo
 
 ### Funcionalidades do demo agenda-salao (referência para apps de agendamento)
 
