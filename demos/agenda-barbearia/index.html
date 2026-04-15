@@ -727,8 +727,11 @@ function abrirQuickPop(slot, prof, cell) {
   document.getElementById('qpSlotLabel').textContent=`${slot} · ${prof}`;
   const pop=document.getElementById('quickPop');
   const rect=cell.getBoundingClientRect();
-  const top=Math.min(rect.top+window.scrollY, window.innerHeight+window.scrollY-340);
-  const left=Math.min(rect.left+window.scrollX+rect.width+6, window.innerWidth+window.scrollX-256);
+  const popW=256, popH=350;
+  let left = rect.right + 6;
+  if (left + popW > window.innerWidth) left = rect.left - popW - 6;
+  let top = rect.top;
+  if (top + popH > window.innerHeight) top = window.innerHeight - popH - 8;
   pop.style.top=Math.max(top,80)+'px';
   pop.style.left=Math.max(left,8)+'px';
   pop.classList.add('open');
