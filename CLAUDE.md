@@ -112,6 +112,15 @@ if (left + popW > window.innerWidth) left = rect.left - popW - 6; // fallback es
 let top = rect.top;
 if (top + popH > window.innerHeight) top = window.innerHeight - popH - 8; // fallback cima
 ```
+`popH` deve refletir o tamanho do popup **fechado** (painel de telefone oculto). Nunca usar inline `style="display:flex"` em elementos que o CSS já controla com `display:none` — o inline sobrescreve o CSS e o painel fica sempre visível, aumentando a altura real do popup e quebrando o cálculo de posição. O padrão correto:
+```css
+.qp-tel-wrap { display:none; }
+.qp-tel-wrap.open { display:flex; flex-direction:column; gap:7px; }
+```
+```html
+<!-- SEM inline style — deixar o CSS controlar -->
+<div class="qp-tel-wrap" id="qpTelWrap">...</div>
+```
 
 **localStorage seguro:**
 ```javascript
