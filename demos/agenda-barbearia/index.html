@@ -531,7 +531,7 @@ SLOTS.push('20:00');
 const SLOT_IDX = Object.fromEntries(SLOTS.map((s,i) => [s, i]));
 
 let dataAtual    = hoje();
-let agendamentos = JSON.parse(localStorage.getItem('barberpro_ag') || '[]');
+let agendamentos = (() => { try { return JSON.parse(localStorage.getItem('barberpro_ag') || '[]'); } catch(e) { return []; } })();
 let modoProf     = localStorage.getItem('barberpro_prof') === '1';
 let editandoId   = null, detalheId = null;
 
@@ -936,7 +936,7 @@ function renderChatOpts() {
       <button class="chat-opt" onclick="chatFaq('pagamento')">💳 Formas de pagamento</button>
       <button class="chat-opt" onclick="chatFaq('fidelidade')">⭐ Programa de fidelidade</button>
       <button class="chat-opt" onclick="chatFaq('local')">📍 Onde fica?</button>`;
-    footer.innerHTML = `<a href="https://wa.me/5551000000000?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20na%20BarberPro." target="_blank" style="color:var(--gold);font-weight:700;text-decoration:none">💬 Agendar pelo WhatsApp →</a>`;
+    footer.innerHTML = `<a href="https://wa.me/5551997471429?text=Olá!%20Gostaria%20de%20agendar%20um%20horário%20na%20BarberPro." target="_blank" style="color:var(--gold);font-weight:700;text-decoration:none">💬 Agendar pelo WhatsApp →</a>`;
   }
 }
 
@@ -1026,7 +1026,7 @@ function chatCmd(cmd) {
       const agora=new Date();
       const horaAgora=`${pad(agora.getHours())}:${pad(agora.getMinutes()>=30?30:0)}`;
       const ocupados={};
-      agDia.forEach(ag=>{ const ini=SLOTS.indexOf(ag.hora); for(let i=ini;i<ini+parseInt(ag.duracao);i++){if(!ocupados[ag.profissional])ocupados[ag.profissional]=new Set();ocupados[ag.profissional].add(SLOTS[i]);} });
+      agDia.forEach(ag=>{ const ini=SLOT_IDX[ag.hora]??-1; for(let i=ini;i<ini+parseInt(ag.duracao);i++){if(!ocupados[ag.profissional])ocupados[ag.profissional]=new Set();ocupados[ag.profissional].add(SLOTS[i]);} });
       const res=PROFISSIONAIS.map(p=>{ const prox=SLOTS.find(s=>s>=horaAgora&&!(ocupados[p]?.has(s))); return prox?`<strong style="color:${COR[p]}">${p}</strong>: ${prox}`:null; }).filter(Boolean);
       addMsgChat(res.length?`✅ Próximos horários livres:<br>${res.join('<br>')}`:'Sem horários livres no momento. 🌙','bot');
     }
