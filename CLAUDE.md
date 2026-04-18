@@ -14,9 +14,9 @@ Sempre responder em **português (pt-BR)**.
 
 ```
 Área de Trabalho/               ← raiz do repositório (branch: main)
-├── apresentacao-servicos.html  ← página de vendas dos serviços da Fabrizia
 ├── demos/                      ← sites demo para prospecção de clientes
 │   ├── index.html              ← portfólio público com lista dos demos
+│   ├── meu-demo-site/          ← site pessoal de vendas da Fabrizia (submodule git)
 │   ├── academia/               ← demo para academia
 │   ├── clinica-estetica/       ← demo para clínica estética
 │   ├── restaurante/            ← demo cardápio digital com carrinho
@@ -27,10 +27,11 @@ Sempre responder em **português (pt-BR)**.
 │   ├── odontologia/            ← demo odontologia (git próprio → fabriziagonsales/odontologia)
 │   ├── petshop/                ← demo petshop (git próprio → fabriziagonsales/petshop)
 │   └── agenda-salao/           ← demo agenda p/ salão Alto Beleza (git próprio → fabriziagonsales/demo-agenda-teste1)
+├── cursos/                     ← git próprio → fabriziagonsales/cursos (não versionar no pai)
 └── site-teste/                 ← git próprio — não versionar aqui
 ```
 
-> `sabor-e-saude/` foi deletado do disco mas ainda existe no histórico git.
+> `sabor-e-saude/` foi removido. `apresentacao-servicos.html` foi removido.
 
 ## Demos — padrão de desenvolvimento
 
@@ -181,6 +182,28 @@ Ver o SVG completo em `demos/agenda-salao/index.html` dentro de `.btn-wpp-detail
 ## Git
 
 - **Branch principal:** `main` (repositório teste2)
-- **Demos com git próprio:** `demos/odontologia/` (branch `master`), `demos/petshop/` (branch `master`), `demos/agenda-salao/` (branch `main` → repo `demo-agenda-teste1`) — **não commitar arquivos dessas pastas no repositório pai**
+- **Repos com git próprio** — não commitar no repositório pai:
+  - `demos/odontologia/` (branch `master` → fabriziagonsales/odontologia)
+  - `demos/petshop/` (branch `master` → fabriziagonsales/petshop)
+  - `demos/agenda-salao/` (branch `main` → fabriziagonsales/demo-agenda-teste1)
+  - `cursos/` (branch `main` → fabriziagonsales/cursos) — publicado em `https://fabriziagonsales.github.io/cursos/`
+  - `demos/meu-demo-site/` é um git submodule — editar dentro da pasta e commitar lá
 - **Nunca commitar:** `*.lnk`, `*.url`, `desktop.ini`, `ROMS/`, `SUPER NINTENDO/`, `Dura_Client-6.2/`, `Miracle74-1.3/`, `Novo(a) Documento de Texto.txt`
-- Para commitar em odontologia, petshop ou agenda-salao, entrar na pasta e usar o git deles separadamente
+- Para commitar em qualquer repo com git próprio, entrar na pasta e usar o git deles separadamente
+
+## Projeto cursos/ — Amor de Cozinha
+
+Curso de culinária saudável da Fabrizia. Publicado em `https://fabriziagonsales.github.io/cursos/`.
+
+**Formato:** 100% baseado em **fotos passo a passo** — sem vídeo, sem câmera. A Fabrizia não aparece em câmera.
+
+**Arquivos do curso:**
+- `index.html` — página de vendas (R$ 19,99 no Pix via WhatsApp)
+- `receitas.html` — 30 receitas divididas em 3 categorias (Proteína / Rápidas / Doces Fit)
+- `lista-compras.html` — lista de compras semanal
+- `substituicoes.html` — tabela de substituições de ingredientes
+- `roteiros-modulos.html` — guia interno: o que fotografar em cada módulo
+
+**Paleta:** `--p #a89070`, `--ouro #c8a96a`, `--p2 #2c2c2c`, `--claro #f2ede7`, `--creme #faf8f5`
+
+**Entrega ao cliente:** após pagamento via Pix, Fabrizia envia acesso pelo WhatsApp (5551997471429).
