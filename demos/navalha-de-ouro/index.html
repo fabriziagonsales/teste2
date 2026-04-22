@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Navalha de Ouro</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --bg: #0d0d0d;
+  --bg2: #161616;
+  --bg3: #1e1e1e;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0f0f0;
+  --muted: rgba(255,255,255,0.4);
+  --green: #2ecc71;
+  --red: #e74c3c;
+  --blue: #3498db;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px 12px;
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.app-logo { font-family: 'Bebas Neue'; font-size: 22px; letter-spacing: 2px; color: var(--gold); }
+.app-logo span { color: var(--text); }
+.mode-toggle { display: flex; gap: 4px; background: var(--bg3); border-radius: 20px; padding: 3px; }
+.mode-btn {
+  padding: 5px 14px; border-radius: 16px; font-size: 11px;
+  font-weight: 500; border: none; cursor: pointer;
+  background: transparent; color: var(--muted); transition: all 0.2s;
+}
+.mode-btn.active { background: var(--gold); color: #000; }
+.nav {
+  display: flex; background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto; scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-item {
+  flex-shrink: 0; padding: 12px 16px;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
+  display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap;
+}
+.nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+.nav-icon { font-size: 18px; }
+.page { display: none; padding: 16px; animation: fadeUp 0.3s ease; }
+.page.active { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px; margin-bottom: 12px;
+}
+.card-title {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-title .badge {
+  background: var(--gold); color: #000;
+  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px; letter-spacing: 0;
+}
+.metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.metric { background: var(--bg3); border-radius: 12px; padding: 14px; border: 1px solid var(--border); }
+.metric-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.metric-val { font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 1px; color: var(--gold); line-height: 1; }
+.metric-sub { font-size: 10px; color: var(--green); margin-top: 2px; }
+.date-strip { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; margin-bottom: 14px; }
+.date-strip::-webkit-scrollbar { display: none; }
+.date-day {
+  flex-shrink: 0; width: 50px; padding: 8px 6px;
+  border-radius: 10px; text-align: center;
+  background: var(--bg3); border: 1px solid var(--border); cursor: pointer; transition: all 0.2s;
+}
+.date-day.active { background: var(--gold); border-color: var(--gold); }
+.date-day.active .day-name, .date-day.active .day-num { color: #000; }
+.day-name { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.day-num { font-family: 'Bebas Neue'; font-size: 22px; color: var(--text); line-height: 1.1; }
+.slot { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.slot:last-child { border-bottom: none; }
+.slot-time { font-family: 'Bebas Neue'; font-size: 20px; color: var(--muted); width: 52px; flex-shrink: 0; letter-spacing: 1px; }
+.slot-bar { width: 3px; height: 44px; border-radius: 2px; flex-shrink: 0; }
+.slot-info { flex: 1; }
+.slot-name { font-size: 14px; font-weight: 600; color: var(--text); }
+.slot-service { font-size: 11px; color: var(--muted); }
+.slot-price { font-family: 'Bebas Neue'; font-size: 18px; color: var(--gold); letter-spacing: 1px; }
+.slot-status { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 10px; letter-spacing: 0.5px; }
+.s-confirm { background: rgba(46,204,113,0.15); color: var(--green); }
+.s-pending { background: rgba(201,168,76,0.15); color: var(--gold); }
+.slot-empty { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); opacity: 0.35; }
+.slot-empty .slot-time { color: var(--muted); }
+.slot-empty-line { flex: 1; height: 1px; background: var(--border); }
+.services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.service-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.service-card.selected { border-color: var(--gold); background: rgba(201,168,76,0.08); }
+.service-card:hover { border-color: rgba(201,168,76,0.4); }
+.svc-icon { font-size: 26px; margin-bottom: 6px; }
+.svc-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.svc-price { font-family: 'Bebas Neue'; font-size: 18px; color: var(--gold); letter-spacing: 1px; }
+.svc-time { font-size: 10px; color: var(--muted); }
+.time-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+.time-btn {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 4px;
+  font-size: 12px; font-weight: 500; color: var(--text); cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.time-btn.selected { background: var(--gold); border-color: var(--gold); color: #000; }
+.time-btn.busy { opacity: 0.3; pointer-events: none; text-decoration: line-through; }
+.fin-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-bottom: 14px; }
+.bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar-bg { width: 100%; background: var(--bg3); border-radius: 4px 4px 0 0; position: relative; }
+.bar-fill { width: 100%; border-radius: 4px 4px 0 0; position: absolute; bottom: 0; }
+.bar-label { font-size: 9px; color: var(--muted); }
+.fin-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); }
+.fin-row:last-child { border-bottom: none; }
+.fin-desc { font-size: 13px; color: var(--text); }
+.fin-date { font-size: 10px; color: var(--muted); }
+.fin-val { font-family: 'Bebas Neue'; font-size: 18px; letter-spacing: 1px; }
+.fin-in { color: var(--green); }
+.fin-out { color: var(--red); }
+.reminder { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.reminder:last-child { border-bottom: none; }
+.reminder-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.reminder-info { flex: 1; }
+.reminder-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.reminder-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.reminder-time { font-size: 10px; color: var(--gold); font-weight: 600; white-space: nowrap; }
+.btn {
+  width: 100%; padding: 14px; background: var(--gold); color: #000;
+  font-family: 'Bebas Neue'; font-size: 18px; letter-spacing: 2px;
+  border: none; border-radius: 12px; cursor: pointer; transition: opacity 0.2s;
+}
+.btn:hover { opacity: 0.9; }
+.btn-outline { background: transparent; border: 1.5px solid var(--gold); color: var(--gold); }
+.btn-sm { padding: 8px 16px; font-size: 14px; border-radius: 8px; width: auto; }
+.barber-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; margin-bottom: 14px; }
+.barber-row::-webkit-scrollbar { display: none; }
+.barber-card { flex-shrink: 0; width: 80px; text-align: center; cursor: pointer; }
+.barber-av {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; border: 2px solid var(--border); transition: border-color 0.2s;
+}
+.barber-card.selected .barber-av { border-color: var(--gold); }
+.barber-name { font-size: 11px; font-weight: 500; color: var(--text); }
+.barber-stars { font-size: 9px; color: var(--gold); }
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8); z-index: 200;
+  align-items: flex-end; justify-content: center;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg2); border-radius: 20px 20px 0 0;
+  padding: 24px 20px 36px; width: 100%; max-width: 420px;
+  border-top: 1px solid var(--border); animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+.modal-title { font-family: 'Bebas Neue'; font-size: 24px; letter-spacing: 2px; color: var(--text); margin-bottom: 16px; text-align: center; }
+.confirm-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.confirm-row:last-of-type { border-bottom: none; margin-bottom: 16px; }
+.confirm-key { font-size: 12px; color: var(--muted); }
+.confirm-val { font-size: 13px; font-weight: 600; color: var(--text); }
+.pin-overlay {
+  display: none; position: fixed; inset: 0; background: var(--bg); z-index: 500;
+  flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px;
+}
+.pin-overlay.show { display: flex; }
+.pin-logo { font-family: 'Bebas Neue'; font-size: 28px; letter-spacing: 3px; color: var(--gold); margin-bottom: 6px; }
+.pin-logo span { color: var(--text); }
+.pin-subtitle { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 36px; }
+.pin-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 28px; text-align: center; }
+.pin-dots { display: flex; gap: 14px; margin-bottom: 36px; }
+.pin-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); transition: all 0.2s; }
+.pin-dot.filled { background: var(--gold); border-color: var(--gold); }
+.pin-dot.error { background: var(--red); border-color: var(--red); }
+.pin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 260px; }
+.pin-key {
+  aspect-ratio: 1; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.15s; user-select: none;
+}
+.pin-key:active { background: var(--bg3); transform: scale(0.94); }
+.pin-key.gold-key { background: rgba(201,168,76,0.12); border-color: rgba(201,168,76,0.3); }
+.pin-num { font-family: 'Bebas Neue'; font-size: 28px; color: var(--text); line-height: 1; letter-spacing: 1px; }
+.pin-letters { font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+.pin-error-msg { font-size: 12px; color: var(--red); margin-top: 16px; min-height: 18px; font-weight: 600; text-align: center; }
+.pin-back-btn { margin-top: 20px; background: transparent; border: none; font-size: 12px; color: var(--muted); cursor: pointer; letter-spacing: 1px; font-family: 'DM Sans'; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+  background: var(--green); color: #fff; padding: 12px 24px; border-radius: 30px;
+  font-size: 13px; font-weight: 600; z-index: 300;
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+.notif { position: relative; }
+.notif::after {
+  content: '3'; position: absolute; top: -4px; right: -4px;
+  background: var(--red); color: #fff; font-size: 8px; font-weight: 700;
+  width: 14px; height: 14px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.steps { display: flex; gap: 6px; margin-bottom: 16px; }
+.step-dot { flex: 1; height: 3px; border-radius: 2px; background: var(--bg3); transition: background 0.3s; }
+.step-dot.done { background: var(--gold); }
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+input[type=text]:focus, input[type=number]:focus { outline: none; border-color: var(--gold) !important; }
+.icon-selected { border-color: var(--gold) !important; background: rgba(201,168,76,0.15); }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="app-logo">Navalha de <span>Ouro</span></div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="setMode('cliente')">Cliente</button>
+    <button class="mode-btn" onclick="setMode('barbeiro')">Barbeiro</button>
+  </div>
+</div>
+
+<div class="nav" id="navBar"></div>
+
+<!-- AGENDAR -->
+<div class="page active" id="page-agendar">
+  <div class="steps">
+    <div class="step-dot done"></div>
+    <div class="step-dot"></div>
+    <div class="step-dot"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Escolha o serviço</div>
+    <div class="services-grid">
+      <div class="service-card selected" onclick="selectService(this,'Corte Clássico','R$35','30min')">
+        <div class="svc-icon">✂️</div><div class="svc-name">Corte Clássico</div>
+        <div class="svc-price">R$35</div><div class="svc-time">30 min</div>
+      </div>
+      <div class="service-card" onclick="selectService(this,'Barba','R$25','20min')">
+        <div class="svc-icon">🪒</div><div class="svc-name">Barba</div>
+        <div class="svc-price">R$25</div><div class="svc-time">20 min</div>
+      </div>
+      <div class="service-card" onclick="selectService(this,'Corte + Barba','R$55','50min')">
+        <div class="svc-icon">💈</div><div class="svc-name">Corte + Barba</div>
+        <div class="svc-price">R$55</div><div class="svc-time">50 min</div>
+      </div>
+      <div class="service-card" onclick="selectService(this,'Hidratação','R$40','40min')">
+        <div class="svc-icon">✨</div><div class="svc-name">Hidratação</div>
+        <div class="svc-price">R$40</div><div class="svc-time">40 min</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Escolha o barbeiro</div>
+    <div class="barber-row">
+      <div class="barber-card selected" onclick="selectBarber(this)">
+        <div class="barber-av" style="background:#2a1f10;">👨‍🦱</div>
+        <div class="barber-name">João</div><div class="barber-stars">★★★★★</div>
+      </div>
+      <div class="barber-card" onclick="selectBarber(this)">
+        <div class="barber-av" style="background:#1a2030;">👨🏽</div>
+        <div class="barber-name">Pedro</div><div class="barber-stars">★★★★☆</div>
+      </div>
+      <div class="barber-card" onclick="selectBarber(this)">
+        <div class="barber-av" style="background:#1a2820;">🧔</div>
+        <div class="barber-name">Carlos</div><div class="barber-stars">★★★★★</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Horário — Hoje, Ter 22</div>
+    <div class="time-grid">
+      <div class="time-btn busy">09:00</div>
+      <div class="time-btn busy">09:30</div>
+      <div class="time-btn selected" onclick="selectTime(this)">10:00</div>
+      <div class="time-btn" onclick="selectTime(this)">10:30</div>
+      <div class="time-btn" onclick="selectTime(this)">11:00</div>
+      <div class="time-btn busy">11:30</div>
+      <div class="time-btn" onclick="selectTime(this)">14:00</div>
+      <div class="time-btn" onclick="selectTime(this)">14:30</div>
+      <div class="time-btn" onclick="selectTime(this)">15:00</div>
+      <div class="time-btn busy">15:30</div>
+      <div class="time-btn" onclick="selectTime(this)">16:00</div>
+      <div class="time-btn" onclick="selectTime(this)">16:30</div>
+    </div>
+  </div>
+  <button class="btn" onclick="openModal()">CONFIRMAR AGENDAMENTO</button>
+</div>
+
+<!-- MEUS AGENDAMENTOS -->
+<div class="page" id="page-meus">
+  <div class="card">
+    <div class="card-title">Próximo agendamento <span class="badge">HOJE</span></div>
+    <div style="display:flex;gap:14px;align-items:center;padding:8px 0;">
+      <div style="text-align:center;background:var(--gold);color:#000;border-radius:10px;padding:10px 14px;font-family:'Bebas Neue';font-size:26px;letter-spacing:1px;line-height:1;">10<br><span style="font-size:11px;font-family:'DM Sans';font-weight:600;">:00</span></div>
+      <div>
+        <div style="font-size:15px;font-weight:600;">Corte + Barba</div>
+        <div style="font-size:12px;color:var(--muted);">com João · 50 min</div>
+        <div style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600;">✓ Confirmado</div>
+      </div>
+      <div style="margin-left:auto;font-family:'Bebas Neue';font-size:22px;color:var(--gold);">R$55</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Histórico</div>
+    <div class="slot">
+      <div class="slot-time">15 ABR</div>
+      <div class="slot-bar" style="background:var(--green);"></div>
+      <div class="slot-info"><div class="slot-name">Corte Clássico</div><div class="slot-service">com Pedro</div></div>
+      <div class="slot-price">R$35</div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">08 ABR</div>
+      <div class="slot-bar" style="background:var(--green);"></div>
+      <div class="slot-info"><div class="slot-name">Corte + Barba</div><div class="slot-service">com João</div></div>
+      <div class="slot-price">R$55</div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">01 ABR</div>
+      <div class="slot-bar" style="background:var(--red);"></div>
+      <div class="slot-info"><div class="slot-name">Barba</div><div class="slot-service">com Carlos</div></div>
+      <div class="slot-price" style="color:var(--red);">Cancelado</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Meu perfil</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;">
+      <div style="width:54px;height:54px;border-radius:50%;background:var(--bg3);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px;">🧑</div>
+      <div>
+        <div style="font-size:15px;font-weight:600;">Lucas Mendes</div>
+        <div style="font-size:11px;color:var(--muted);">Cliente desde Jan 2024</div>
+        <div style="font-size:11px;color:var(--gold);margin-top:2px;">⭐ 8 cortes realizados</div>
+      </div>
+    </div>
+    <button class="btn btn-outline btn-sm" style="width:100%;font-family:'DM Sans';font-size:13px;font-weight:600;letter-spacing:0;" onclick="showToast('Notificações ativadas!')">🔔 Ativar lembretes por WhatsApp</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="page" id="page-dashboard">
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Hoje</div><div class="metric-val">R$210</div><div class="metric-sub">↑ 3 atendidos</div></div>
+    <div class="metric"><div class="metric-label">Esta semana</div><div class="metric-val">R$1.4K</div><div class="metric-sub">↑ +12% vs ant.</div></div>
+    <div class="metric"><div class="metric-label">Agendamentos</div><div class="metric-val">6</div><div class="metric-sub" style="color:var(--gold);">2 pendentes</div></div>
+    <div class="metric"><div class="metric-label">Estoque</div><div class="metric-val" style="color:var(--gold);">2</div><div class="metric-sub" style="color:var(--red);">⚠ baixo</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Agenda de hoje</div>
+    <div class="date-strip">
+      <div class="date-day"><div class="day-name">DOM</div><div class="day-num">20</div></div>
+      <div class="date-day"><div class="day-name">SEG</div><div class="day-num">21</div></div>
+      <div class="date-day active"><div class="day-name">TER</div><div class="day-num">22</div></div>
+      <div class="date-day"><div class="day-name">QUA</div><div class="day-num">23</div></div>
+      <div class="date-day"><div class="day-name">QUI</div><div class="day-num">24</div></div>
+      <div class="date-day"><div class="day-name">SEX</div><div class="day-num">25</div></div>
+      <div class="date-day"><div class="day-name">SÁB</div><div class="day-num">26</div></div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">09:00</div>
+      <div class="slot-bar" style="background:var(--green);"></div>
+      <div class="slot-info"><div class="slot-name">Marcos Silva</div><div class="slot-service">Corte + Barba · 50min</div></div>
+      <div><div class="slot-price">R$55</div><div class="slot-status s-confirm">Feito</div></div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">10:00</div>
+      <div class="slot-bar" style="background:var(--gold);"></div>
+      <div class="slot-info"><div class="slot-name">Lucas Mendes</div><div class="slot-service">Corte Clássico · 30min</div></div>
+      <div><div class="slot-price">R$35</div><div class="slot-status s-pending">Agora</div></div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">11:00</div>
+      <div class="slot-bar" style="background:var(--blue);"></div>
+      <div class="slot-info"><div class="slot-name">Rafael Costa</div><div class="slot-service">Barba · 20min</div></div>
+      <div><div class="slot-price">R$25</div><div class="slot-status" style="background:rgba(52,152,219,.15);color:var(--blue);">Conf.</div></div>
+    </div>
+    <div class="slot-empty">
+      <div class="slot-time">12:00</div>
+      <div class="slot-empty-line"></div>
+      <div style="font-size:11px;color:var(--muted);">Livre</div>
+    </div>
+    <div class="slot">
+      <div class="slot-time">14:00</div>
+      <div class="slot-bar" style="background:var(--blue);"></div>
+      <div class="slot-info"><div class="slot-name">André Lima</div><div class="slot-service">Corte + Barba · 50min</div></div>
+      <div><div class="slot-price">R$55</div><div class="slot-status" style="background:rgba(52,152,219,.15);color:var(--blue);">Conf.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ESTOQUE -->
+<div class="page" id="page-estoque">
+  <div id="stockAlertBar" style="display:none;background:rgba(231,76,60,0.12);border:1px solid rgba(231,76,60,0.3);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--red);font-weight:600;"></div>
+  <div class="card">
+    <div class="card-title">Produtos em estoque <span class="badge" id="stockBadge">0 baixo</span></div>
+    <div id="stockList"></div>
+  </div>
+  <button class="btn" onclick="openAddProduct()" style="margin-bottom:10px;">+ ADICIONAR PRODUTO</button>
+  <button class="btn btn-outline" style="font-family:'DM Sans';font-size:13px;font-weight:600;letter-spacing:0;" onclick="showToast('Relatório gerado!')">📊 Relatório de estoque</button>
+</div>
+
+<!-- MODAL EDITAR PRODUTO -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title" id="editModalTitle">Editar Produto</div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Ícone</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;" id="iconPicker">
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🧴</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🪒</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">💈</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🧼</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">✂️</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🧹</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">💊</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🫙</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">📦</span>
+        <span onclick="selectIcon(this)" style="font-size:22px;cursor:pointer;padding:6px;border-radius:8px;border:1px solid var(--border);">🧃</span>
+      </div>
+    </div>
+    <div style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Nome do produto</div>
+      <input id="editName" type="text" placeholder="Ex: Pomada Modeladora" style="width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;color:var(--text);font-family:'DM Sans';">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Quantidade atual</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="changeQty(-1)" style="width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:18px;color:var(--text);cursor:pointer;">−</button>
+          <input id="editQty" type="number" min="0" value="0" style="width:50px;text-align:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px;font-size:16px;font-weight:600;color:var(--text);font-family:'Bebas Neue';">
+          <button onclick="changeQty(1)" style="width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:18px;color:var(--text);cursor:pointer;">+</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">Avisar quando chegar em</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button onclick="changeMin(-1)" style="width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:18px;color:var(--text);cursor:pointer;">−</button>
+          <input id="editMin" type="number" min="1" value="2" style="width:50px;text-align:center;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:6px;font-size:16px;font-weight:600;color:var(--gold);font-family:'Bebas Neue';">
+          <button onclick="changeMin(1)" style="width:34px;height:34px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;font-size:18px;color:var(--text);cursor:pointer;">+</button>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;">⚠ O app vai alertar quando a quantidade chegar em <strong id="editMinPreview" style="color:var(--gold);">2</strong> unidades</div>
+    <button class="btn" style="margin-bottom:10px;" onclick="saveProduct()">SALVAR</button>
+    <button class="btn btn-outline" style="font-family:'DM Sans';font-size:13px;font-weight:600;letter-spacing:0;" onclick="closeEditModal()">Cancelar</button>
+    <button id="deleteBtn" class="btn" style="margin-top:8px;background:rgba(231,76,60,0.15);color:var(--red);border:1px solid rgba(231,76,60,0.3);font-family:'DM Sans';font-size:13px;font-weight:600;letter-spacing:0;" onclick="deleteProduct()">🗑 Remover produto</button>
+  </div>
+</div>
+
+<!-- FINANCEIRO -->
+<div class="page" id="page-financeiro">
+  <div class="metrics" style="grid-template-columns:1fr 1fr 1fr;">
+    <div class="metric"><div class="metric-label">Receita mês</div><div class="metric-val" style="font-size:22px;">R$4.2K</div><div class="metric-sub">↑ +18%</div></div>
+    <div class="metric"><div class="metric-label">Despesas</div><div class="metric-val" style="font-size:22px;color:var(--red);">R$890</div><div class="metric-sub" style="color:var(--muted);">fixo</div></div>
+    <div class="metric"><div class="metric-label">Lucro</div><div class="metric-val" style="font-size:22px;color:var(--green);">R$3.3K</div><div class="metric-sub">líquido</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Faturamento semanal</div>
+    <div class="fin-chart">
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);opacity:0.5;height:45px;"></div></div><div class="bar-label">DOM</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);opacity:0.5;height:60px;"></div></div><div class="bar-label">SEG</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);opacity:0.5;height:55px;"></div></div><div class="bar-label">TER</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);height:80px;"></div></div><div class="bar-label">QUA</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);opacity:0.5;height:70px;"></div></div><div class="bar-label">QUI</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);height:80px;"></div></div><div class="bar-label">SEX</div></div>
+      <div class="bar-wrap"><div class="bar-bg" style="height:80px;"><div class="bar-fill" style="background:var(--gold);height:65px;"></div></div><div class="bar-label">SÁB</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Lançamentos</div>
+    <div class="fin-row"><div><div class="fin-desc">Lucas Mendes — Corte</div><div class="fin-date">Hoje, 10:00</div></div><div class="fin-val fin-in">+R$35</div></div>
+    <div class="fin-row"><div><div class="fin-desc">Marcos Silva — C+B</div><div class="fin-date">Hoje, 09:00</div></div><div class="fin-val fin-in">+R$55</div></div>
+    <div class="fin-row"><div><div class="fin-desc">Reposição lâminas</div><div class="fin-date">Ontem</div></div><div class="fin-val fin-out">-R$48</div></div>
+    <div class="fin-row"><div><div class="fin-desc">André Lima — C+B</div><div class="fin-date">Ontem</div></div><div class="fin-val fin-in">+R$55</div></div>
+    <div class="fin-row"><div><div class="fin-desc">Rafael Costa — Barba</div><div class="fin-date">Ontem</div></div><div class="fin-val fin-in">+R$25</div></div>
+  </div>
+</div>
+
+<!-- LEMBRETES -->
+<div class="page" id="page-lembretes">
+  <div class="card">
+    <div class="card-title">Automações ativas</div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--green);"></div><div class="reminder-info"><div class="reminder-title">Lembrete de agendamento</div><div class="reminder-desc">WhatsApp enviado 1h antes para o cliente</div></div><div class="reminder-time">Ativo ✓</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--green);"></div><div class="reminder-info"><div class="reminder-title">Confirmação automática</div><div class="reminder-desc">Msg enviada ao cliente ao agendar</div></div><div class="reminder-time">Ativo ✓</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--gold);"></div><div class="reminder-info"><div class="reminder-title">Reativação de clientes</div><div class="reminder-desc">Lembra clientes que não voltam há 30 dias</div></div><div class="reminder-time">Pausado</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--green);"></div><div class="reminder-info"><div class="reminder-title">Alerta de estoque baixo</div><div class="reminder-desc">Notificação quando produto está acabando</div></div><div class="reminder-time">Ativo ✓</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--green);"></div><div class="reminder-info"><div class="reminder-title">Relatório diário</div><div class="reminder-desc">Resumo financeiro às 20h todo dia</div></div><div class="reminder-time">Ativo ✓</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--muted);"></div><div class="reminder-info"><div class="reminder-title">Promoção mensal</div><div class="reminder-desc">Envio automático de oferta aos clientes</div></div><div class="reminder-time">Inativo</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Próximos lembretes</div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--gold);"></div><div class="reminder-info"><div class="reminder-title">WhatsApp → Lucas Mendes</div><div class="reminder-desc">"Olá Lucas! Seu corte é às 10:00 hoje 💈"</div></div><div class="reminder-time">09:00</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--blue);"></div><div class="reminder-info"><div class="reminder-title">WhatsApp → Rafael Costa</div><div class="reminder-desc">"Rafael, seu horário é às 11:00 hoje 🪒"</div></div><div class="reminder-time">10:00</div></div>
+    <div class="reminder"><div class="reminder-dot" style="background:var(--red);"></div><div class="reminder-info"><div class="reminder-title">Alerta: Óleo para Barba</div><div class="reminder-desc">Apenas 1 unidade restante — repor urgente</div></div><div class="reminder-time">Agora</div></div>
+  </div>
+  <button class="btn" onclick="showToast('Lembrete enviado por WhatsApp!')">💬 ENVIAR LEMBRETE AGORA</button>
+</div>
+
+<!-- PIN LOCK -->
+<div class="pin-overlay" id="pinOverlay">
+  <div class="pin-logo">Navalha de <span>Ouro</span></div>
+  <div class="pin-subtitle">Área restrita</div>
+  <div class="pin-title">🔐 Digite a senha do barbeiro</div>
+  <div class="pin-dots">
+    <div class="pin-dot" id="pd0"></div><div class="pin-dot" id="pd1"></div>
+    <div class="pin-dot" id="pd2"></div><div class="pin-dot" id="pd3"></div>
+  </div>
+  <div class="pin-grid">
+    <div class="pin-key" onclick="pinPress('1')"><div class="pin-num">1</div></div>
+    <div class="pin-key" onclick="pinPress('2')"><div class="pin-num">2</div><div class="pin-letters">ABC</div></div>
+    <div class="pin-key" onclick="pinPress('3')"><div class="pin-num">3</div><div class="pin-letters">DEF</div></div>
+    <div class="pin-key" onclick="pinPress('4')"><div class="pin-num">4</div><div class="pin-letters">GHI</div></div>
+    <div class="pin-key" onclick="pinPress('5')"><div class="pin-num">5</div><div class="pin-letters">JKL</div></div>
+    <div class="pin-key" onclick="pinPress('6')"><div class="pin-num">6</div><div class="pin-letters">MNO</div></div>
+    <div class="pin-key" onclick="pinPress('7')"><div class="pin-num">7</div><div class="pin-letters">PQRS</div></div>
+    <div class="pin-key" onclick="pinPress('8')"><div class="pin-num">8</div><div class="pin-letters">TUV</div></div>
+    <div class="pin-key" onclick="pinPress('9')"><div class="pin-num">9</div><div class="pin-letters">WXYZ</div></div>
+    <div class="pin-key" style="visibility:hidden;"></div>
+    <div class="pin-key" onclick="pinPress('0')"><div class="pin-num">0</div></div>
+    <div class="pin-key gold-key" onclick="pinDelete()"><div class="pin-num" style="font-size:20px;color:var(--gold);">⌫</div></div>
+  </div>
+  <div class="pin-error-msg" id="pinError"></div>
+  <button class="pin-back-btn" onclick="cancelPin()">← Voltar para área do cliente</button>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Confirmar Agendamento</div>
+    <div class="confirm-row"><div class="confirm-key">Serviço</div><div class="confirm-val" id="conf-svc">Corte Clássico</div></div>
+    <div class="confirm-row"><div class="confirm-key">Barbeiro</div><div class="confirm-val">João ⭐ 5.0</div></div>
+    <div class="confirm-row"><div class="confirm-key">Data</div><div class="confirm-val">Hoje, Ter 22 Abr</div></div>
+    <div class="confirm-row"><div class="confirm-key">Horário</div><div class="confirm-val" id="conf-time">10:00</div></div>
+    <div class="confirm-row"><div class="confirm-key">Duração</div><div class="confirm-val" id="conf-dur">30 min</div></div>
+    <div class="confirm-row"><div class="confirm-key">Valor</div><div class="confirm-val" id="conf-price" style="color:var(--gold);font-family:'Bebas Neue';font-size:20px;">R$35</div></div>
+    <button class="btn" style="margin-bottom:10px;" onclick="confirmar()">✓ CONFIRMAR</button>
+    <button class="btn btn-outline" style="font-family:'DM Sans';font-size:13px;font-weight:600;letter-spacing:0;" onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">✓ Agendamento confirmado!</div>
+
+<script>
+const MODES = {
+  cliente:  [{id:'agendar',icon:'📅',label:'Agendar'},{id:'meus',icon:'🕐',label:'Meus Horários'}],
+  barbeiro: [{id:'dashboard',icon:'📊',label:'Dashboard'},{id:'estoque',icon:'📦',label:'Estoque'},{id:'financeiro',icon:'💰',label:'Financeiro'},{id:'lembretes',icon:'🔔',label:'Lembretes',notif:true}]
+};
+let selectedSvc={name:'Corte Clássico',price:'R$35',dur:'30min'}, selectedTime='10:00';
+const PIN='1234'; let pinInput='', pinUnlocked=false;
+
+function ge(id){return document.getElementById(id);}
+function pinPress(d){if(pinInput.length>=4)return;pinInput+=d;refreshDots();if(pinInput.length===4)setTimeout(checkPin,120);}
+function pinDelete(){pinInput=pinInput.slice(0,-1);refreshDots();ge('pinError').textContent='';}
+function refreshDots(state){for(let i=0;i<4;i++){const dot=ge('pd'+i);dot.className='pin-dot';if(state==='error')dot.classList.add('error');else if(i<pinInput.length)dot.classList.add('filled');}}
+function checkPin(){if(pinInput===PIN){pinUnlocked=true;ge('pinOverlay').classList.remove('show');ge('pinError').textContent='';pinInput='';refreshDots();activateMode('barbeiro');}else{refreshDots('error');ge('pinError').textContent='✕ Senha incorreta. Tente novamente.';setTimeout(()=>{pinInput='';refreshDots();ge('pinError').textContent='';},1300);}}
+function cancelPin(){ge('pinOverlay').classList.remove('show');pinInput='';refreshDots();ge('pinError').textContent='';activateMode('cliente');}
+function setMode(mode){if(mode==='barbeiro'&&!pinUnlocked){ge('pinOverlay').classList.add('show');return;}if(mode==='cliente')pinUnlocked=false;activateMode(mode);}
+function activateMode(mode){document.querySelectorAll('.mode-btn').forEach((b,i)=>b.classList.toggle('active',(i===0&&mode==='cliente')||(i===1&&mode==='barbeiro')));buildNav(mode);goPage(MODES[mode][0].id);}
+function buildNav(mode){const nav=ge('navBar');nav.innerHTML='';MODES[mode].forEach((item,i)=>{const el=document.createElement('div');el.className='nav-item'+(i===0?' active':'')+(item.notif?' notif':'');el.innerHTML=`<div class="nav-icon">${item.icon}</div>${item.label}`;el.onclick=()=>{goPage(item.id);nav.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');};nav.appendChild(el);});}
+function goPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=ge('page-'+id);if(pg)pg.classList.add('active');if(id==='estoque')renderStock();}
+function selectService(el,name,price,dur){document.querySelectorAll('.service-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');selectedSvc={name,price,dur};}
+function selectBarber(el){document.querySelectorAll('.barber-card').forEach(c=>c.classList.remove('selected'));el.classList.add('selected');}
+function selectTime(el){document.querySelectorAll('.time-btn:not(.busy)').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');selectedTime=el.textContent;}
+function openModal(){ge('conf-svc').textContent=selectedSvc.name;ge('conf-price').textContent=selectedSvc.price;ge('conf-dur').textContent=selectedSvc.dur;ge('conf-time').textContent=selectedTime;ge('modal').classList.add('show');}
+function closeModal(){ge('modal').classList.remove('show');}
+function confirmar(){closeModal();showToast('✓ Agendamento confirmado! WhatsApp enviado.');}
+function showToast(msg){const t=ge('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+let estoqueData=[
+  {id:1,icon:'🧴',name:'Pomada Modeladora',qty:8,min:2},
+  {id:2,icon:'🪒',name:'Lâminas Gillette',qty:4,min:10},
+  {id:3,icon:'💈',name:'Óleo para Barba',qty:1,min:3},
+  {id:4,icon:'🧼',name:'Shampoo Profissional',qty:6,min:2},
+  {id:5,icon:'✂️',name:'Tesoura Profissional',qty:3,min:1},
+];
+let nextId=6, editingId=null, selectedIconEl=null;
+
+function renderStock(){
+  const list=ge('stockList');if(!list)return;list.innerHTML='';let lowCount=0;
+  estoqueData.forEach(item=>{
+    const pct=Math.min(100,Math.round((item.qty/Math.max(item.min*3,1))*100));
+    let color='var(--green)';
+    if(item.qty===0){color='var(--red)';lowCount++;}
+    else if(item.qty<=item.min){color='var(--gold)';lowCount++;}
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);';
+    row.innerHTML=`<div style="font-size:24px;width:40px;text-align:center;">${item.icon}</div><div style="flex:1;"><div style="font-size:13px;font-weight:600;">${item.name}</div><div style="font-size:11px;color:var(--muted);">Avisar em: ${item.min} unid.</div><div style="height:4px;background:var(--bg3);border-radius:2px;margin-top:5px;"><div style="height:4px;width:${pct}%;background:${color};border-radius:2px;"></div></div></div><div style="font-family:'Bebas Neue';font-size:22px;color:${color};min-width:30px;text-align:center;">${item.qty}</div><div onclick="openEditProduct(${item.id})" style="width:30px;height:30px;border-radius:8px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.25);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;flex-shrink:0;">✏️</div>`;
+    list.appendChild(row);
+  });
+  const badge=ge('stockBadge');if(badge)badge.textContent=lowCount+' baixo';
+  const bar=ge('stockAlertBar');
+  if(bar){const low=estoqueData.filter(i=>i.qty<=i.min);if(low.length>0){bar.style.display='block';bar.textContent='⚠ Atenção: '+low.map(i=>i.name).join(', ')+(low.length===1?' está com estoque baixo!':' estão com estoque baixo!');}else bar.style.display='none';}
+}
+function openAddProduct(){editingId=null;ge('editModalTitle').textContent='+ Novo Produto';ge('editName').value='';ge('editQty').value=0;ge('editMin').value=2;ge('editMinPreview').textContent=2;ge('deleteBtn').style.display='none';document.querySelectorAll('#iconPicker span').forEach(s=>s.classList.remove('icon-selected'));selectedIconEl=null;ge('editModal').classList.add('show');}
+function openEditProduct(id){const item=estoqueData.find(i=>i.id===id);if(!item)return;editingId=id;ge('editModalTitle').textContent='Editar Produto';ge('editName').value=item.name;ge('editQty').value=item.qty;ge('editMin').value=item.min;ge('editMinPreview').textContent=item.min;ge('deleteBtn').style.display='block';document.querySelectorAll('#iconPicker span').forEach(s=>{s.classList.remove('icon-selected');if(s.textContent===item.icon){s.classList.add('icon-selected');selectedIconEl=s;}});ge('editModal').classList.add('show');}
+function closeEditModal(){ge('editModal').classList.remove('show');}
+function selectIcon(el){document.querySelectorAll('#iconPicker span').forEach(s=>s.classList.remove('icon-selected'));el.classList.add('icon-selected');selectedIconEl=el;}
+function changeQty(delta){const inp=ge('editQty');inp.value=Math.max(0,(parseInt(inp.value)||0)+delta);}
+function changeMin(delta){const inp=ge('editMin');inp.value=Math.max(1,(parseInt(inp.value)||1)+delta);ge('editMinPreview').textContent=inp.value;}
+document.addEventListener('input',e=>{if(e.target.id==='editMin')ge('editMinPreview').textContent=e.target.value||1;});
+function saveProduct(){const name=ge('editName').value.trim(),qty=parseInt(ge('editQty').value)||0,min=parseInt(ge('editMin').value)||1,icon=selectedIconEl?selectedIconEl.textContent:'📦';if(!name){showToast('Digite o nome do produto!');return;}if(editingId!==null){const item=estoqueData.find(i=>i.id===editingId);if(item){item.icon=icon;item.name=name;item.qty=qty;item.min=min;}showToast('✓ Produto atualizado!');}else{estoqueData.push({id:nextId++,icon,name,qty,min});showToast('✓ Produto adicionado!');}closeEditModal();renderStock();}
+function deleteProduct(){if(editingId===null)return;estoqueData=estoqueData.filter(i=>i.id!==editingId);closeEditModal();renderStock();showToast('Produto removido.');}
+
+buildNav('cliente');
+goPage('agendar');
+</script>
+</body>
+</html>
