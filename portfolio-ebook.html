@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Portfólio — Fabrizia Gonsales Soluções Digitais</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--navy:#0f1f35;--gold:#b8973a;--cream:#faf7f2;}
+body{font-family:'DM Sans',sans-serif;background:#c9cdd4;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.page{width:794px;height:1123px;background:white;margin:20px auto;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.2);page-break-after:always;break-after:page;position:relative;display:flex;flex-direction:column;}
+@media print{body{background:none;}  .page{margin:0;box-shadow:none;} @page{size:A4;margin:0;}}
+
+/* ── CAPA ── */
+.cover{background:var(--navy);color:white;}
+.cover-ring{position:absolute;border:1px solid rgba(184,151,58,.1);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-52%);}
+.r1{width:380px;height:380px;} .r2{width:580px;height:580px;border-color:rgba(184,151,58,.05);}
+.cover-top{display:flex;justify-content:space-between;align-items:center;padding:60px 60px 0;z-index:1;}
+.cover-tag{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);}
+.cover-year{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.3);}
+.cover-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px;z-index:1;padding:0 60px;}
+.cover-line{width:48px;height:2px;background:var(--gold);}
+.cover-name{font-family:'Cormorant Garamond',serif;font-size:68px;font-weight:300;line-height:1;}
+.cover-name em{color:var(--gold);font-style:italic;}
+.cover-sub{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:rgba(255,255,255,.4);font-weight:300;}
+.cover-tagline{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;font-weight:300;color:rgba(255,255,255,.6);max-width:360px;line-height:1.55;}
+.cover-badge{background:rgba(184,151,58,.15);border:1px solid rgba(184,151,58,.35);border-radius:6px;padding:10px 22px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);}
+.cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;padding:0 60px 52px;border-top:1px solid rgba(255,255,255,.07);padding-top:28px;z-index:1;}
+.cover-contact{font-size:11px;color:rgba(255,255,255,.4);line-height:2.2;}
+.cover-contact strong{color:var(--gold);display:block;font-size:10px;letter-spacing:1px;text-transform:uppercase;}
+.cover-note{font-size:10px;color:rgba(255,255,255,.2);text-align:right;line-height:1.8;}
+
+/* ── SOBRE ── */
+.about{background:var(--cream);}
+.about-hdr{background:var(--navy);padding:40px 60px 32px;display:flex;justify-content:space-between;align-items:flex-end;flex-shrink:0;}
+.about-hdr h2{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:white;line-height:1;}
+.about-hdr h2 em{color:var(--gold);font-style:italic;}
+.about-hdr-sub{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:8px;}
+.about-hdr-num{font-family:'Cormorant Garamond',serif;font-size:88px;font-weight:300;color:rgba(184,151,58,.18);line-height:1;}
+.about-body{flex:1;padding:40px 60px;display:flex;gap:40px;align-items:flex-start;}
+.about-photo{flex:0 0 160px;}
+.about-photo-frame{width:160px;height:210px;border-radius:84px 84px 14px 14px;overflow:hidden;background:var(--navy);}
+.about-photo-frame img{width:100%;height:100%;object-fit:cover;}
+.about-text{flex:1;}
+.about-lead{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:400;line-height:1.55;color:var(--navy);margin-bottom:18px;}
+.about-lead em{color:var(--gold);font-style:italic;}
+.about-p{font-size:12.5px;line-height:1.8;color:#374151;margin-bottom:26px;}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.about-card{background:white;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:13px 15px;}
+.about-card h4{font-size:11.5px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+.about-card p{font-size:11px;color:#6b7280;line-height:1.45;}
+.about-ftr{padding:20px 60px 28px;border-top:1px solid rgba(15,31,53,.08);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.about-quote{font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--navy);opacity:.65;}
+.about-pill{background:var(--navy);color:white;padding:10px 22px;border-radius:100px;font-size:11px;font-weight:500;}
+
+/* ── DEMO ── */
+.demo-hdr{padding:28px 60px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.demo-seg{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:6px;}
+.demo-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:white;line-height:1;}
+.demo-pnum{font-family:'Cormorant Garamond',serif;font-size:70px;font-weight:300;color:rgba(255,255,255,.12);line-height:1;}
+.demo-main{flex:1;background:var(--cream);display:flex;}
+.demo-l{flex:0 0 225px;padding:40px 20px 40px 60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.phone{width:144px;height:290px;border:10px solid #18202e;border-radius:32px;overflow:hidden;box-shadow:0 28px 60px rgba(0,0,0,.28);position:relative;background:#18202e;flex-shrink:0;}
+.phone::before{content:'';position:absolute;top:7px;left:50%;transform:translateX(-50%);width:30px;height:4px;background:#222c3a;border-radius:3px;z-index:2;}
+.phone img{width:100%;height:100%;object-fit:cover;display:block;}
+.phone-shadow{width:88px;height:10px;background:rgba(0,0,0,.12);border-radius:50%;filter:blur(6px);}
+.demo-r{flex:1;padding:40px 60px 40px 20px;display:flex;flex-direction:column;}
+.demo-desc{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;line-height:1.55;color:var(--navy);margin-bottom:24px;}
+.demo-features{list-style:none;flex:1;}
+.demo-features li{padding:10px 0;font-size:12.5px;color:#374151;border-bottom:1px solid rgba(15,31,53,.07);display:flex;gap:11px;line-height:1.4;}
+.demo-features li::before{content:'→';font-weight:700;flex-shrink:0;color:var(--gold);}
+.demo-bot{display:flex;justify-content:space-between;align-items:center;padding-top:20px;margin-top:14px;border-top:1px solid rgba(15,31,53,.08);}
+.demo-url{font-size:10px;color:#9ca3af;font-family:monospace;}
+.demo-btn{font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border-radius:100px;border:1.5px solid;font-weight:600;white-space:nowrap;}
+.demo-ftr{padding:13px 60px;background:rgba(15,31,53,.03);border-top:1px solid rgba(15,31,53,.05);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.demo-ftr-brand{font-size:9px;color:rgba(15,31,53,.3);letter-spacing:1px;}
+.demo-dots{display:flex;gap:5px;}
+.demo-dots span{width:6px;height:6px;border-radius:50%;background:rgba(15,31,53,.12);}
+.demo-dots span.on{background:var(--gold);}
+
+/* ── CTA FINAL ── */
+.cta{background:var(--navy);color:white;align-items:center;justify-content:center;text-align:center;padding:0 80px;}
+.cta-ring{position:absolute;border:1px solid rgba(184,151,58,.07);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);}
+.cr1{width:360px;height:360px;} .cr2{width:560px;height:560px;border-color:rgba(184,151,58,.04);}
+.cta-lbl{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:22px;z-index:1;}
+.cta-h{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:300;line-height:1.08;margin-bottom:16px;z-index:1;}
+.cta-h em{color:var(--gold);font-style:italic;}
+.cta-sub{font-size:13.5px;color:rgba(255,255,255,.55);max-width:420px;line-height:1.65;margin-bottom:44px;font-weight:300;z-index:1;}
+.cta-cards{display:flex;gap:16px;margin-bottom:42px;width:100%;z-index:1;}
+.cta-card{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:24px 18px;}
+.cta-card-ico{font-size:26px;margin-bottom:10px;}
+.cta-card h4{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.cta-card p{font-size:11px;color:rgba(255,255,255,.42);line-height:1.5;}
+.cta-wpp{background:#25d366;color:white;padding:17px 42px;border-radius:100px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:12px;margin-bottom:16px;letter-spacing:.2px;z-index:1;}
+.cta-wpp svg{width:21px;height:21px;flex-shrink:0;}
+.cta-or{font-size:11px;color:rgba(255,255,255,.22);margin-bottom:16px;z-index:1;}
+.cta-email{font-size:13px;color:rgba(255,255,255,.42);margin-bottom:44px;z-index:1;}
+.cta-email strong{color:rgba(255,255,255,.75);}
+.cta-line{width:100%;height:1px;background:rgba(255,255,255,.07);margin-bottom:22px;z-index:1;}
+.cta-legal{font-size:10px;color:rgba(255,255,255,.2);letter-spacing:.5px;z-index:1;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ CAPA ══════════ -->
+<div class="page cover">
+  <div class="cover-ring r1"></div>
+  <div class="cover-ring r2"></div>
+  <div class="cover-top">
+    <div class="cover-tag">Portfólio de Demonstrações</div>
+    <div class="cover-year">2025</div>
+  </div>
+  <div class="cover-center">
+    <div class="cover-line"></div>
+    <h1 class="cover-name">Fabrizia<br><em>Gonsales</em></h1>
+    <p class="cover-sub">Soluções Digitais</p>
+    <div class="cover-line"></div>
+    <p class="cover-tagline">Sites profissionais e sistemas de agendamento para negócios locais</p>
+    <div class="cover-badge">8 Demos disponíveis para ver ao vivo</div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-contact">
+      <strong>WhatsApp</strong>(XX) XXXXX-XXXX<!-- ← substitua pelo seu número -->
+      <strong>E-mail</strong>fabriziagonsales@gmail.com
+    </div>
+    <div class="cover-note">Orçamento personalizado<br>sem compromisso</div>
+  </div>
+</div>
+
+<!-- ══════════ SOBRE ══════════ -->
+<div class="page about">
+  <div class="about-hdr">
+    <div>
+      <h2>Olá, sou a <em>Fabrizia</em></h2>
+      <p class="about-hdr-sub">Quem está por trás das soluções</p>
+    </div>
+    <div class="about-hdr-num">02</div>
+  </div>
+  <div class="about-body">
+    <div class="about-photo">
+      <!-- Substitua a URL abaixo pela sua própria foto -->
+      <div class="about-photo-frame">
+        <img src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Fabrizia Gonsales">
+      </div>
+    </div>
+    <div class="about-text">
+      <p class="about-lead">Ajudo negócios locais a terem <em>presença digital profissional</em> — rápido, acessível e que realmente converte.</p>
+      <p class="about-p">Trabalho com sites modernos e sistemas de agendamento desenvolvidos especialmente para o mercado local: salões, clínicas, restaurantes, pet shops e muito mais. Cada solução é personalizada com as cores, serviços e identidade do seu negócio — pronta para funcionar em poucos dias.<br><br>Acredito que todo negócio, independente do tamanho, merece uma presença digital que impressiona e que traz resultados concretos: mais agendamentos, mais pedidos, mais clientes.</p>
+      <div class="about-grid">
+        <div class="about-card"><h4>Entrega rápida</h4><p>Site personalizado em poucos dias, sem burocracia</p></div>
+        <div class="about-card"><h4>Sem contratos longos</h4><p>Soluções flexíveis que crescem com seu negócio</p></div>
+        <div class="about-card"><h4>Suporte próximo</h4><p>Atendimento direto via WhatsApp, sem intermediários</p></div>
+        <div class="about-card"><h4>Feito para o local</h4><p>Soluções pensadas para quem atende presencialmente</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="about-ftr">
+    <p class="about-quote">"Seu negócio merece uma vitrine à altura."</p>
+    <div class="about-pill">fabriziagonsales@gmail.com</div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 1: RESTAURANTE ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#c17f24;">
+    <div><p class="demo-seg">Restaurante · Cardápio Digital</p><h2 class="demo-title">Cardápio Online</h2></div>
+    <div class="demo-pnum">03</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Restaurante"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Cardápio digital elegante com carrinho integrado — o cliente escolhe, monta o pedido e envia direto pelo WhatsApp.</p>
+      <ul class="demo-features">
+        <li>Cardápio com fotos, descrições e preços por categoria</li>
+        <li>Carrinho de pedidos com total calculado automaticamente</li>
+        <li>Pedido formatado enviado direto pelo WhatsApp</li>
+        <li>Modo escuro e claro com alternância e persistência</li>
+        <li>Busca de pratos em tempo real por nome</li>
+        <li>Chatbot de atendimento com respostas automáticas 24h</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/teste2/demos/restaurante</span>
+        <span class="demo-btn" style="color:#c17f24;border-color:#c17f24;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 2: CLÍNICA ESTÉTICA ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#7c3aed;">
+    <div><p class="demo-seg">Clínica Estética · Site Institucional</p><h2 class="demo-title">Clínica Estética</h2></div>
+    <div class="demo-pnum">04</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/3985165/pexels-photo-3985165.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Estética"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Site sofisticado com galeria de transformações, chatbot inteligente e agendamento por WhatsApp em segundos.</p>
+      <ul class="demo-features">
+        <li>Apresentação de serviços com fotos profissionais e preços</li>
+        <li>Galeria antes e depois com slider interativo</li>
+        <li>Chatbot de atendimento com perguntas e respostas automatizadas</li>
+        <li>Carrossel de depoimentos com avaliações e fotos reais</li>
+        <li>Formulário de contato integrado ao WhatsApp</li>
+        <li>Localização no mapa e links para redes sociais</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/teste2/demos/clinica-estetica</span>
+        <span class="demo-btn" style="color:#7c3aed;border-color:#7c3aed;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 3: ODONTOLOGIA ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#0f1f35;">
+    <div><p class="demo-seg">Odontologia · Site Completo</p><h2 class="demo-title">Clínica Odontológica</h2></div>
+    <div class="demo-pnum">05</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/3845766/pexels-photo-3845766.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Odontologia"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Site premium para clínicas odontológicas com especialidades, galeria de casos e agendamento simplificado.</p>
+      <ul class="demo-features">
+        <li>Apresentação de especialidades com ícones e descrições</li>
+        <li>Seção de convênios e planos aceitos</li>
+        <li>Galeria de casos com slider antes e depois</li>
+        <li>Agendamento de consulta direto pelo WhatsApp</li>
+        <li>Depoimentos de pacientes com avaliações em estrelas</li>
+        <li>Chatbot de triagem para direcionar ao serviço certo</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/odontologia</span>
+        <span class="demo-btn" style="color:#b8973a;border-color:#b8973a;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span class="on"></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 4: ACADEMIA ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#dc2626;">
+    <div><p class="demo-seg">Academia · Site Institucional</p><h2 class="demo-title">Academia Fitness</h2></div>
+    <div class="demo-pnum">06</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Academia"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Site dinâmico para academias com planos, grade de aulas, galeria e captação de novos alunos via WhatsApp.</p>
+      <ul class="demo-features">
+        <li>Apresentação de planos com preços e benefícios em destaque</li>
+        <li>Grade de aulas e horários por modalidade</li>
+        <li>Galeria da estrutura e equipamentos disponíveis</li>
+        <li>Formulário de matrícula online integrado ao WhatsApp</li>
+        <li>Contador animado de alunos, instrutores e anos de atividade</li>
+        <li>Depoimentos de alunos com resultados reais</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/teste2/demos/academia</span>
+        <span class="demo-btn" style="color:#dc2626;border-color:#dc2626;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span></span><span class="on"></span><span></span><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 5: BARBEARIA ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#1c1c1c;">
+    <div><p class="demo-seg">Barbearia · App de Agendamento</p><h2 class="demo-title">BarberPro</h2></div>
+    <div class="demo-pnum">07</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/1319460/pexels-photo-1319460.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Barbearia"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Sistema de agendamento completo para barbearias com grade visual por barbeiro, acesso por PIN e gestão de clientes.</p>
+      <ul class="demo-features">
+        <li>Grade visual de horários por barbeiro (slots de 30 minutos)</li>
+        <li>Acesso profissional protegido por PIN exclusivo</li>
+        <li>Agendamento rápido diretamente no slot da grade</li>
+        <li>Modo cliente: solicita horário sem acesso ao sistema</li>
+        <li>Gestão de serviços com valores e duração personalizáveis</li>
+        <li>Histórico completo de agendamentos por data</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/teste2/demos/agenda-barbearia</span>
+        <span class="demo-btn" style="color:#c9922a;border-color:#c9922a;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span></span><span></span><span class="on"></span><span></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 6: SALÃO ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:linear-gradient(135deg,#7c3aed,#ec4899);">
+    <div><p class="demo-seg">Salão de Beleza · App de Agendamento</p><h2 class="demo-title">Alto Beleza</h2></div>
+    <div class="demo-pnum">08</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Salão"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Sistema de agendamento para salões com múltiplas profissionais, grade visual e controle financeiro do dia.</p>
+      <ul class="demo-features">
+        <li>Grade com múltiplas profissionais em colunas simultâneas</li>
+        <li>Clientes solicitam horários sem precisar de PIN</li>
+        <li>Adição rápida de agendamento no slot com popover</li>
+        <li>Fechamento do dia com total por profissional e geral</li>
+        <li>Serviços: escova, progressiva, pintura, cílios, unhas</li>
+        <li>Barra de resumo mostrando atendimentos e faturamento</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/demo-agenda-teste1</span>
+        <span class="demo-btn" style="color:#ec4899;border-color:#ec4899;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span></span><span></span><span></span><span class="on"></span><span></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 7: PET SHOP ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#059669;">
+    <div><p class="demo-seg">Pet Shop · Site Institucional</p><h2 class="demo-title">Pet Shop</h2></div>
+    <div class="demo-pnum">09</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/1741205/pexels-photo-1741205.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Pet Shop"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Site completo para pet shops com catálogo de serviços, agendamento de banho e tosa, e galeria de pets atendidos.</p>
+      <ul class="demo-features">
+        <li>Catálogo de serviços: banho, tosa, consultas e produtos</li>
+        <li>Tabela de preços por porte do animal</li>
+        <li>Galeria de fotos dos pets atendidos</li>
+        <li>Agendamento de banho e tosa direto pelo WhatsApp</li>
+        <li>Dicas e cuidados de saúde animal em blog</li>
+        <li>Localização, horários e contato direto</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/petshop</span>
+        <span class="demo-btn" style="color:#059669;border-color:#059669;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span class="on"></span><span></span></div>
+  </div>
+</div>
+
+<!-- ══════════ DEMO 8: DENTISTA ══════════ -->
+<div class="page">
+  <div class="demo-hdr" style="background:#0284c7;">
+    <div><p class="demo-seg">Dentista · Site com Convênios</p><h2 class="demo-title">Clínica Dentária</h2></div>
+    <div class="demo-pnum">10</div>
+  </div>
+  <div class="demo-main">
+    <div class="demo-l">
+      <div class="phone"><img src="https://images.pexels.com/photos/4021775/pexels-photo-4021775.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Dentista"></div>
+      <div class="phone-shadow"></div>
+    </div>
+    <div class="demo-r">
+      <p class="demo-desc">Site clean e profissional para clínicas odontológicas com suporte a convênios populares como Cartão de Todos.</p>
+      <ul class="demo-features">
+        <li>Destaque para convênios aceitos (Cartão de Todos, etc.)</li>
+        <li>Apresentação de especialidades com ícones e descrições</li>
+        <li>Chatbot inteligente para triagem e agendamento inicial</li>
+        <li>Formulário com envio automático ao WhatsApp</li>
+        <li>Seção de equipe com foto e especialidade de cada profissional</li>
+        <li>Design acessível e responsivo para todos os dispositivos</li>
+      </ul>
+      <div class="demo-bot">
+        <span class="demo-url">fabriziagonsales.github.io/teste2/demos/dentista</span>
+        <span class="demo-btn" style="color:#0284c7;border-color:#0284c7;">Ver Demo</span>
+      </div>
+    </div>
+  </div>
+  <div class="demo-ftr">
+    <span class="demo-ftr-brand">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS</span>
+    <div class="demo-dots"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="on"></span></div>
+  </div>
+</div>
+
+<!-- ══════════ CTA FINAL ══════════ -->
+<div class="page cta">
+  <div class="cta-ring cr1"></div>
+  <div class="cta-ring cr2"></div>
+  <p class="cta-lbl">Próximo passo</p>
+  <h2 class="cta-h">Vamos <em>conversar</em><br>sobre seu negócio?</h2>
+  <p class="cta-sub">Cada demo pode ser personalizado com seu nome, cores, serviços, fotos e número de WhatsApp. Orçamento sem compromisso.</p>
+  <div class="cta-cards">
+    <div class="cta-card">
+      <div class="cta-card-ico">⚡</div>
+      <h4>Entrega Rápida</h4>
+      <p>Site pronto e publicado em poucos dias após a aprovação</p>
+    </div>
+    <div class="cta-card">
+      <div class="cta-card-ico">🎨</div>
+      <h4>100% Personalizado</h4>
+      <p>Suas cores, seus serviços, sua identidade visual</p>
+    </div>
+    <div class="cta-card">
+      <div class="cta-card-ico">📱</div>
+      <h4>Mobile First</h4>
+      <p>Funciona perfeitamente em qualquer celular ou tablet</p>
+    </div>
+  </div>
+  <div class="cta-wpp">
+    <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Chamar no WhatsApp
+  </div>
+  <p class="cta-or">ou</p>
+  <p class="cta-email">Envie um e-mail para <strong>fabriziagonsales@gmail.com</strong></p>
+  <div class="cta-line"></div>
+  <p class="cta-legal">FABRIZIA GONSALES · SOLUÇÕES DIGITAIS · 2025</p>
+</div>
+
+</body>
+</html>
